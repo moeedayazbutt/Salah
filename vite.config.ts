@@ -15,7 +15,7 @@ export default defineConfig({
         description: 'Beautiful Islamic prayer times with a live dynamic sky',
         theme_color: '#080A1A',
         background_color: '#080A1A',
-        display: 'standalone',
+        display: 'fullscreen',
         orientation: 'any',
         start_url: '/Salah/',
         scope: '/Salah/',
