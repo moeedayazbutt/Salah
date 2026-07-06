@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0E1230"/>
+      <stop offset="100%" stop-color="#1E1B4B"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="100" fill="url(#bg)"/>
+  <!-- Crescent moon -->
+  <path d="M280 120 c-80 0-145 65-145 145 s65 145 145 145 c-60-20-100-75-100-145 s40-125 100-145z" fill="#FFD600"/>
+  <!-- Star -->
+  <polygon points="320,200 330,230 362,230 336,248 346,280 320,262 294,280 304,248 278,230 310,230" fill="#FFD600" opacity="0.8"/>
+  <circle cx="320" cy="230" r="40" fill="none" stroke="rgba(255,214,0,0.15)" stroke-width="2"/>
+</svg>

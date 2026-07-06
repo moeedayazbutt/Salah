@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Salah — Prayer Times (Mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Amiri+Quran&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --sky-top: #080A1A;
+      --sky-mid1: #0E1230;
+      --sky-mid2: #151A3A;
+      --sky-bot: #1A1F3E;
+      --pattern-opacity: 0.03;
+      --pattern-color: #1A237E;
+    }
+
+    body {
+      font-family: 'Amiri', serif;
+      background: var(--sky-top);
+      color: #FAFAFA;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .app-container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+      background: var(--sky-top);
+    }
+
+    /* ===== SKY BACKGROUND ===== */
+    .sky-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid1) 25%, var(--sky-mid2) 60%, var(--sky-bot) 100%);
+      overflow: hidden;
+    }
+
+    .stars {
+      position: absolute;
+      inset: 0;
+    }
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle 3s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0.2; transform: scale(0.8); }
+      100% { opacity: 0.8; transform: scale(1.2); }
+    }
+
+    .moon {
+      position: absolute;
+      top: 6%;
+      right: 8%;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fff 0%, #f0e68c 40%, #daa520 100%);
+      box-shadow: 0 0 60px rgba(255, 215, 0, 0.3), 0 0 120px rgba(255, 215, 0, 0.1);
+      z-index: 1;
+    }
+    .moon::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: -12px;
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: var(--sky-top);
+    }
+    .moon-crater {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(200, 180, 100, 0.15);
+    }
+    .moon-crater:nth-child(1) { width: 14px; height: 14px; top: 22px; left: 40px; }
+    .moon-crater:nth-child(2) { width: 9px; height: 9px; top: 44px; left: 28px; }
+    .moon-crater:nth-child(3) { width: 7px; height: 7px; top: 16px; left: 55px; }
+
+    .pattern-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: var(--pattern-opacity);
+      background-image: 
+        linear-gradient(30deg, var(--pattern-color) 12%, transparent 12.5%, transparent 87%, var(--pattern-color) 87.5%, var(--pattern-color)),
+        linear-gradient(150deg, var(--pattern-color) 12%, transparent 12.5%, transparent 87%, var(--pattern-color) 87.5%, var(--pattern-color)),
+        linear-gradient(270deg, var(--pattern-color) 12%, transparent 12.5%, transparent 87%, var(--pattern-color) 87.5%, var(--pattern-color)),
+        linear-gradient(30deg, var(--pattern-color) 12%, transparent 12.5%, transparent 87%, var(--pattern-color) 87.5%, var(--pattern-color));
+      background-size: 80px 140px;
+      background-position: 0 0, 0 0, 40px 70px, 40px 70px;
+      mix-blend-mode: overlay;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      width: 100%;
+      height: 100%;
+      padding: 24px;
+      gap: 24px;
+    }
+
+    /* ===== LEFT PANEL (Timer Hero) ===== */
+    .left-panel {
+      flex: 0 0 58%;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .next-prayer-card {
+      flex: 1;
+      background: rgba(15, 18, 48, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 28px;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 
+        0 8px 32px rgba(0,0,0,0.5),
+        0 0 80px rgba(255, 215, 0, 0.05);
+    }
+
+    .next-prayer-card .card-pattern {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.03) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(20, 184, 166, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .prayer-label {
+      font-family: 'Amiri';
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.35);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .prayer-name-row {
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+      margin-bottom: 12px;
+    }
+
+    .prayer-name-arabic {
+      font-family: 'Amiri Quran', 'Amiri', serif;
+      font-size: clamp(5rem, 12vw, 8rem);
+      line-height: 1;
+      background: linear-gradient(135deg, #FFD600 0%, #F59E0B 25%, #14B8A6 60%, #0D9488 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 60px rgba(245, 158, 11, 0.2));
+    }
+
+    .prayer-name-english {
+      font-family: 'Amiri', serif;
+      font-size: clamp(1rem, 1.5vw, 1.3rem);
+      color: rgba(255, 255, 255, 0.35);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .countdown-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 8px 0 20px;
+    }
+
+    .countdown {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(4rem, 10vw, 6.5rem);
+      font-weight: 500;
+      color: #FAFAFA;
+      letter-spacing: 8px;
+      line-height: 1;
+      text-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
+    }
+
+    .countdown-sub {
+      font-family: 'Amiri', serif;
+      font-size: clamp(0.85rem, 1.2vw, 1rem);
+      color: rgba(255, 255, 255, 0.3);
+      letter-spacing: 2px;
+      margin-top: 8px;
+    }
+
+    .progress-section {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 12%;
+      background: linear-gradient(90deg, #F59E0B, #14B8A6);
+      border-radius: 4px;
+      transition: width 1s ease;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+    }
+
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-family: 'Amiri', serif;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    /* ===== RIGHT PANEL (Date + Prayers) ===== */
+    .right-panel {
+      flex: 0 0 calc(42% - 24px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    /* Hijri Date Card — Prominent */
+    .hijri-card {
+      flex-shrink: 0;
+      background: rgba(15, 18, 48, 0.5);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 24px;
+      padding: 24px 28px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 
+        0 4px 24px rgba(0,0,0,0.3),
+        0 0 60px rgba(255, 215, 0, 0.04);
+    }
+
+    .hijri-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 70% 20%, rgba(255, 215, 0, 0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hijri-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .hijri-date-main {
+      font-family: 'Amiri Quran', 'Amiri', serif;
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      line-height: 1.1;
+      background: linear-gradient(135deg, #FFD600 0%, #F59E0B 50%, #14B8A6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.15));
+    }
+
+    .hijri-month-moon {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .moon-icon-small {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #FFD600, #B8860B);
+      position: relative;
+      flex-shrink: 0;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+    }
+    .moon-icon-small::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -5px;
+      width: 33px;
+      height: 33px;
+      border-radius: 50%;
+      background: rgba(15, 18, 48, 0.7);
+    }
+
+    .moon-phase-text {
+      font-family: 'Amiri', serif;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .hijri-sub {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hijri-gregorian {
+      font-family: 'Amiri', serif;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    .hijri-day-name {
+      font-family: 'Amiri Quran', 'Amiri', serif;
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .hijri-timezone {
+      font-family: 'Amiri', serif;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    .hijri-divider {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Prayer List */
+    .prayer-list-container {
+      flex: 1;
+      background: rgba(15, 18, 48, 0.4);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 24px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .prayer-list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-shrink: 0;
+    }
+
+    .prayer-list-title {
+      font-family: 'Amiri', serif;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.35);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .time-format-toggle {
+      display: flex;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 3px;
+    }
+
+    .time-format-btn {
+      font-family: 'Amiri', serif;
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.4);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 200ms ease;
+    }
+
+    .time-format-btn.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: #FAFAFA;
+    }
+
+    .prayer-list {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow-y: auto;
+      min-height: 0;
+    }
+
+    .prayer-list::-webkit-scrollbar {
+      width: 3px;
+    }
+    .prayer-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .prayer-list::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+    }
+
+    .prayer-row {
+      display: flex;
+      flex-direction: column;
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 14px;
+      transition: all 300ms ease;
+      flex-shrink: 0;
+    }
+
+    .prayer-row.active {
+      background: rgba(255, 215, 0, 0.06);
+      border-color: rgba(245, 158, 11, 0.35);
+      box-shadow: 0 0 24px rgba(245, 158, 11, 0.08), inset 0 0 24px rgba(245, 158, 11, 0.015);
+    }
+
+    .prayer-row-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .prayer-row-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .active-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #F59E0B;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+      animation: pulseDot 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .prayer-row-name {
+      font-family: 'Amiri Quran', 'Amiri', serif;
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .prayer-row-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .prayer-row.active .prayer-row-time {
+      color: #FFD600;
+    }
+
+    .prayer-row-progress {
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .prayer-row-progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 1s ease;
+    }
+
+    .prayer-row.active .prayer-row-progress-fill {
+      background: linear-gradient(90deg, #F59E0B, #14B8A6);
+      box-shadow: 0 0 6px rgba(245, 158, 11, 0.3);
+    }
+
+    .prayer-row:not(.active) .prayer-row-progress-fill {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* ===== WEATHER CARD ===== */
+    .weather-card {
+      flex-shrink: 0;
+      background: rgba(15, 18, 48, 0.4);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .weather-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .weather-icon-wrapper {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .weather-temp-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .weather-temp-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 2px;
+    }
+
+    .weather-temp {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.8rem;
+      font-weight: 500;
+      color: #FAFAFA;
+      line-height: 1;
+    }
+
+    .weather-temp-unit {
+      font-family: 'Amiri', serif;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.35);
+      margin-top: 3px;
+    }
+
+    .weather-condition {
+      font-family: 'Amiri', serif;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.3);
+      margin-top: 1px;
+    }
+
+    .weather-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .weather-location {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Amiri', serif;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .weather-details {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Amiri', serif;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .weather-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Settings button */
+    .settings-btn-wrapper {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 10;
+    }
+
+    .settings-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 200ms ease;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 1.3rem;
+    }
+
+    .settings-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: scale(1.05);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .main-content {
+        flex-direction: column;
+        padding: 16px;
+        gap: 16px;
+      }
+      .left-panel {
+        flex: none;
+        height: 45vh;
+      }
+      .right-panel {
+        flex: 1;
+      }
+      .prayer-name-arabic {
+        font-size: clamp(3rem, 12vw, 4.5rem);
+      }
+      .countdown {
+        font-size: clamp(2.5rem, 10vw, 3.5rem);
+      }
+      .next-prayer-card {
+        padding: 24px;
+      }
+      .moon {
+        width: 50px;
+        height: 50px;
+        top: 4%;
+        right: 6%;
+      }
+      .moon::before {
+        width: 46px;
+        height: 46px;
+      }
+      .hijri-date-main {
+        font-size: clamp(1.6rem, 5vw, 2.2rem);
+      }
+      .weather-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .weather-right {
+        align-items: flex-start;
+      }
+      .weather-details {
+        flex-wrap: wrap;
+      }
+    }
+
+    .watermark {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Amiri Quran', serif;
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.06);
+      letter-spacing: 2px;
+      z-index: 1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sky Background -->
+    <div class="sky-bg">
+      <div class="stars" id="stars"></div>
+      <div class="moon">
+        <div class="moon-crater"></div>
+        <div class="moon-crater"></div>
+        <div class="moon-crater"></div>
+      </div>
+      <div class="pattern-overlay"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- LEFT PANEL — Timer Hero -->
+      <div class="left-panel">
+        <div class="next-prayer-card">
+          <div class="card-pattern"></div>
+          <div class="prayer-label">NEXT PRAYER</div>
+          <div class="prayer-name-row">
+            <span class="prayer-name-arabic">الفجر</span>
+            <span class="prayer-name-english">● FAJR</span>
+          </div>
+          <div class="countdown-container">
+            <div class="countdown" id="countdown">02:14:32</div>
+            <div class="countdown-sub">— time until next prayer —</div>
+          </div>
+          <div class="progress-section">
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="progressBar" style="width: 12%"></div>
+            </div>
+            <div class="progress-labels">
+              <span>12% elapsed</span>
+              <span>Ends at 04:52 AM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL — Date + Prayers -->
+      <div class="right-panel">
+        <!-- Hijri Date — Prominent -->
+        <div class="hijri-card">
+          <div class="hijri-top-row">
+            <span class="hijri-date-main">١٤٤٦/٠٣/١٥</span>
+            <div class="hijri-month-moon">
+              <div class="moon-icon-small">
+                <div style="position: absolute; top: -3px; left: -5px; width: 33px; height: 33px; border-radius: 50%; background: rgba(15,18,48,0.7);"></div>
+              </div>
+              <span class="moon-phase-text">Waxing Gibbous<br/>78% illuminated</span>
+            </div>
+          </div>
+          <div class="hijri-sub">
+            <span class="hijri-day-name">الأحد</span>
+            <span class="hijri-divider"></span>
+            <span class="hijri-gregorian">15 Ramadan 1446 AH</span>
+            <span class="hijri-divider"></span>
+            <span class="hijri-timezone">Europe/London</span>
+          </div>
+        </div>
+
+        <!-- Daily Prayer List -->
+        <div class="prayer-list-container">
+          <div class="prayer-list-header">
+            <span class="prayer-list-title">Daily Prayers</span>
+            <div class="time-format-toggle">
+              <button class="time-format-btn active">12h</button>
+              <button class="time-format-btn">24h</button>
+            </div>
+          </div>
+          <div class="prayer-list">
+            <!-- Fajr — Active -->
+            <div class="prayer-row active">
+              <div class="prayer-row-content">
+                <div class="prayer-row-left">
+                  <div class="active-dot"></div>
+                  <span class="prayer-row-name">الفجر</span>
+                </div>
+                <span class="prayer-row-time">04:52 AM</span>
+              </div>
+              <div class="prayer-row-progress">
+                <div class="prayer-row-progress-fill" style="width: 12%"></div>
+              </div>
+            </div>
+            <!-- Sunrise -->
+            <div class="prayer-row">
+              <div class="prayer-row-content">
+                <div class="prayer-row-left" style="padding-left: 17px;">
+                  <span class="prayer-row-name">الشروق</span>
+                </div>
+                <span class="prayer-row-time">06:18 AM</span>
+              </div>
+              <div class="prayer-row-progress">
+                <div class="prayer-row-progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+            <!-- Dhuhr -->
+            <div class="prayer-row">
+              <div class="prayer-row-content">
+                <div class="prayer-row-left" style="padding-left: 17px;">
+                  <span class="prayer-row-name">الظهر</span>
+                </div>
+                <span class="prayer-row-time">12:35 PM</span>
+              </div>
+              <div class="prayer-row-progress">
+                <div class="prayer-row-progress-fill" style="width: 68%"></div>
+              </div>
+            </div>
+            <!-- Asr -->
+            <div class="prayer-row">
+              <div class="prayer-row-content">
+                <div class="prayer-row-left" style="padding-left: 17px;">
+                  <span class="prayer-row-name">العصر</span>
+                </div>
+                <span class="prayer-row-time">03:45 PM</span>
+              </div>
+              <div class="prayer-row-progress">
+                <div class="prayer-row-progress-fill" style="width: 35%"></div>
+              </div>
+            </div>
+            <!-- Maghrib -->
+            <div class="prayer-row">
+              <div class="prayer-row-content">
+                <div class="prayer-row-left" style="padding-left: 17px;">
+                  <span class="prayer-row-name">المغرب</span>
+                </div>
+                <span class="prayer-row-time">06:52 PM</span>
+              </div>
+              <div class="prayer-row-progress">
+                <div class="prayer-row-progress-fill" style="width: 18%"></div>
+              </div>
+            </div>
+            <!-- Isha -->
+            <div class="prayer-row">
+              <div class="prayer-row-content">
+                <div class="prayer-row-left" style="padding-left: 17px;">
+                  <span class="prayer-row-name">العشاء</span>
+                </div>
+                <span class="prayer-row-time">08:12 PM</span>
+              </div>
+              <div class="prayer-row-progress">
+                <div class="prayer-row-progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weather Card -->
+        <div class="weather-card">
+          <div class="weather-left">
+            <div class="weather-icon-wrapper">
+              <svg viewBox="0 0 40 40" width="36" height="36">
+                <circle cx="20" cy="18" r="7" fill="#FFD600" opacity="0.9"/>
+                <g stroke="#FFD600" stroke-width="1.5" opacity="0.5">
+                  <line x1="20" y1="4" x2="20" y2="8"/>
+                  <line x1="20" y1="28" x2="20" y2="32"/>
+                  <line x1="8" y1="18" x2="12" y2="18"/>
+                  <line x1="28" y1="18" x2="32" y2="18"/>
+                  <line x1="11.5" y1="9.5" x2="14.5" y2="12.5"/>
+                  <line x1="25.5" y1="12.5" x2="28.5" y2="9.5"/>
+                  <line x1="11.5" y1="26.5" x2="14.5" y2="23.5"/>
+                  <line x1="25.5" y1="23.5" x2="28.5" y2="26.5"/>
+                </g>
+                <ellipse cx="24" cy="30" rx="12" ry="5" fill="rgba(255,255,255,0.1)"/>
+              </svg>
+            </div>
+            <div class="weather-temp-group">
+              <div class="weather-temp-row">
+                <span class="weather-temp">22</span>
+                <span class="weather-temp-unit">°C</span>
+              </div>
+              <div class="weather-condition">Clear Sky</div>
+            </div>
+          </div>
+          <div class="weather-right">
+            <div class="weather-location">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>London, GB</span>
+            </div>
+            <div class="weather-details">
+              <span>Feels like 24°</span>
+              <span class="weather-dot"></span>
+              <span>Humidity 58%</span>
+              <span class="weather-dot"></span>
+              <span>Wind 12 km/h</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Button -->
+    <div class="settings-btn-wrapper">
+      <div class="settings-btn">⚙</div>
+    </div>
+
+    <div class="watermark">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</div>
+  </div>
+
+  <script>
+    // Generate stars
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 150; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 80 + '%';
+      star.style.animationDelay = Math.random() * 5 + 's';
+      star.style.animationDuration = (2 + Math.random() * 4) + 's';
+      star.style.width = star.style.height = (1 + Math.random() * 2) + 'px';
+      starsContainer.appendChild(star);
+    }
+
+    // Animate countdown for demo
+    let seconds = 2 * 3600 + 14 * 60 + 32;
+    const countdownEl = document.getElementById('countdown');
+    const progressBar = document.getElementById('progressBar');
+    
+    setInterval(() => {
+      if (seconds > 0) seconds--;
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = seconds % 60;
+      countdownEl.textContent = String(h).padStart(2, '0') + ':' + 
+                                 String(m).padStart(2, '0') + ':' + 
+                                 String(s).padStart(2, '0');
+      
+      const totalDuration = 2 * 3600 + 14 * 60 + 32;
+      const elapsed = ((totalDuration - seconds) / totalDuration) * 100;
+      progressBar.style.width = Math.min(elapsed, 100) + '%';
+    }, 1000);
+  </script>
+</body>
+</html>
