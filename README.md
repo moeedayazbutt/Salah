@@ -1,32 +1,49 @@
-# React + TypeScript + Vite
+# Salah — صلاة
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+**A beautiful Islamic prayer times web app with a live dynamic sky.**
 
-Currently, two official plugins are available:
+🌐 **[moeedayazbutt.github.io/Salah](https://moeedayazbutt.github.io/Salah/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+The sky changes in real time based on your location and the sun's position — deep indigo at Fajr, golden at sunrise, brilliant blue through the afternoon, burning amber at Maghrib, and a star-lit night for Isha. A crescent moon tracks the lunar phase; palm silhouettes and drifting birds appear when the light is right.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the Oxlint configuration
+- **Live sky background** — solar elevation drives smooth gradient transitions across all eight sky phases (night, Fajr, sunrise, morning, midday, afternoon, Maghrib, Isha)
+- **Next prayer countdown** — large hero display with Arabic name in Reem Kufi calligraphy and a live progress bar
+- **Full daily prayer schedule** — Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha with 12h/24h toggle
+- **Hijri date** — accurate Islamic calendar with Arabic month names and moon phase (Waxing Crescent → Full Moon → Waning Gibbous etc.)
+- **7-day weather forecast** — temperature, humidity, wind, and condition icons
+- **Qibla direction** — calculated from your coordinates
+- **Settings page** — location (GPS or manual), 12 calculation methods, Hanafi/Shafi madhab, high-latitude rules, per-prayer minute adjustments, timezone, Hijri offset
+- **PWA** — installable on mobile and desktop, works offline after first load
+- **Responsive** — optimised for both landscape desktop and portrait mobile
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## Stack
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+| | |
+|---|---|
+| Framework | React 19 + TypeScript |
+| Build | Vite 8 |
+| Styling | Tailwind CSS 4 |
+| Prayer engine | [adhan](https://github.com/batoulapps/adhan-js) |
+| State | Zustand (persisted) |
+| Fonts | Reem Kufi · Amiri · JetBrains Mono |
+| Hosting | GitHub Pages (auto-deploy via Actions) |
+
+## Development
+
+```bash
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # type-check + Vite build → dist/
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Deployment
+
+Pushes to `main` automatically build and deploy via GitHub Actions to GitHub Pages.
+
+---
+
+*بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ*
