@@ -64,7 +64,7 @@ export interface HourlyForecast {
   isNow: boolean;
 }
 
-export function getHourlyForecast(lat: number, lon: number): HourlyForecast[] {
+export function getHourlyForecast(lat: number, lon: number, fromHour?: number): HourlyForecast[] {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
@@ -76,14 +76,14 @@ export function getHourlyForecast(lat: number, lon: number): HourlyForecast[] {
   const avg = (baseHigh + baseLow) / 2;
   const amplitude = (baseHigh - baseLow) / 2;
 
-  const currentHour = now.getHours();
+  const currentHour = fromHour ?? now.getHours();
   const result: HourlyForecast[] = [];
 
   for (let i = 0; i < 12; i++) {
     const hour = (currentHour + i) % 24;
     const temp = Math.round(avg + amplitude * Math.cos((2 * Math.PI * (hour - 14)) / 24));
     const condIdx = Math.floor(rng() * CONDITIONS.length);
-    const isNow = i === 0;
+    const isNow = i === 0 && fromHour === undefined;
     const h12 = hour % 12 || 12;
     const timeLabel = isNow ? 'Now' : `${h12}${hour >= 12 ? 'PM' : 'AM'}`;
     result.push({ hour, temp, condition: CONDITIONS[condIdx], timeLabel, isNow });
