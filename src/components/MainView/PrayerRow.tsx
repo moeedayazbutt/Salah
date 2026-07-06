@@ -47,24 +47,24 @@ const PrayerRow = memo(({ prayer, timeStr }: PrayerRowProps) => (
             dir="rtl" lang="ar"
             className="font-arabic"
             style={{
-              fontSize: 'clamp(0.8rem, 1.5vw, 1.6rem)',
-              color: prayer.isCurrent ? '#FAFAFA' : 'rgba(255,255,255,0.8)',
+              fontSize: 'clamp(0.95rem, 1.5vw, 1.7rem)',
+              color: prayer.isCurrent ? '#FAFAFA' : 'rgba(255,255,255,0.85)',
               marginLeft: prayer.isCurrent ? 0 : 9,
             }}
           >
             {prayer.nameAr}
           </span>
           <span className="font-ui" style={{
-            fontSize: 'clamp(0.55rem, 0.9vw, 1rem)',
-            color: 'rgba(255,255,255,0.4)',
+            fontSize: 'clamp(0.65rem, 0.9vw, 1rem)',
+            color: 'rgba(255,255,255,0.45)',
           }}>
             {prayer.nameEn}
           </span>
         </div>
       </div>
       <span className="font-mono font-medium" style={{
-        fontSize: 'clamp(0.7rem, 1.2vw, 1.3rem)',
-        color: prayer.isCurrent ? '#FFD600' : 'rgba(255,255,255,0.8)',
+        fontSize: 'clamp(0.8rem, 1.2vw, 1.4rem)',
+        color: prayer.isCurrent ? '#FFD600' : 'rgba(255,255,255,0.85)',
       }}>
         {timeStr}
       </span>

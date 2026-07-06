@@ -73,14 +73,14 @@ function WeatherWidget({ forecast }: { forecast: ReturnType<typeof getForecast> 
     >
       <div className="flex items-center justify-between flex-shrink-0" style={{ marginBottom: '2px' }}>
         <div className="flex items-center" style={{ gap: '5px' }}>
-          <WeatherIcon condition={today?.condition.icon ?? 'sunny'} size={18} />
+          <WeatherIcon condition={today?.condition.icon ?? 'sunny'} size={22} />
           <div className="flex items-start">
             <span className="font-mono font-medium leading-none text-white" style={{ fontSize: 'clamp(1rem, 2vw, 2.2rem)' }}>
               {tempBase}
             </span>
-            <span className="font-ui" style={{ fontSize: 'clamp(0.5rem, 0.8vw, 0.9rem)', color: 'rgba(255,255,255,0.25)' }}>°C</span>
+            <span className="font-ui" style={{ fontSize: 'clamp(0.6rem, 0.9vw, 1rem)', color: 'rgba(255,255,255,0.25)' }}>°C</span>
           </div>
-          <span className="font-ui" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.8rem)', color: 'rgba(255,255,255,0.4)' }}>
+          <span className="font-ui" style={{ fontSize: 'clamp(0.65rem, 0.9vw, 1rem)', color: 'rgba(255,255,255,0.4)' }}>
             {today?.condition.en ?? 'Clear'} · {today?.condition.ar ?? 'صافية'}
           </span>
         </div>
@@ -97,21 +97,21 @@ function WeatherWidget({ forecast }: { forecast: ReturnType<typeof getForecast> 
         </div>
       </div>
       <div className="flex-shrink-0" style={{ marginBottom: '3px' }}>
-        <span className="font-ui" style={{ fontSize: 'clamp(0.4rem, 0.65vw, 0.75rem)', color: 'rgba(255,255,255,0.35)' }}>
+        <span className="font-ui" style={{ fontSize: 'clamp(0.65rem, 0.8vw, 0.85rem)', color: 'rgba(255,255,255,0.35)' }}>
           Feels·يشعر {feelsTemp}° · Hum·الرطوبة {humidity}% · Wind·الرياح {windSpeed}km/h
         </span>
       </div>
       <div className="flex-1 min-h-0 flex items-center overflow-x-auto" style={{ gap: '1px' }}>
         {forecast.map((day, i) => (
-          <div key={day.date.toISOString()} className="flex flex-col items-center flex-shrink-0" style={{ minWidth: 'clamp(32px, 6vw, 56px)', padding: '1px 2px' }}>
-            <span className="font-ui" style={{ fontSize: 'clamp(0.38rem, 0.6vw, 0.7rem)', color: i === 0 ? 'rgba(255,215,0,0.6)' : 'rgba(255,255,255,0.35)', marginBottom: '1px' }}>
-              {i === 0 ? 'Today·اليوم' : day.dayNameEn.slice(0, 3)}
+          <div key={day.date.toISOString()} className="flex flex-col items-center flex-shrink-0" style={{ minWidth: 'clamp(36px, 6vw, 60px)', padding: '1px 2px' }}>
+            <span className="font-ui" style={{ fontSize: 'clamp(0.6rem, 0.75vw, 0.85rem)', color: i === 0 ? 'rgba(255,215,0,0.7)' : 'rgba(255,255,255,0.4)', marginBottom: '2px' }}>
+              {i === 0 ? 'Today' : day.dayNameEn.slice(0, 3)}
             </span>
-            <WeatherIcon condition={day.condition.icon} size={i === 0 ? 12 : 10} />
-            <span className="font-mono" style={{ fontSize: 'clamp(0.45rem, 0.7vw, 0.8rem)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.1 }}>
+            <WeatherIcon condition={day.condition.icon} size={i === 0 ? 16 : 13} />
+            <span className="font-mono" style={{ fontSize: 'clamp(0.65rem, 0.8vw, 0.9rem)', color: 'rgba(255,255,255,0.6)', lineHeight: 1.2 }}>
               {day.high}°
             </span>
-            <span className="font-mono" style={{ fontSize: 'clamp(0.35rem, 0.55vw, 0.65rem)', color: 'rgba(255,255,255,0.35)', lineHeight: 1.1 }}>
+            <span className="font-mono" style={{ fontSize: 'clamp(0.55rem, 0.7vw, 0.8rem)', color: 'rgba(255,255,255,0.35)', lineHeight: 1.2 }}>
               {day.low}°
             </span>
           </div>
@@ -187,7 +187,7 @@ export default function RightPanel() {
         </div>
 
         <div className="flex items-center" style={{ gap: '4px', flexWrap: 'wrap' }}>
-            <span dir="rtl" lang="ar" className="font-arabic" style={{ fontSize: 'clamp(0.8rem, 1.5vw, 1.8rem)', color: 'rgba(255,255,255,0.55)' }}>
+            <span dir="rtl" lang="ar" className="font-arabic" style={{ fontSize: 'clamp(0.9rem, 1.6vw, 2rem)', color: 'rgba(255,255,255,0.65)' }}>
               {hijri?.dayNameAr || '—'}
             </span>
             <span className="font-ui" style={{ fontSize: 'clamp(0.6rem, 1vw, 1.2rem)', color: 'rgba(255,255,255,0.4)' }}>

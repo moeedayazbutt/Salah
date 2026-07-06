@@ -209,7 +209,7 @@ export default function NextPrayerTimer() {
         </span>
 
         <div className="flex items-baseline justify-center gap-3 w-full flex-wrap" style={{ padding: 0 }}>
-          <span key={displayPrayer?.nameAr} dir="rtl" lang="ar" className="font-arabic leading-none animate-ink-flow"
+          <span key={displayPrayer?.nameAr} dir="rtl" lang="ar" className="font-arabic-display leading-none animate-ink-flow hero-arabic-name"
             style={{
               fontSize: 'clamp(3.5rem, 12vw, 10rem)',
               whiteSpace: 'nowrap',
@@ -228,7 +228,7 @@ export default function NextPrayerTimer() {
         </div>
 
         <div className="flex flex-col items-center">
-          <span className="font-mono font-medium leading-none"
+          <span className="font-mono font-medium leading-none hero-countdown"
             style={{
               fontSize: 'clamp(4rem, 14vw, 11rem)',
               letterSpacing: 'clamp(4px, 1vw, 12px)',
