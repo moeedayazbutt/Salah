@@ -91,7 +91,7 @@ export function getMoonPhase(date: Date): { phase: number; name: string; illumin
 }
 
 export function determineSkyPhase(elevation: number): SkyPhase {
-  const phases: Record<string, { range: [number, number]; name: string; gradient: string; pattern: string; opacity: number }> = {
+  const phases: Record<string, { range: [number, number]; name: string; gradient: string; pattern: string; patternOpacity: number }> = {
     night: {
       range: [-90, -18],
       name: 'Night',

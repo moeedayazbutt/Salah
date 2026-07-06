@@ -35,12 +35,11 @@ function toAdhanMadhab(madhab: string) {
 }
 
 function toAdhanHighLatRule(rule: string) {
-  const map: Record<string, string> = {
-    middleOfNight: HighLatitudeRule.MiddleOfTheNight,
-    seventhOfNight: HighLatitudeRule.SeventhOfTheNight,
-    twilightAngle: HighLatitudeRule.TwilightAngle,
-  };
-  return map[rule] || HighLatitudeRule.MiddleOfTheNight;
+  switch (rule) {
+    case 'seventhOfNight': return HighLatitudeRule.SeventhOfTheNight;
+    case 'twilightAngle':  return HighLatitudeRule.TwilightAngle;
+    default:               return HighLatitudeRule.MiddleOfTheNight;
+  }
 }
 
 export function calculatePrayerTimes(
