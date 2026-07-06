@@ -1,6 +1,7 @@
 import { usePrayerTimeEngine } from './hooks/usePrayerTimes';
 import { useGeolocation, useRequestGeolocation } from './hooks/useGeolocation';
 import { useAdhanNotifications } from './hooks/useNotifications';
+import { useFullscreen } from './hooks/useFullscreen';
 import { useStore } from './store';
 import SkyBackground from './components/Background/SkyBackground';
 import NextPrayerTimer from './components/MainView/NextPrayerTimer';
@@ -77,6 +78,8 @@ function App() {
   useGeolocation();
   useAdhanNotifications();
 
+  const { isFullscreen, enter: enterFullscreen, exit: exitFullscreen } = useFullscreen();
+
   const settings = useStore((s) => s.settings);
   const isSettingsOpen = useStore((s) => s.isSettingsOpen);
   const setSettingsOpen = useStore((s) => s.setSettingsOpen);
@@ -102,14 +105,51 @@ function App() {
         </div>
       )}
 
-      <div className="fixed z-10" style={{ bottom: '4px', right: '6px' }}>
+      <div className="fixed z-10 flex items-center" style={{ bottom: '4px', right: '6px', gap: '6px' }}>
+        <button
+          onClick={isFullscreen ? exitFullscreen : enterFullscreen}
+          aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+          title={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+          className="flex items-center justify-center cursor-pointer border-none transition-all duration-200"
+          style={{
+            width: 44,
+            height: 44,
+            borderRadius: '50%',
+            background: isFullscreen ? 'rgba(245,158,11,0.12)' : 'rgba(255,255,255,0.06)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: `1px solid ${isFullscreen ? 'rgba(245,158,11,0.25)' : 'rgba(255,255,255,0.08)'}`,
+            color: isFullscreen ? 'rgba(245,158,11,0.8)' : 'rgba(255,255,255,0.5)',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = isFullscreen ? 'rgba(245,158,11,0.12)' : 'rgba(255,255,255,0.06)'; }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            {isFullscreen ? (
+              <>
+                <polyline points="8 3 3 3 3 8" /><line x1="3" y1="3" x2="9" y2="9" />
+                <polyline points="16 3 21 3 21 8" /><line x1="21" y1="3" x2="15" y2="9" />
+                <polyline points="8 21 3 21 3 16" /><line x1="3" y1="21" x2="9" y2="15" />
+                <polyline points="16 21 21 21 21 16" /><line x1="21" y1="21" x2="15" y2="15" />
+              </>
+            ) : (
+              <>
+                <polyline points="3 8 3 3 8 3" /><line x1="3" y1="3" x2="9" y2="9" />
+                <polyline points="21 8 21 3 16 3" /><line x1="21" y1="3" x2="15" y2="9" />
+                <polyline points="3 16 3 21 8 21" /><line x1="3" y1="21" x2="9" y2="15" />
+                <polyline points="21 16 21 21 16 21" /><line x1="21" y1="21" x2="15" y2="15" />
+              </>
+            )}
+          </svg>
+        </button>
+
         <button
           onClick={() => setSettingsOpen(!isSettingsOpen)}
           aria-label="Open settings · فتح الإعدادات"
           className="flex items-center justify-center cursor-pointer border-none transition-all duration-200"
           style={{
-            width: 'clamp(44px, 4vw, 44px)',
-            height: 'clamp(44px, 4vw, 44px)',
+            width: 44,
+            height: 44,
             borderRadius: '50%',
             background: 'rgba(255,255,255,0.06)',
             backdropFilter: 'blur(12px)',
@@ -118,14 +158,8 @@ function App() {
             color: 'rgba(255,255,255,0.5)',
             fontSize: 'clamp(1rem, 1.5vw, 2rem)',
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-            e.currentTarget.style.transform = 'scale(1.05)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
-            e.currentTarget.style.transform = 'scale(1)';
-          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.transform = 'scale(1.05)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.transform = 'scale(1)'; }}
         >
           ⚙
         </button>
