@@ -8,33 +8,45 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg'],
+      includeAssets: ['favicon.ico', 'favicon.svg', 'apple-touch-icon-180x180.png'],
       manifest: {
         name: 'Salah — Prayer Times',
         short_name: 'Salah',
-        description: 'Beautiful prayer times with dynamic sky',
+        description: 'Beautiful Islamic prayer times with a live dynamic sky',
         theme_color: '#080A1A',
         background_color: '#080A1A',
         display: 'standalone',
-        start_url: '/',
+        orientation: 'any',
+        start_url: '/Salah/',
+        scope: '/Salah/',
         icons: [
           {
-            src: '/icons/icon-192.svg',
-            sizes: '192x192',
-            type: 'image/svg+xml',
-            purpose: 'any maskable'
+            src: 'pwa-64x64.png',
+            sizes: '64x64',
+            type: 'image/png'
           },
           {
-            src: '/icons/icon-512.svg',
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-512x512.png',
             sizes: '512x512',
-            type: 'image/svg+xml',
-            purpose: 'any maskable'
+            type: 'image/png'
+          },
+          {
+            src: 'maskable-icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           }
         ],
         categories: ['lifestyle', 'utilities']
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        navigateFallback: 'index.html',
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
