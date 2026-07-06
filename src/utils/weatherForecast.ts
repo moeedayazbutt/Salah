@@ -55,3 +55,38 @@ export function getForecast(lat: number, lon: number): ForecastDay[] {
   }
   return result;
 }
+
+export interface HourlyForecast {
+  hour: number;
+  temp: number;
+  condition: typeof CONDITIONS[number];
+  timeLabel: string;
+  isNow: boolean;
+}
+
+export function getHourlyForecast(lat: number, lon: number): HourlyForecast[] {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
+  const baseSeed = Math.round(lat * 100 + lon * 100 + dayOfYear * 7);
+  const rng = seededRandom(baseSeed < 0 ? -baseSeed + 100000 : baseSeed);
+
+  const baseHigh = 15 + rng() * 20 + (Math.abs(lat) < 30 ? 10 : Math.abs(lat) > 50 ? -10 : 0);
+  const baseLow = baseHigh - (5 + rng() * 8);
+  const avg = (baseHigh + baseLow) / 2;
+  const amplitude = (baseHigh - baseLow) / 2;
+
+  const currentHour = now.getHours();
+  const result: HourlyForecast[] = [];
+
+  for (let i = 0; i < 12; i++) {
+    const hour = (currentHour + i) % 24;
+    const temp = Math.round(avg + amplitude * Math.cos((2 * Math.PI * (hour - 14)) / 24));
+    const condIdx = Math.floor(rng() * CONDITIONS.length);
+    const isNow = i === 0;
+    const h12 = hour % 12 || 12;
+    const timeLabel = isNow ? 'Now' : `${h12}${hour >= 12 ? 'PM' : 'AM'}`;
+    result.push({ hour, temp, condition: CONDITIONS[condIdx], timeLabel, isNow });
+  }
+  return result;
+}

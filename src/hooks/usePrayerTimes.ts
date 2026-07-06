@@ -28,7 +28,7 @@ export function usePrayerTimeEngine() {
       const solarPos = calculateSunPosition(now, latitude, longitude);
       setSolarPosition(solarPos);
 
-      const phase = determineSkyPhase(solarPos.elevation);
+      const phase = determineSkyPhase(solarPos.elevation, solarPos.azimuth);
       setSkyPhase(phase);
 
       const moonInfo = getMoonPhase(now);

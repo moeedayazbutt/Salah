@@ -41,6 +41,12 @@ interface AppState {
   setSettingsOpen: (open: boolean) => void;
   isLocationSearchOpen: boolean;
   setLocationSearchOpen: (open: boolean) => void;
+  aodMode: boolean;
+  setAodMode: (v: boolean) => void;
+  skyDisplayHours: number | null;
+  setSkyDisplayHours: (h: number | null) => void;
+  skySliderAuto: boolean;
+  setSkySliderAuto: (v: boolean) => void;
 
   // Location
   lastKnownLocation: Coordinates | null;
@@ -108,6 +114,12 @@ export const useStore = create<AppState>()(
       setSettingsOpen: (isSettingsOpen) => set({ isSettingsOpen }),
       isLocationSearchOpen: false,
       setLocationSearchOpen: (isLocationSearchOpen) => set({ isLocationSearchOpen }),
+      aodMode: false,
+      setAodMode: (aodMode) => set({ aodMode }),
+      skyDisplayHours: null,
+      setSkyDisplayHours: (skyDisplayHours) => set({ skyDisplayHours }),
+      skySliderAuto: true,
+      setSkySliderAuto: (skySliderAuto) => set({ skySliderAuto }),
 
       // Location
       lastKnownLocation: null,
@@ -123,6 +135,7 @@ export const useStore = create<AppState>()(
       partialize: (state) => ({
         settings: state.settings,
         lastKnownLocation: state.lastKnownLocation,
+        aodMode: state.aodMode,
       }),
     }
   )

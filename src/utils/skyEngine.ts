@@ -90,84 +90,29 @@ export function getMoonPhase(date: Date): { phase: number; name: string; illumin
   return { phase, name, illumination };
 }
 
-export function determineSkyPhase(elevation: number): SkyPhase {
-  const phases: Record<string, { range: [number, number]; name: string; gradient: string; pattern: string; patternOpacity: number }> = {
-    night: {
-      range: [-90, -18],
-      name: 'Night',
-      gradient: 'linear-gradient(180deg, #080A1A 0%, #0E1230 25%, #151A3A 60%, #1A1F3E 100%)',
-      pattern: 'girih-tiles',
-      patternOpacity: 0.03
-    },
-    fajr: {
-      range: [-18, -12],
-      name: 'Fajr',
-      gradient: 'linear-gradient(180deg, #0E1230 0%, #1A1F4A 20%, #2D2B6B 40%, #4A3B7E 60%, #6B4A8A 80%, #8B5A9A 100%)',
-      pattern: 'eight-point-star',
-      patternOpacity: 0.025
-    },
-    sunrise: {
-      range: [-12, 0],
-      name: 'Sunrise',
-      gradient: 'linear-gradient(180deg, #1A1F4A 0%, #3D2B5E 12%, #6B4A7A 25%, #A05A6A 37%, #C46A4C 50%, #E88A4A 62%, #F5A962 75%, #FAD98A 87%, #FFE8A0 100%)',
-      pattern: 'muqarnas',
-      patternOpacity: 0.03
-    },
-    morning: {
-      range: [0, 30],
-      name: 'Morning',
-      gradient: 'linear-gradient(180deg, #F5A962 0%, #F8C47A 20%, #FAD98A 40%, #A8D5E8 60%, #7EC8E8 80%, #5DADE2 100%)',
-      pattern: 'girih-tiles',
-      patternOpacity: 0.02
-    },
-    midday: {
-      range: [30, 60],
-      name: 'Midday',
-      gradient: 'linear-gradient(180deg, #87CEEB 0%, #5DADE2 25%, #3498DB 50%, #2E86C1 75%, #1B4F72 100%)',
-      pattern: 'kufic-border',
-      patternOpacity: 0.015
-    },
-    afternoon: {
-      range: [60, 30],
-      name: 'Afternoon',
-      gradient: 'linear-gradient(180deg, #2E86C1 0%, #3498DB 20%, #5DADE2 40%, #85C1E9 60%, #A9D5E8 80%, #F5A962 100%)',
-      pattern: 'girih-tiles',
-      patternOpacity: 0.02
-    },
-    sunset: {
-      range: [30, 0],
-      name: 'Sunset',
-      gradient: 'linear-gradient(180deg, #5DADE2 0%, #85C1E9 10%, #F5A962 25%, #F39C12 35%, #E67E22 45%, #D35400 55%, #C0392B 65%, #A93226 80%, #8B2C2C 100%)',
-      pattern: 'muqarnas',
-      patternOpacity: 0.03
-    },
-    maghrib: {
-      range: [0, -12],
-      name: 'Maghrib',
-      gradient: 'linear-gradient(180deg, #8B2C2C 0%, #A93226 15%, #C0392B 30%, #9B59B6 45%, #6C3A7A 60%, #4A2C5E 75%, #2D1B3E 100%)',
-      pattern: 'eight-point-star',
-      patternOpacity: 0.025
-    },
-    isha: {
-      range: [-12, -18],
-      name: 'Isha',
-      gradient: 'linear-gradient(180deg, #2D1B3E 0%, #1A1D3A 30%, #12142E 60%, #0A0C1E 100%)',
-      pattern: 'girih-tiles',
-      patternOpacity: 0.02
-    }
+export function determineSkyPhase(elevation: number, azimuth = 90): SkyPhase {
+  // azimuth > 180 → sun is west of south → afternoon/evening half of day
+  const isPM = azimuth > 180;
+
+  const phases: Record<string, { name: string; gradient: string; pattern: string; patternOpacity: number }> = {
+    night:     { name: 'Night',     gradient: 'linear-gradient(180deg, #060810 0%, #090C1A 30%, #0C1025 70%, #0E1230 100%)', pattern: 'girih-tiles',     patternOpacity: 0.03  },
+    fajr:      { name: 'Fajr',      gradient: 'linear-gradient(180deg, #0A0D1E 0%, #1A1F4A 25%, #2D2B6B 50%, #4A3B7E 75%, #6B4A8A 100%)', pattern: 'eight-point-star', patternOpacity: 0.025 },
+    sunrise:   { name: 'Sunrise',   gradient: 'linear-gradient(180deg, #1A1F4A 0%, #4A3060 15%, #8A4A60 30%, #C46A4C 50%, #E88A4A 70%, #F5B06A 85%, #FFE090 100%)', pattern: 'muqarnas',       patternOpacity: 0.03  },
+    morning:   { name: 'Morning',   gradient: 'linear-gradient(180deg, #E8C070 0%, #F0D080 15%, #B8DCF0 40%, #80C8EE 65%, #50B0E8 85%, #3498DB 100%)', pattern: 'girih-tiles',     patternOpacity: 0.02  },
+    midday:    { name: 'Midday',    gradient: 'linear-gradient(180deg, #60C0F0 0%, #3498DB 20%, #2080C0 45%, #1868A8 70%, #104878 100%)', pattern: 'kufic-border',    patternOpacity: 0.015 },
+    afternoon: { name: 'Afternoon', gradient: 'linear-gradient(180deg, #2080C0 0%, #3498DB 20%, #60C0EE 45%, #A0D4EE 65%, #D0B870 85%, #E8A858 100%)', pattern: 'girih-tiles',     patternOpacity: 0.02  },
+    sunset:    { name: 'Sunset',    gradient: 'linear-gradient(180deg, #D09050 0%, #E07030 20%, #C03020 40%, #901840 55%, #601060 70%, #380848 85%, #1C0428 100%)', pattern: 'muqarnas',       patternOpacity: 0.035 },
+    maghrib:   { name: 'Maghrib',   gradient: 'linear-gradient(180deg, #2A0838 0%, #401060 20%, #501880 35%, #402870 50%, #301860 65%, #200840 80%, #100820 100%)', pattern: 'eight-point-star', patternOpacity: 0.025 },
+    isha:      { name: 'Isha',      gradient: 'linear-gradient(180deg, #160826 0%, #100820 30%, #0C0C1C 60%, #080A18 100%)', pattern: 'girih-tiles',     patternOpacity: 0.02  },
   };
 
-  for (const [id, phase] of Object.entries(phases)) {
-    if (phase.range[0] >= phase.range[1]) {
-      if (elevation <= phase.range[0] && elevation >= phase.range[1]) {
-        return { id, ...phase };
-      }
-    } else {
-      if (elevation >= phase.range[0] && elevation <= phase.range[1]) {
-        return { id, ...phase };
-      }
-    }
-  }
+  let id: string;
+  if      (elevation <= -18) id = 'night';
+  else if (elevation <= -12) id = 'fajr';
+  else if (elevation <= 0)   id = isPM ? 'maghrib'   : 'sunrise';
+  else if (elevation <= 30)  id = isPM ? 'sunset'    : 'morning';
+  else if (elevation <= 60)  id = isPM ? 'afternoon' : 'midday';
+  else                       id = 'midday';
 
-  return { id: 'night', ...phases.night };
+  return { id, ...phases[id] };
 }

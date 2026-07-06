@@ -51,33 +51,6 @@ function Clouds() {
   );
 }
 
-function PalmTrees() {
-  return (
-    <div className="absolute inset-x-0 pointer-events-none" style={{ bottom: 0, height: '28%', zIndex: 1 }}>
-      <svg viewBox="0 0 120 200" className="absolute" style={{ left: '3%', bottom: 0, height: '65%', opacity: 0.25 }}>
-        <path d="M60 200 L58 60" stroke="rgba(139,90,43,0.4)" strokeWidth="4" fill="none" />
-        <path d="M58 60 Q30 30 10 40" stroke="rgba(34,139,34,0.3)" strokeWidth="3" fill="none" strokeLinecap="round" />
-        <path d="M58 60 Q40 20 28 15" stroke="rgba(34,139,34,0.25)" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-        <path d="M58 60 Q55 18 50 8" stroke="rgba(34,139,34,0.2)" strokeWidth="2" fill="none" strokeLinecap="round" />
-        <path d="M58 60 Q75 25 90 30" stroke="rgba(34,139,34,0.25)" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-        <path d="M58 60 Q80 32 100 50" stroke="rgba(34,139,34,0.2)" strokeWidth="2" fill="none" strokeLinecap="round" />
-      </svg>
-      <svg viewBox="0 0 120 200" className="absolute" style={{ right: '5%', bottom: 0, height: '55%', opacity: 0.2 }}>
-        <path d="M60 200 L62 70" stroke="rgba(139,90,43,0.4)" strokeWidth="3.5" fill="none" />
-        <path d="M62 70 Q35 35 15 45" stroke="rgba(34,139,34,0.25)" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-        <path d="M62 70 Q42 25 30 20" stroke="rgba(34,139,34,0.2)" strokeWidth="2" fill="none" strokeLinecap="round" />
-        <path d="M62 70 Q60 20 55 10" stroke="rgba(34,139,34,0.18)" strokeWidth="2" fill="none" strokeLinecap="round" />
-        <path d="M62 70 Q78 28 95 35" stroke="rgba(34,139,34,0.2)" strokeWidth="2" fill="none" strokeLinecap="round" />
-      </svg>
-      <svg viewBox="0 0 80 160" className="absolute" style={{ left: '12%', bottom: 0, height: '40%', opacity: 0.15 }}>
-        <path d="M40 160 L42 70" stroke="rgba(139,90,43,0.35)" strokeWidth="3" fill="none" />
-        <path d="M42 70 Q22 45 8 50" stroke="rgba(34,139,34,0.2)" strokeWidth="2" fill="none" strokeLinecap="round" />
-        <path d="M42 70 Q30 35 22 28" stroke="rgba(34,139,34,0.18)" strokeWidth="2" fill="none" strokeLinecap="round" />
-        <path d="M42 70 Q55 40 68 48" stroke="rgba(34,139,34,0.18)" strokeWidth="2" fill="none" strokeLinecap="round" />
-      </svg>
-    </div>
-  );
-}
 
 export default function NextPrayerTimer() {
   const currentPrayer = useCurrentPrayer();
@@ -191,9 +164,6 @@ export default function NextPrayerTimer() {
         </div>
       )}
 
-      {/* Palm Trees */}
-      <PalmTrees />
-
       {/* Islamic pattern overlay */}
       <div className="absolute inset-0 pointer-events-none" style={{
         zIndex: 2, opacity: phase?.patternOpacity ?? 0.03,
@@ -228,10 +198,11 @@ export default function NextPrayerTimer() {
         </div>
 
         <div className="flex flex-col items-center">
-          <span className="font-mono font-medium leading-none hero-countdown"
+          <span className="font-mono leading-none hero-countdown"
             style={{
               fontSize: 'clamp(4rem, 14vw, 11rem)',
               letterSpacing: 'clamp(4px, 1vw, 12px)',
+              fontWeight: 300,
               color: '#FAFAFA',
               textShadow: '0 0 30px rgba(255,255,255,0.08)',
             }}>
