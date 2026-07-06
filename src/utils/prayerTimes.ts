@@ -35,11 +35,10 @@ function toAdhanMadhab(madhab: string) {
 }
 
 function toAdhanHighLatRule(rule: string) {
-  const map: Record<string, HighLatitudeRule> = {
+  const map: Record<string, string> = {
     middleOfNight: HighLatitudeRule.MiddleOfTheNight,
     seventhOfNight: HighLatitudeRule.SeventhOfTheNight,
     twilightAngle: HighLatitudeRule.TwilightAngle,
-    nearestLatitude: HighLatitudeRule.NearestLatitude,
   };
   return map[rule] || HighLatitudeRule.MiddleOfTheNight;
 }
@@ -62,6 +61,7 @@ export function calculatePrayerTimes(
     const adj = params.adjustments;
     calcParams.adjustments = {
       fajr: adj.fajr,
+      sunrise: 0,
       dhuhr: adj.dhuhr,
       asr: adj.asr,
       maghrib: adj.maghrib,
@@ -87,7 +87,6 @@ export function calculatePrayerTimes(
 export function getPrayerInfo(
   times: PrayerTimes,
   now: Date,
-  format: '12h' | '24h'
 ): PrayerInfo[] {
   const prayers: PrayerInfo[] = PRAYER_ORDER.map((key) => ({
     key,
@@ -128,7 +127,6 @@ export function getPrayerInfo(
   for (let i = 0; i < prayers.length; i++) {
     const current = prayers[i];
     const next = prayers[i < prayers.length - 1 ? i + 1 : 0];
-    const prev = prayers[i > 0 ? i - 1 : prayers.length - 1];
 
     if (current.isCurrent) {
       if (current.time <= now) {

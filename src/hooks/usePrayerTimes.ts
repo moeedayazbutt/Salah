@@ -1,7 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { calculatePrayerTimes, getPrayerInfo, formatCountdown, calculateQibla, calculateHijriDate } from '../utils/prayerTimes';
 import { calculateSunPosition, determineSkyPhase, getMoonPhase } from '../utils/skyEngine';
-import type { PrayerTimes, PrayerInfo } from '../types';
 import { useStore } from '../store';
 
 export function usePrayerTimeEngine() {
@@ -52,7 +51,7 @@ export function usePrayerTimeEngine() {
       if (times) {
         setPrayerTimes(times);
 
-        const info = getPrayerInfo(times, now, settings.timeFormat);
+        const info = getPrayerInfo(times, now);
         setPrayerInfo(info);
 
         const current = info.find((p) => p.isCurrent) || null;

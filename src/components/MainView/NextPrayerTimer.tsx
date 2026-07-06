@@ -115,7 +115,7 @@ export default function NextPrayerTimer() {
 
   const birds = useMemo(() => {
     if (elevation < 5 || elevation > 60) return null;
-    return Array.from({ length: 3 + Math.floor(Math.random() * 4) }, (_, i) => ({
+    return Array.from({ length: 3 + Math.floor(Math.random() * 4) }, () => ({
       left: `${15 + Math.random() * 70}%`,
       top: `${18 + Math.random() * 28}%`,
       delay: `${Math.random() * 10}s`,

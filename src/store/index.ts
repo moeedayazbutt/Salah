@@ -51,9 +51,6 @@ interface AppState {
   setInitialized: (init: boolean) => void;
 }
 
-// Fix the typo in the type
-type HijDate = HijriDate | null;
-
 const DEFAULT_SETTINGS: PrayerSettings = {
   coordinates: { latitude: 0, longitude: 0 },
   timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
