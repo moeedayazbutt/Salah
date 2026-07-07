@@ -60,8 +60,27 @@ export function usePrayerTimeEngine() {
         setNextPrayer(next);
 
         if (next) {
-          const diff = next.time.getTime() - now.getTime();
-          const { text } = formatCountdown(diff);
+          let diff = next.time.getTime() - now.getTime();
+          if (diff <= 0) {
+            // next.time is today's prayer that has already passed (wrap-around after Isha).
+            // Recalculate for tomorrow to get the real countdown.
+            const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+            const tmr = calculatePrayerTimes(tomorrow, {
+              coordinates: settings.coordinates,
+              method: settings.calculationMethod,
+              madhab: settings.madhab,
+              highLatitudeRule: settings.highLatitudeRule,
+              adjustments: settings.adjustments,
+            });
+            if (tmr) {
+              const key = next.key as keyof typeof tmr;
+              const tomorrowTime = tmr[key];
+              if (tomorrowTime instanceof Date) {
+                diff = tomorrowTime.getTime() - now.getTime();
+              }
+            }
+          }
+          const { text } = formatCountdown(Math.max(0, diff));
           setTimeUntilNext(text);
         }
       }
