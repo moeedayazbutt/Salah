@@ -85,7 +85,7 @@ function App() {
 
       {/* Control buttons — hidden when fullscreen */}
       {!hideUI && (
-        <div className="fixed z-20 flex items-center" style={{ bottom: '62px', right: '8px', gap: '6px' }}>
+        <div className="fixed z-20 flex items-center" style={{ top: '12px', left: '50%', transform: 'translateX(-50%)', gap: '6px' }}>
           <button
             onClick={isFullscreen ? exitFullscreen : enterFullscreen}
             aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}

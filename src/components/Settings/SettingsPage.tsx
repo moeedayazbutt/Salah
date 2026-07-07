@@ -2,7 +2,45 @@ import { useStore } from '../../store';
 import { CALCULATION_METHODS, MADHAB_OPTIONS, HIGH_LATITUDE_RULES, TIME_FORMATS, THEME_MODES } from '../../types';
 import type { ThemeMode, Madhab, HighLatitudeRule, TimeFormat } from '../../types';
 import { useRequestGeolocation } from '../../hooks/useGeolocation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
+
+interface NominatimResult {
+  place_id: number;
+  display_name: string;
+  lat: string;
+  lon: string;
+  address?: { city?: string; town?: string; village?: string; country?: string; state?: string };
+}
+
+function useCitySearch() {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<NominatimResult[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const search = useCallback((q: string) => {
+    setQuery(q);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    if (!q.trim() || q.length < 2) { setResults([]); setOpen(false); return; }
+    timerRef.current = setTimeout(async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=12&addressdetails=1&accept-language=en`,
+          { headers: { 'Accept-Language': 'en' } }
+        );
+        const data: NominatimResult[] = await res.json();
+        setResults(data);
+        setOpen(data.length > 0);
+      } catch { setResults([]); }
+      setLoading(false);
+    }, 350);
+  }, []);
+
+  const clear = useCallback(() => { setQuery(''); setResults([]); setOpen(false); }, []);
+  return { query, search, results, loading, open, setOpen, clear };
+}
 
 export default function SettingsPage() {
   const settings = useStore((s) => s.settings);
@@ -10,6 +48,15 @@ export default function SettingsPage() {
   const setSettingsOpen = useStore((s) => s.setSettingsOpen);
   const requestLocation = useRequestGeolocation();
   const containerRef = useRef<HTMLDivElement>(null);
+  const citySearch = useCitySearch();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const selectCity = useCallback((result: NominatimResult) => {
+    const lat = parseFloat(result.lat);
+    const lon = parseFloat(result.lon);
+    updateSettings({ coordinates: { latitude: lat, longitude: lon } });
+    citySearch.clear();
+  }, [updateSettings, citySearch]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -92,26 +139,57 @@ export default function SettingsPage() {
         <div className="flex flex-col gap-6">
           {/* Location */}
           <Section title="📍 Location · الموقع">
-            <div className="flex gap-3">
-              <input
-                type="text"
-                placeholder="Search city · ابحث عن مدينة"
-                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-ui transition-all duration-200"
-                style={{
-                  background: 'rgba(0,0,0,0.3)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  color: '#FAFAFA',
-                  outline: 'none',
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = 'rgba(245, 158, 11, 0.4)';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(245, 158, 11, 0.1)';
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = 'rgba(255,255,255,0.1)';
-                  e.target.style.boxShadow = 'none';
-                }}
-              />
+            <div className="flex gap-3 relative">
+              <div className="flex-1 relative" ref={dropdownRef}>
+                <input
+                  type="text"
+                  placeholder="Search city or country…"
+                  value={citySearch.query}
+                  onChange={(e) => citySearch.search(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl text-sm font-ui transition-all duration-200"
+                  style={{
+                    background: 'rgba(0,0,0,0.3)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    color: '#FAFAFA',
+                    outline: 'none',
+                    paddingRight: citySearch.loading ? 36 : undefined,
+                  }}
+                  onFocus={(e) => { e.target.style.borderColor = 'rgba(245,158,11,0.4)'; e.target.style.boxShadow = '0 0 0 3px rgba(245,158,11,0.1)'; }}
+                  onBlur={(e) => { setTimeout(() => citySearch.setOpen(false), 160); e.target.style.borderColor = 'rgba(255,255,255,0.1)'; e.target.style.boxShadow = 'none'; }}
+                  autoComplete="off"
+                />
+                {citySearch.loading && (
+                  <span style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>⏳</span>
+                )}
+                {citySearch.open && citySearch.results.length > 0 && (
+                  <div style={{
+                    position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 100,
+                    background: 'rgba(18,22,54,0.98)', border: '1px solid rgba(255,255,255,0.12)',
+                    borderRadius: 12, marginTop: 4, maxHeight: 280, overflowY: 'auto',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+                  }}>
+                    {citySearch.results.map((r) => {
+                      const city = r.address?.city ?? r.address?.town ?? r.address?.village ?? '';
+                      const country = r.address?.country ?? '';
+                      const label = city ? `${city}${country ? `, ${country}` : ''}` : r.display_name.split(',').slice(0, 2).join(',');
+                      const sub = r.display_name.split(',').slice(1, 3).join(',').trim();
+                      return (
+                        <button
+                          key={r.place_id}
+                          onMouseDown={() => selectCity(r)}
+                          className="w-full text-left px-4 py-2.5 font-ui cursor-pointer border-none transition-all duration-150"
+                          style={{ background: 'transparent', borderBottom: '1px solid rgba(255,255,255,0.04)' }}
+                          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(245,158,11,0.08)')}
+                          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                        >
+                          <span style={{ display: 'block', fontSize: 13, color: '#FAFAFA', fontWeight: 500 }}>{label}</span>
+                          {sub && <span style={{ display: 'block', fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 1 }}>{sub}</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
               <button
                 onClick={requestLocation}
                 className="px-4 py-2.5 rounded-xl text-sm font-ui cursor-pointer border-none transition-all duration-200"
@@ -119,6 +197,7 @@ export default function SettingsPage() {
                   background: 'rgba(20, 184, 166, 0.15)',
                   color: '#14B8A6',
                   border: '1px solid rgba(20, 184, 166, 0.2)',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 📍 GPS

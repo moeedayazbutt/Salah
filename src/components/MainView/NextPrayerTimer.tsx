@@ -196,6 +196,47 @@ export default function NextPrayerTimer() {
 
   const gradient = displayPhase?.gradient ?? 'linear-gradient(180deg, #080A1A 0%, #0E1230 25%, #151A3A 60%, #1A1F3E 100%)';
 
+  const prayerNameStyle = useMemo((): React.CSSProperties => {
+    const phase = displayPhase?.name as string | undefined;
+    switch (phase) {
+      case 'morning':
+      case 'midday':
+      case 'afternoon':
+        return {
+          background: 'linear-gradient(135deg, #ffffff 0%, #FFF9C4 50%, #FFE082 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.7))',
+        };
+      case 'sunrise':
+        return {
+          background: 'linear-gradient(135deg, #FFFFFF 0%, #FFE0B2 45%, #FF8F00 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.5))',
+        };
+      case 'sunset':
+      case 'maghrib':
+        return {
+          background: 'linear-gradient(135deg, #FFFFFF 0%, #FCE4EC 45%, #E91E63 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.5))',
+        };
+      default: // night, fajr, isha
+        return {
+          background: 'linear-gradient(135deg, #FFD600 0%, #F59E0B 30%, #14B8A6 70%, #0D9488 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          filter: 'drop-shadow(0 0 40px rgba(245,158,11,0.2))',
+        };
+    }
+  }, [displayPhase]);
+
   /* Sun/moon sizing */
   const bodySize = typeof window !== 'undefined' ? Math.max(45, Math.min(90, window.innerWidth * 0.055)) : 65;
 
@@ -315,11 +356,8 @@ export default function NextPrayerTimer() {
               style={{
                 fontSize: 'clamp(3.8rem, 11vw, 10rem)',
                 whiteSpace: 'nowrap',
-                background: 'linear-gradient(135deg, #FFD600 0%, #F59E0B 30%, #14B8A6 70%, #0D9488 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                filter: 'drop-shadow(0 0 40px rgba(245,158,11,0.2))',
+                transition: 'filter 2s ease, background 2s ease',
+                ...prayerNameStyle,
               }}
             >
               {displayPrayer?.nameAr || '—'}
