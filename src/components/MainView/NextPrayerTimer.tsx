@@ -5,7 +5,6 @@ import {
 } from '../../hooks/usePrayerTimes';
 import { useStore } from '../../store';
 import { calculateSunPosition, determineSkyPhase } from '../../utils/skyEngine';
-import { getHourlyForecast } from '../../utils/weatherForecast';
 import { formatTime } from '../../utils/prayerTimes';
 
 /* ── Stars ─────────────────────────────────────────── */
@@ -44,82 +43,112 @@ function Clouds() {
   );
 }
 
-/* ── Prayer icons ───────────────────────────────────── */
+/* ── Prayer icons (horizon-based sun position) ──────── */
+// All icons share a horizon line at y=19. Sun circle moves to show
+// its position in the sky for each prayer time.
 function PrayerIcon({ prayerKey, size = 22, color = 'rgba(255,255,255,0.6)' }: { prayerKey: string; size?: number; color?: string }) {
   const s = size;
-  if (prayerKey === 'fajr') return (
-    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill={color} fillOpacity="0.15" />
-      <line x1="12" y1="2" x2="12" y2="4" /><line x1="19" y1="5" x2="17.5" y2="6.5" />
-      <circle cx="18" cy="4" r="1" fill={color} stroke="none" />
-    </svg>
-  );
-  if (prayerKey === 'sunrise') return (
-    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
-      <path d="M17 12a5 5 0 1 1-10 0" />
-      <line x1="12" y1="2" x2="12" y2="4" />
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="19.78" y1="4.22" x2="18.36" y2="5.64" />
-      <line x1="2" y1="12" x2="4" y2="12" /><line x1="20" y1="12" x2="22" y2="12" />
-      <line x1="3" y1="18" x2="21" y2="18" />
-      <polyline points="8 18 12 13 16 18" />
-    </svg>
-  );
-  if (prayerKey === 'dhuhr') return (
-    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="4" fill={color} fillOpacity="0.2" />
-      <line x1="12" y1="2" x2="12" y2="4" /><line x1="12" y1="20" x2="12" y2="22" />
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-      <line x1="2" y1="12" x2="4" y2="12" /><line x1="20" y1="12" x2="22" y2="12" />
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-    </svg>
-  );
-  if (prayerKey === 'asr') return (
-    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
-      <circle cx="12" cy="10" r="4" fill={color} fillOpacity="0.15" />
-      <line x1="12" y1="2" x2="12" y2="4" />
-      <line x1="19.78" y1="4.22" x2="18.36" y2="5.64" /><line x1="22" y1="10" x2="20" y2="10" />
-      <line x1="3" y1="19" x2="21" y2="19" />
-      <line x1="12" y1="14" x2="12" y2="19" />
-      <line x1="8" y1="19" x2="5" y2="22" /><line x1="16" y1="19" x2="19" y2="22" />
-    </svg>
-  );
-  if (prayerKey === 'maghrib') return (
-    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
-      <path d="M17 18a5 5 0 1 1-10 0" fill={color} fillOpacity="0.1" />
-      <line x1="12" y1="9" x2="12" y2="2" />
-      <line x1="4.22" y1="10.22" x2="5.64" y2="11.64" /><line x1="19.78" y1="10.22" x2="18.36" y2="11.64" />
-      <line x1="2" y1="18" x2="22" y2="18" />
-      <line x1="8" y1="22" x2="16" y2="22" />
-    </svg>
-  );
-  /* isha */
-  return (
-    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill={color} fillOpacity="0.15" />
-      <circle cx="17" cy="5" r="1" fill={color} stroke="none" />
-      <circle cx="20" cy="9" r="0.75" fill={color} stroke="none" />
-      <circle cx="15" cy="2" r="0.75" fill={color} stroke="none" />
-    </svg>
-  );
-}
+  const stroke = color;
+  const fill = color;
 
-/* ── Weather icon ───────────────────────────────────── */
-function WeatherIcon({ condition, size = 22 }: { condition: string; size?: number }) {
-  const c = condition === 'sunny' ? '#FFD600' : condition === 'partly-cloudy' ? '#E8C84A' : condition === 'cloudy' ? '#9CA3AF' : '#60A5FA';
+  // Fajr: sun deep below horizon on the east — only a soft glow arc visible
+  if (prayerKey === 'fajr') return (
+    <svg width={s} height={s} viewBox="0 0 28 28" fill="none" stroke={stroke} strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
+      {/* horizon */}
+      <line x1="2" y1="20" x2="26" y2="20" strokeOpacity="0.5" />
+      {/* glow arc below horizon */}
+      <path d="M7 20 Q14 28 21 20" strokeOpacity="0.4" />
+      {/* sun well below horizon, just a halo */}
+      <circle cx="14" cy="24" r="3" fill={fill} fillOpacity="0.12" strokeOpacity="0.3" />
+      {/* stars above */}
+      <circle cx="7"  cy="8"  r="0.9" fill={fill} stroke="none" opacity="0.7" />
+      <circle cx="20" cy="5"  r="0.7" fill={fill} stroke="none" opacity="0.6" />
+      <circle cx="14" cy="11" r="0.8" fill={fill} stroke="none" opacity="0.5" />
+    </svg>
+  );
+
+  // Sunrise (Shuruq): sun half-risen above horizon at centre
+  if (prayerKey === 'sunrise') return (
+    <svg width={s} height={s} viewBox="0 0 28 28" fill="none" stroke={stroke} strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
+      {/* horizon */}
+      <line x1="2" y1="20" x2="26" y2="20" strokeOpacity="0.5" />
+      {/* sun half above horizon */}
+      <path d="M8 20 A6 6 0 0 1 20 20" fill={fill} fillOpacity="0.2" />
+      <path d="M8 20 A6 6 0 0 1 20 20" />
+      {/* rays */}
+      <line x1="14" y1="5"  x2="14" y2="8"  strokeOpacity="0.7" />
+      <line x1="22" y1="9"  x2="20" y2="11" strokeOpacity="0.6" />
+      <line x1="6"  y1="9"  x2="8"  y2="11" strokeOpacity="0.6" />
+      <line x1="24" y1="14" x2="22" y2="14" strokeOpacity="0.5" />
+      <line x1="4"  y1="14" x2="6"  y2="14" strokeOpacity="0.5" />
+    </svg>
+  );
+
+  // Dhuhr: sun high at zenith (top-centre), full circle, horizon at bottom
+  if (prayerKey === 'dhuhr') return (
+    <svg width={s} height={s} viewBox="0 0 28 28" fill="none" stroke={stroke} strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
+      {/* horizon */}
+      <line x1="2" y1="22" x2="26" y2="22" strokeOpacity="0.4" />
+      {/* sun at zenith */}
+      <circle cx="14" cy="8" r="4.5" fill={fill} fillOpacity="0.25" />
+      {/* rays */}
+      <line x1="14" y1="1"  x2="14" y2="2.5" />
+      <line x1="21" y1="3"  x2="20" y2="4.2" />
+      <line x1="7"  y1="3"  x2="8"  y2="4.2" />
+      <line x1="24" y1="8"  x2="22.5" y2="8" />
+      <line x1="4"  y1="8"  x2="5.5"  y2="8" />
+      <line x1="21" y1="13" x2="20"   y2="11.8" />
+      <line x1="7"  y1="13" x2="8"    y2="11.8" />
+      {/* vertical line from sun to horizon */}
+      <line x1="14" y1="12.5" x2="14" y2="22" strokeOpacity="0.2" strokeDasharray="2 2" />
+    </svg>
+  );
+
+  // Asr: keep as-is (user said don't change Asr)
+  if (prayerKey === 'asr') return (
+    <svg width={s} height={s} viewBox="0 0 28 28" fill="none" stroke={stroke} strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
+      {/* horizon */}
+      <line x1="2" y1="22" x2="26" y2="22" strokeOpacity="0.4" />
+      {/* sun at ~45° in afternoon sky, west side */}
+      <circle cx="19" cy="11" r="4" fill={fill} fillOpacity="0.2" />
+      <line x1="19" y1="4"    x2="19" y2="5.5" />
+      <line x1="25" y1="7"    x2="23.9" y2="8.1" />
+      <line x1="26" y1="11"   x2="24.5" y2="11" />
+      <line x1="25" y1="15"   x2="23.9" y2="13.9" />
+      {/* shadow line extending from base */}
+      <line x1="19" y1="15" x2="5" y2="22" strokeOpacity="0.35" />
+    </svg>
+  );
+
+  // Maghrib: sun setting on the right (west), half below horizon
+  if (prayerKey === 'maghrib') return (
+    <svg width={s} height={s} viewBox="0 0 28 28" fill="none" stroke={stroke} strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
+      {/* horizon */}
+      <line x1="2" y1="18" x2="26" y2="18" strokeOpacity="0.5" />
+      {/* sun half-set on the right */}
+      <path d="M15 18 A6 6 0 0 0 27 18" fill={fill} fillOpacity="0.2" />
+      <path d="M15 18 A6 6 0 0 0 27 18" />
+      {/* rays above horizon */}
+      <line x1="21" y1="5"  x2="21" y2="7"  strokeOpacity="0.7" />
+      <line x1="27" y1="10" x2="25.5" y2="10.8" strokeOpacity="0.6" />
+      <line x1="15" y1="10" x2="16.5" y2="11"   strokeOpacity="0.6" />
+      {/* fading glow below */}
+      <line x1="2" y1="23" x2="12" y2="23" strokeOpacity="0.2" />
+    </svg>
+  );
+
+  // Isha: keep as moon + stars (user said don't change Isha)
   return (
-    <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true">
-      <circle cx="20" cy="18" r="7" fill={c} opacity="0.9" />
-      {condition === 'sunny' && (
-        <g stroke={c} strokeWidth="1.5" opacity="0.5">
-          <line x1="20" y1="4" x2="20" y2="8" /><line x1="20" y1="28" x2="20" y2="32" />
-          <line x1="8" y1="18" x2="12" y2="18" /><line x1="28" y1="18" x2="32" y2="18" />
-          <line x1="11.5" y1="9.5" x2="14.5" y2="12.5" /><line x1="25.5" y1="12.5" x2="28.5" y2="9.5" />
-          <line x1="11.5" y1="26.5" x2="14.5" y2="23.5" /><line x1="25.5" y1="23.5" x2="28.5" y2="26.5" />
-        </g>
-      )}
-      {condition === 'partly-cloudy' && (<><g stroke={c} strokeWidth="1.2" opacity="0.4"><line x1="20" y1="6" x2="20" y2="9" /><line x1="10" y1="18" x2="13" y2="18" /><line x1="27" y1="18" x2="30" y2="18" /></g><ellipse cx="28" cy="22" rx="10" ry="5" fill="rgba(255,255,255,0.22)" /></>)}
-      {condition === 'cloudy' && <ellipse cx="26" cy="22" rx="13" ry="6" fill="rgba(255,255,255,0.28)" />}
-      {condition === 'rainy' && (<><ellipse cx="26" cy="20" rx="12" ry="5.5" fill="rgba(255,255,255,0.22)" /><g stroke="#60A5FA" strokeWidth="1.5" opacity="0.7" strokeLinecap="round"><line x1="22" y1="28" x2="20" y2="34" /><line x1="27" y1="28" x2="25" y2="34" /><line x1="32" y1="28" x2="30" y2="34" /></g></>)}
+    <svg width={s} height={s} viewBox="0 0 28 28" fill="none" stroke={stroke} strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
+      {/* horizon */}
+      <line x1="2" y1="22" x2="26" y2="22" strokeOpacity="0.3" />
+      {/* crescent moon */}
+      <path d="M22 14a8 8 0 1 1-9-9 6 6 0 0 0 9 9z" fill={fill} fillOpacity="0.18" />
+      {/* stars */}
+      <circle cx="7"  cy="7"  r="1"    fill={fill} stroke="none" opacity="0.8" />
+      <circle cx="20" cy="4"  r="0.8"  fill={fill} stroke="none" opacity="0.7" />
+      <circle cx="5"  cy="15" r="0.7"  fill={fill} stroke="none" opacity="0.6" />
+      <circle cx="24" cy="10" r="0.65" fill={fill} stroke="none" opacity="0.6" />
     </svg>
   );
 }
@@ -167,13 +196,6 @@ export default function NextPrayerTimer() {
 
   const gradient = displayPhase?.gradient ?? 'linear-gradient(180deg, #080A1A 0%, #0E1230 25%, #151A3A 60%, #1A1F3E 100%)';
 
-  /* Hourly weather */
-  const sliderHour = (!skySliderAuto && skyDisplayHours !== null) ? Math.floor(skyDisplayHours) : undefined;
-  const hourly = useMemo(
-    () => getHourlyForecast(settings.coordinates.latitude, settings.coordinates.longitude, sliderHour),
-    [settings.coordinates.latitude, settings.coordinates.longitude, sliderHour],
-  );
-
   /* Sun/moon sizing */
   const bodySize = typeof window !== 'undefined' ? Math.max(45, Math.min(90, window.innerWidth * 0.055)) : 65;
 
@@ -193,8 +215,6 @@ export default function NextPrayerTimer() {
   const timeStr  = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   const dateStr  = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   const hijriStr = hijri ? `${hijri.day} ${hijri.monthNameEn} ${hijri.year} AH` : '';
-
-  const currentWeather = hourly[0];
 
   return (
     <div className="flex-1 relative overflow-hidden rounded-xl flex flex-col" style={{
@@ -364,48 +384,6 @@ export default function NextPrayerTimer() {
               )}
             </div>
           ))}
-        </div>
-
-        {/* WEATHER — bottom */}
-        <div className="flex-shrink-0 rounded-xl" style={{
-          padding: '8px 14px',
-          background: 'rgba(0,0,0,0.28)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          border: '1px solid rgba(255,255,255,0.07)',
-        }}>
-          <div className="flex items-center" style={{ gap: 10, marginBottom: 6 }}>
-            <WeatherIcon condition={currentWeather?.condition.icon ?? 'sunny'} size={30} />
-            <div className="flex items-end" style={{ gap: 3 }}>
-              <span className="font-mono" style={{ fontSize: 'clamp(1.4rem, 2.8vw, 2.8rem)', fontWeight: 300, color: '#FAFAFA', lineHeight: 1 }}>
-                {currentWeather?.temp ?? '—'}
-              </span>
-              <span className="font-ui" style={{ fontSize: 'clamp(0.7rem, 1.1vw, 1.1rem)', color: 'rgba(255,255,255,0.4)', marginBottom: '0.15em' }}>°C</span>
-            </div>
-            <span className="font-ui" style={{ fontSize: 'clamp(0.75rem, 1.2vw, 1.2rem)', color: 'rgba(255,255,255,0.5)' }}>
-              {currentWeather?.condition.en ?? 'Clear'}
-            </span>
-          </div>
-          <div className="hourly-scroll">
-            <div className="flex" style={{ gap: 3, minWidth: 'max-content' }}>
-              {hourly.map((h) => (
-                <div key={`${h.hour}-${h.timeLabel}`} className="flex flex-col items-center rounded-lg" style={{
-                  padding: '4px 8px', minWidth: 50,
-                  background: h.isNow ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.04)',
-                  border: `1px solid ${h.isNow ? 'rgba(245,158,11,0.3)' : 'rgba(255,255,255,0.05)'}`,
-                  gap: 2,
-                }}>
-                  <span className="font-ui" style={{ fontSize: 'clamp(0.6rem, 0.9vw, 0.95rem)', color: h.isNow ? '#F59E0B' : 'rgba(255,255,255,0.45)' }}>
-                    {h.timeLabel}
-                  </span>
-                  <WeatherIcon condition={h.condition.icon} size={16} />
-                  <span className="font-mono" style={{ fontSize: 'clamp(0.65rem, 0.95vw, 1rem)', color: 'rgba(255,255,255,0.8)', fontWeight: 400 }}>
-                    {h.temp}°
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
       </div>
