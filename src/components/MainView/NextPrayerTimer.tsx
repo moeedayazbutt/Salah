@@ -188,6 +188,8 @@ export default function NextPrayerTimer() {
   const elevation = displayPos.elevation;
   const azimuth   = displayPos.azimuth;
   const isNight   = elevation < 0;
+  // Stars fade in gradually from elevation +3 (twilight) down to -15 (full night)
+  const starFade = elevation >= 3 ? 0 : elevation <= -15 ? 1 : (-elevation + 3) / 18;
 
   const displayPhase = useMemo(() => {
     if (!skySliderAuto && skyDisplayHours !== null) return determineSkyPhase(elevation, azimuth);
@@ -240,8 +242,9 @@ export default function NextPrayerTimer() {
   /* Sun/moon sizing */
   const bodySize = typeof window !== 'undefined' ? Math.max(45, Math.min(90, window.innerWidth * 0.055)) : 65;
 
-  const sunTop  = `${Math.min(58, Math.max(4, 58 - elevation * 0.75))}%`;
-  const sunLeft = azimuth < 180 ? `${8 + (azimuth / 180) * 40}%` : `${48 + ((azimuth - 180) / 180) * 40}%`;
+  // Sun starts low behind mountains (elevation=0 → ~62% down), clears them around elevation=8°
+  const sunTop  = `${Math.min(62, Math.max(4, 62 - elevation * 0.9))}%`;
+  const sunLeft = azimuth < 180 ? `${10 + (azimuth / 180) * 38}%` : `${48 + ((azimuth - 180) / 180) * 38}%`;
 
   const moonPct    = Math.max(0, Math.min(100, ((elevation + 20) / 40) * 100));
   const moonTop    = `${5 + moonPct * 0.25}%`;
@@ -265,22 +268,22 @@ export default function NextPrayerTimer() {
       {/* Sky gradient bleed */}
       <div className="absolute inset-0 pointer-events-none" style={{ background: gradient.replace('180deg', '135deg'), opacity: 0.12, transition: 'background 2s ease-in-out' }} />
 
-      {/* Stars */}
-      {isNight && (
+      {/* Stars — appear gradually from twilight, full at deep night */}
+      {starFade > 0 && (
         <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
           {STARS.map((star, i) => (
             <Star key={i} style={{
               left: star.left, top: star.top, width: star.size, height: star.size,
               animation: `twinkle ${star.dur} ease-in-out ${star.delay} infinite`,
-              opacity: elevation < -12 ? star.op * 0.9 : star.op * Math.max(0.05, (elevation + 18) / 18 * 0.85),
-              transition: 'opacity 2s ease-in-out',
+              opacity: star.op * starFade,
+              transition: 'opacity 3s ease-in-out',
             }} />
           ))}
         </div>
       )}
 
       {/* Moon */}
-      {isNight && (
+      {starFade > 0 && (
         <div className="absolute pointer-events-none" style={{
           top: moonTop, right: moonRight, width: bodySize, height: bodySize,
           transition: 'all 1.5s cubic-bezier(0.4,0,0.2,1)', zIndex: 1,
@@ -338,13 +341,13 @@ export default function NextPrayerTimer() {
               </span>
             )}
           </div>
-          <span className="font-mono" style={{ fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)', fontWeight: 300, color: '#FAFAFA', letterSpacing: '0.04em', lineHeight: 1, marginTop: 2 }}>
+          <span style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 400, fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)', color: '#FAFAFA', letterSpacing: '0.04em', lineHeight: 1, marginTop: 2, fontVariantNumeric: 'tabular-nums' }}>
             {timeStr}
           </span>
         </div>
 
-        {/* PRAYER NAME — own row with generous top margin */}
-        <div className="flex flex-col items-center flex-shrink-0" style={{ marginTop: 'clamp(12px, 3vh, 32px)', gap: 4 }}>
+        {/* PRAYER NAME — tighter gap with top clock row */}
+        <div className="flex flex-col items-center flex-shrink-0" style={{ marginTop: 'clamp(4px, 1vh, 10px)', gap: 4 }}>
           <span className="font-ui tracking-widest uppercase" style={{ fontSize: 'clamp(0.75rem, 1.3vw, 1.4rem)', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.22em' }}>
             NEXT PRAYER
           </span>
@@ -393,8 +396,12 @@ export default function NextPrayerTimer() {
               flex: '1 1 0%',
               padding: 'clamp(4px, 0.8vh, 10px) 6px',
               borderRadius: 10,
-              background: prayer.isCurrent ? 'rgba(245,158,11,0.12)' : 'rgba(255,255,255,0.04)',
-              border: `1px solid ${prayer.isCurrent ? 'rgba(245,158,11,0.35)' : 'rgba(255,255,255,0.06)'}`,
+              background: prayer.isCurrent
+                ? 'rgba(255,215,0,0.18)'
+                : 'rgba(255,255,255,0.10)',
+              border: `1px solid ${prayer.isCurrent ? 'rgba(255,215,0,0.45)' : 'rgba(255,255,255,0.18)'}`,
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
               gap: 3,
             }}>
               <PrayerIcon
@@ -409,11 +416,13 @@ export default function NextPrayerTimer() {
               }}>
                 {prayer.nameAr}
               </span>
-              <span className="font-mono" style={{
+              <span style={{
+                fontFamily: "'Oswald', sans-serif",
                 fontSize: 'clamp(0.7rem, 1.1vw, 1.2rem)',
-                color: prayer.isCurrent ? 'rgba(255,215,0,0.75)' : 'rgba(255,255,255,0.4)',
                 fontWeight: 400,
+                color: prayer.isCurrent ? 'rgba(255,215,0,0.9)' : 'rgba(255,255,255,0.65)',
                 fontVariantNumeric: 'tabular-nums',
+                letterSpacing: '0.02em',
               }}>
                 {formatTime(prayer.time, settings.timeFormat, settings.timezone)}
               </span>
