@@ -201,11 +201,11 @@ function Mountains({ pal }: { pal:Palette }) {
 const Scene = memo(function Scene({
   pal, speed, sunLeftPct, sunGlowOpacity,
   starFade, moonOpacity, moonTop, moonLeft, moonSize,
-  sunOpacity, sunTop, sunSize, showBirds
+  sunOpacity, sunTop, sunSize
 }: {
   pal:Palette; speed:number; sunLeftPct:number; sunGlowOpacity:number;
   starFade:number; moonOpacity:number; moonTop:number; moonLeft:number; moonSize:number;
-  sunOpacity:number; sunTop:number; sunSize:number; showBirds:boolean;
+  sunOpacity:number; sunTop:number; sunSize:number;
 }) {
   const uid = useId().replace(/:/g,'');
   const reflId = `refl${uid}`;
@@ -228,6 +228,46 @@ const Scene = memo(function Scene({
           filter:'blur(7px)', transition:'left 1.5s ease',
           animation:'reflect-waver 6s ease-in-out infinite',
         }} />
+      )}
+
+      {/* Sun reflection in the water */}
+      {sunOpacity > 0.01 && (
+        <div className="portrait-scale-landscape" style={{
+          position: 'absolute',
+          top: `${62.2 + (62.2 - sunTop)}%`,
+          left: `${sunLeftPct}%`,
+          width: sunSize,
+          height: sunSize,
+          transform: 'translate(-50%, -50%) scaleY(-1)',
+          opacity: sunOpacity * 0.45,
+          filter: 'blur(3px) url(#water-waves)',
+          pointerEvents: 'none',
+          transition: 'opacity 2.5s ease-in-out, top 1.5s ease, left 1.5s ease',
+        }}>
+          {/* Sun core reflection */}
+          <div style={{
+            width: '100%', height: '100%', borderRadius: '50%',
+            background: `radial-gradient(circle, ${pal.sunCore} 0%, ${pal.sunEdge} 70%, transparent 100%)`,
+          }} />
+        </div>
+      )}
+
+      {/* Moon reflection in the water */}
+      {moonOpacity > 0.01 && (
+        <div className="portrait-scale-landscape" style={{
+          position: 'absolute',
+          top: `${62.2 + (62.2 - moonTop)}%`,
+          left: `${moonLeft}%`,
+          width: moonSize,
+          height: moonSize,
+          transform: 'translate(-50%, -50%) scaleY(-1)',
+          opacity: moonOpacity * 0.45,
+          filter: 'blur(2.5px) url(#water-waves)',
+          pointerEvents: 'none',
+          transition: 'opacity 2.5s ease-in-out, top 1.5s ease, left 1.5s ease',
+        }}>
+          <Moon topPct={50} leftPct={50} size={moonSize} opacity={1} />
+        </div>
       )}
 
       <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice"
@@ -282,10 +322,6 @@ const Scene = memo(function Scene({
                   opacity:st.op*starFade * 0.7,
                 }} />
               ))}
-              {/* Moon reflection */}
-              {moonOpacity > 0.01 && <Moon topPct={moonTop} leftPct={moonLeft} size={moonSize} opacity={moonOpacity} />}
-              {/* Sun reflection */}
-              {sunOpacity > 0.01 && <Sun topPct={sunTop} leftPct={sunLeftPct} size={sunSize} opacity={sunOpacity} pal={pal} />}
               {/* Clouds reflection */}
               {pal.cloudOpacity > 0.05 && CLOUD_CFG.map((c,i) => (
                 <div key={`refl-cloud-${i}`} style={{
@@ -295,13 +331,6 @@ const Scene = memo(function Scene({
                   <CloudCluster cloud={pal.cloud} under={pal.cloudUnder} opacity={pal.cloudOpacity*c.opa * 0.8} width={c.width} />
                 </div>
               ))}
-              {/* Birds reflection */}
-              {showBirds && (
-                <div style={{ position:'absolute', inset:0, overflow:'hidden' }}>
-                  <FlockLayer birds={BIG_FLOCK}   color={pal.birdColor} top={18} dir="ltr" duration={58} delay={-24} speed={speed} />
-                  <FlockLayer birds={SMALL_FLOCK} color={pal.birdColor} top={10} dir="ltr" duration={78} delay={-48} speed={speed} />
-                </div>
-              )}
             </div>
           </div>
         </foreignObject>
@@ -372,69 +401,7 @@ function CloudLayer({ pal, speed, foreground = false }: { pal:Palette; speed:num
   );
 }
 
-/* ═══════════════════════════════════════════════════════════
-   BIRDS — a big flock of flapping gulls crossing the sky.
-   ═══════════════════════════════════════════════════════════ */
-interface Bird { x:number; y:number; size:number; flapDur:number; flapDelay:number; tilt:number; }
-function makeFlock(seed:number, count:number, spreadX:number, spreadY:number): Bird[] {
-  let s = seed;
-  const r = () => { s = (s*9301+49297)%233280; return s/233280; };
-  const birds: Bird[] = [];
-  const arm = Math.ceil(count/2);
-  for (let i=0;i<arm;i++) {
-    const jx=(r()-0.5)*10, jy=(r()-0.5)*7;
-    // Add wider speed variance (from 0.45s to 1.35s) and larger delay spread
-    birds.push({ x:i*spreadX+jx, y:i*spreadY+jy, size:16-i*0.35+r()*3, flapDur:0.45+r()*0.9, flapDelay:r()*1.5, tilt:-15+r()*30 });
-    if (i>0) birds.push({ x:i*spreadX+jx, y:-i*spreadY+jy, size:16-i*0.35+r()*3, flapDur:0.45+r()*0.9, flapDelay:r()*1.5, tilt:-15+r()*30 });
-  }
-  return birds;
-}
-const BIG_FLOCK   = makeFlock(1337, 26, 21, 9);
-const SMALL_FLOCK = makeFlock(7,    12, 15, 7);
 
-const SilhouettedBird = memo(({ b }: { b:Bird }) => (
-  <svg width={b.size * 1.5} height={b.size * 1.5} viewBox="0 0 32 32"
-    style={{
-      position:'absolute', left:b.x, top:b.y, overflow:'visible',
-      transform: `rotate(${b.tilt}deg)`,
-    }} aria-hidden="true">
-    {/* Abstract Duck Bottom Wing */}
-    <path
-      d="M 14,18 C 13,24 9,30 5,32 C 9,29 13,24 14,18 Z"
-      fill="currentColor"
-      style={{
-        transformOrigin: '14px 18px',
-        animation: `flap-bottom ${b.flapDur}s ease-in-out ${b.flapDelay}s infinite`
-      }}
-    />
-    {/* Abstract Duck Body + Tail */}
-    <path
-      d="M 2,16 C 5,14 10,13 18,13 C 24,13 28,11.5 31,12 C 29,15 25,18 18,18 C 12,18 5,18 2,16 Z M 1,13 C 3,14 4,15.5 4,16 C 4,16.5 3,18 1,19 C 2.5,17.5 3,16.5 3,16 C 3,15.5 2.5,14.5 1,13 Z"
-      fill="currentColor"
-    />
-    {/* Abstract Duck Top Wing */}
-    <path
-      d="M 14,14 C 13,8 9,2 5,0 C 9,3 13,8 14,14 Z"
-      fill="currentColor"
-      style={{
-        transformOrigin: '14px 14px',
-        animation: `flap-top ${b.flapDur}s ease-in-out ${b.flapDelay}s infinite`
-      }}
-    />
-  </svg>
-));
-
-function FlockLayer({ birds, color, top, dir, duration, delay, speed }:
-  { birds:Bird[]; color:string; top:number; dir:'rtl'|'ltr'; duration:number; delay:number; speed:number }) {
-  return (
-    <div style={{
-      position:'absolute', top:`${top}%`, left:0, color,
-      animation: `${dir==='rtl'?'fly-rtl':'fly-ltr'} ${duration/speed}s linear ${delay/speed}s infinite`,
-    }}>
-      {birds.map((b,i) => <SilhouettedBird key={i} b={b} />)}
-    </div>
-  );
-}
 
 /* ═══════════════════════════════════════════════════════════
    STARS + SHOOTING STARS
@@ -685,7 +652,7 @@ function SkyBackground() {
   }
 
   const starFade  = elevation >= 3 ? 0 : elevation <= -15 ? 1 : (-elevation + 3) / 18;
-  const showBirds = ['morning','midday','afternoon'].includes(phaseId);
+
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden sky-bg">
@@ -746,24 +713,17 @@ function SkyBackground() {
             <Scene
               pal={layerA.pal} speed={speed} sunLeftPct={sunLeft} sunGlowOpacity={finalSunOpacity}
               starFade={starFade} moonOpacity={finalMoonOpacity} moonTop={finalMoonTop} moonLeft={moonLeft} moonSize={moonSize}
-              sunOpacity={finalSunOpacity} sunTop={sunTop} sunSize={sunSize} showBirds={showBirds}
+              sunOpacity={finalSunOpacity} sunTop={sunTop} sunSize={sunSize}
             />
           </div>
           <div style={{ position:'absolute', inset:0, zIndex:4, pointerEvents:'none', opacity:active==='b'?1:0, transition:'opacity 2.5s cubic-bezier(0.4,0,0.2,1)' }}>
             <Scene
               pal={layerB.pal} speed={speed} sunLeftPct={sunLeft} sunGlowOpacity={finalSunOpacity}
               starFade={starFade} moonOpacity={finalMoonOpacity} moonTop={finalMoonTop} moonLeft={moonLeft} moonSize={moonSize}
-              sunOpacity={finalSunOpacity} sunTop={sunTop} sunSize={sunSize} showBirds={showBirds}
+              sunOpacity={finalSunOpacity} sunTop={sunTop} sunSize={sunSize}
             />
           </div>
 
-          {/* Birds (z5, big flock, daytime) */}
-          {showBirds && (
-            <div style={{ position:'absolute', inset:0, overflow:'hidden', zIndex:5, pointerEvents:'none' }}>
-              <FlockLayer birds={BIG_FLOCK}   color={pal.birdColor} top={18} dir="ltr" duration={58} delay={-24} speed={speed} />
-              <FlockLayer birds={SMALL_FLOCK} color={pal.birdColor} top={10} dir="ltr" duration={78} delay={-48} speed={speed} />
-            </div>
-          )}
         </>
       )}
     </div>

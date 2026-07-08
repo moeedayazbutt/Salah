@@ -19,6 +19,42 @@ const AZAAN_URLS: Record<string, { standard: string; fajr: string }> = {
     standard: 'https://www.islamcan.com/audio/adhan/azan2.mp3',
     fajr: 'https://www.islamcan.com/audio/adhan/azan15.mp3',
   },
+  pakistan: {
+    standard: 'https://www.islamcan.com/audio/adhan/azan12.mp3',
+    fajr: 'https://www.islamcan.com/audio/adhan/azan15.mp3',
+  },
+  uae: {
+    standard: 'https://www.islamcan.com/audio/adhan/azan5.mp3',
+    fajr: 'https://www.islamcan.com/audio/adhan/azan15.mp3',
+  },
+  indonesia: {
+    standard: 'https://www.islamcan.com/audio/adhan/azan18.mp3',
+    fajr: 'https://www.islamcan.com/audio/adhan/azan15.mp3',
+  },
+  iran: {
+    standard: 'https://www.islamcan.com/audio/adhan/azan9.mp3',
+    fajr: 'https://www.islamcan.com/audio/adhan/azan15.mp3',
+  },
+  iraq: {
+    standard: 'https://www.islamcan.com/audio/adhan/azan7.mp3',
+    fajr: 'https://www.islamcan.com/audio/adhan/azan15.mp3',
+  },
+  syria: {
+    standard: 'https://www.islamcan.com/audio/adhan/azan4.mp3',
+    fajr: 'https://www.islamcan.com/audio/adhan/azan15.mp3',
+  },
+  yemen: {
+    standard: 'https://www.islamcan.com/audio/adhan/azan13.mp3',
+    fajr: 'https://www.islamcan.com/audio/adhan/azan15.mp3',
+  },
+  morocco: {
+    standard: 'https://www.islamcan.com/audio/adhan/azan11.mp3',
+    fajr: 'https://www.islamcan.com/audio/adhan/azan15.mp3',
+  },
+  somalia: {
+    standard: 'https://www.islamcan.com/audio/adhan/azan19.mp3',
+    fajr: 'https://www.islamcan.com/audio/adhan/azan15.mp3',
+  },
 };
 
 let currentAudio: HTMLAudioElement | null = null;
@@ -30,6 +66,15 @@ export const MUAZZIN_OPTIONS = [
   { value: 'cairo', label: 'Cairo - Sheikh Mustafa Ismail' },
   { value: 'alaqsa', label: 'Al-Aqsa - Sheikh Naji al-Qazzaz' },
   { value: 'istanbul', label: 'Istanbul - Turkey Style' },
+  { value: 'pakistan', label: 'Pakistan - Faisal Mosque' },
+  { value: 'uae', label: 'UAE - Sheikh Zayed Mosque' },
+  { value: 'indonesia', label: 'Indonesia - Nusantara Style' },
+  { value: 'iran', label: 'Iran - Persian Melody' },
+  { value: 'iraq', label: 'Iraq - Baghdad Maqam' },
+  { value: 'syria', label: 'Syria - Umayyad Mosque' },
+  { value: 'yemen', label: 'Yemen - Sana\'a Style' },
+  { value: 'morocco', label: 'Morocco - Maghreb Style' },
+  { value: 'somalia', label: 'Somalia - East Africa Style' },
 ];
 
 export function playAzaan(
