@@ -364,7 +364,7 @@ function CloudLayer({ pal, speed }: { pal:Palette; speed:number }) {
 /* ═══════════════════════════════════════════════════════════
    BIRDS — a big flock of flapping gulls crossing the sky.
    ═══════════════════════════════════════════════════════════ */
-interface Bird { x:number; y:number; size:number; flapDur:number; flapDelay:number; }
+interface Bird { x:number; y:number; size:number; flapDur:number; flapDelay:number; tilt:number; }
 function makeFlock(seed:number, count:number, spreadX:number, spreadY:number): Bird[] {
   let s = seed;
   const r = () => { s = (s*9301+49297)%233280; return s/233280; };
@@ -372,37 +372,40 @@ function makeFlock(seed:number, count:number, spreadX:number, spreadY:number): B
   const arm = Math.ceil(count/2);
   for (let i=0;i<arm;i++) {
     const jx=(r()-0.5)*10, jy=(r()-0.5)*7;
-    birds.push({ x:i*spreadX+jx, y:i*spreadY+jy, size:16-i*0.35+r()*3, flapDur:0.55+r()*0.5, flapDelay:r()*0.9 });
-    if (i>0) birds.push({ x:i*spreadX+jx, y:-i*spreadY+jy, size:16-i*0.35+r()*3, flapDur:0.55+r()*0.5, flapDelay:r()*0.9 });
+    birds.push({ x:i*spreadX+jx, y:i*spreadY+jy, size:16-i*0.35+r()*3, flapDur:0.55+r()*0.5, flapDelay:r()*0.9, tilt:-25+r()*45 });
+    if (i>0) birds.push({ x:i*spreadX+jx, y:-i*spreadY+jy, size:16-i*0.35+r()*3, flapDur:0.55+r()*0.5, flapDelay:r()*0.9, tilt:-25+r()*45 });
   }
   return birds;
 }
 const BIG_FLOCK   = makeFlock(1337, 26, 21, 9);
 const SMALL_FLOCK = makeFlock(7,    12, 15, 7);
 
-const Goose = memo(({ b }: { b:Bird }) => (
+const SilhouettedBird = memo(({ b }: { b:Bird }) => (
   <svg width={b.size * 1.5} height={b.size * 1.5} viewBox="0 0 32 32"
-    style={{ position:'absolute', left:b.x, top:b.y, overflow:'visible' }} aria-hidden="true">
+    style={{
+      position:'absolute', left:b.x, top:b.y, overflow:'visible',
+      transform: `rotate(${b.tilt}deg)`,
+    }} aria-hidden="true">
     {/* Bottom Wing */}
     <path
-      d="M 12,16 C 11,22 7,29 2,32 C 7,30 14,24 15,16 Z"
+      d="M 13,17 C 12,23 9,28 5,31 C 8,28 12,23 13,17 Z"
       fill="currentColor"
       style={{
-        transformOrigin: '12px 16px',
+        transformOrigin: '13px 17px',
         animation: `flap-bottom ${b.flapDur}s ease-in-out ${b.flapDelay}s infinite`
       }}
     />
-    {/* Stout Body + Neck + Head */}
+    {/* Body + Tail */}
     <path
-      d="M 3,18 C 5,16 9,15 13,15 C 17,15 21,15.5 24,16.5 C 26,16 28,15.5 30,15.5 C 31,16 31.5,16.5 31,17 C 30,17.5 28,18 26,18 C 24,19 20,20.5 16,20.5 C 11,20.5 7,19.5 3,18 Z"
+      d="M 2,16 C 4,14.5 8,14 13,14 C 18,14 22,15 26,16 C 22,17 18,18 13,18 C 8,18 4,17.5 2,16 M 1,11 C 3,13 4,15 4,16 C 4,17 3,19 1,21 C 2.5,19 3,17.5 3,16 C 3,14.5 2.5,13 1,11 Z"
       fill="currentColor"
     />
     {/* Top Wing */}
     <path
-      d="M 12,16 C 11,10 7,3 2,0 C 7,2 14,8 15,16 Z"
+      d="M 13,15 C 12,9 9,4 5,1 C 8,4 12,9 13,15 Z"
       fill="currentColor"
       style={{
-        transformOrigin: '12px 16px',
+        transformOrigin: '13px 15px',
         animation: `flap-top ${b.flapDur}s ease-in-out ${b.flapDelay}s infinite`
       }}
     />
@@ -416,7 +419,7 @@ function FlockLayer({ birds, color, top, dir, duration, delay, speed }:
       position:'absolute', top:`${top}%`, left:0, color,
       animation: `${dir==='rtl'?'fly-rtl':'fly-ltr'} ${duration/speed}s linear ${delay/speed}s infinite`,
     }}>
-      {birds.map((b,i) => <Goose key={i} b={b} />)}
+      {birds.map((b,i) => <SilhouettedBird key={i} b={b} />)}
     </div>
   );
 }
