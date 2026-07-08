@@ -189,6 +189,25 @@ function Mountains({ pal }: { pal:Palette }) {
       <path d={FG_RIGHT_MASS} fill={pal.fgDark} />
       <path d={BANK_LEFT} fill={pal.bank} />
       <path d={BANK_RIGHT} fill={pal.bankLight} />
+      
+      {/* Abstract walking moose/deer silhouettes — behind foreground trees */}
+      {/* Moose 1: walks left-to-right */}
+      <g style={{
+        animation: 'moose-walk-ltr 55s linear 5s infinite',
+      }}>
+        <svg viewBox="0 0 28 28" width="28" height="28" x="0" y="526" style={{ overflow: 'visible' }}>
+          <path d="M 5,24 L 6,24 L 7,17 L 14,17 L 15,24 L 16,24 L 14.5,15 L 17,14 L 20,8 L 19,5 L 17.5,6 L 16.5,8 L 15.5,10 L 13.5,11 L 8,11 L 6,15 L 5,24 Z M 20,8 C 21,7 22,5.5 23,4.5 L 22,4.5 C 21,5.5 20.5,6.5 20,8 Z M 19,5 L 18,3 L 17.5,4.5 L 19,5 Z" fill={pal.fgDark} />
+        </svg>
+      </g>
+      {/* Deer 2: walks right-to-left, different timing */}
+      <g style={{
+        animation: 'moose-walk-rtl 65s linear 30s infinite',
+      }}>
+        <svg viewBox="0 0 24 24" width="22" height="22" x="0" y="530" style={{ overflow: 'visible' }}>
+          <path d="M 4,20 L 5,20 L 6,14 L 12,14 L 13,20 L 14,20 L 12.5,13 L 15,12 L 17,7 L 16,5 L 15,6 L 14,8 L 12.5,9.5 L 7.5,9.5 L 5.5,13 L 4,20 Z M 17,7 C 18,6 19,5 20,4 L 19,4 C 18,5 17.5,5.5 17,7 Z" fill={pal.fgDark} />
+        </svg>
+      </g>
+
       {FG_PINES.map(([x,b,h,k],i) => (
         <Pine key={`f${i}`} x={x} base={b} h={h} trunk fill={k==='rust'?pal.fgRust:pal.fgDark} />
       ))}
@@ -350,46 +369,7 @@ const Scene = memo(function Scene({
 
           <Mountains pal={pal} />
           
-          {/* Day-time: sitting and flying birds */}
-          {starFade < 0.95 && (
-            <g style={{ color: pal.fgDark }}>
-              {/* Bird 1: Flyaway from Left Tree (x: 112, y: 309) */}
-              <g style={{
-                transformOrigin: '112px 309px',
-                animation: 'bird-flyaway-left 32s ease-in-out infinite',
-              }}>
-                <svg viewBox="0 0 32 32" width="12" height="12" x={112 - 6} y={309 - 6}>
-                  <path d="M 14,18 C 13,24 9,30 5,32 C 9,29 13,24 14,18 Z" fill="currentColor" style={{ transformOrigin: '14px 18px', animation: 'bird-flap-left-flyaway-bottom 32s ease-in-out infinite' }} />
-                  <path d="M 2,16 C 5,14 10,13 18,13 C 24,13 28,11.5 31,12 C 29,15 25,18 18,18 C 12,18 5,18 2,16 Z M 1,13 C 3,14 4,15.5 4,16 C 4,16.5 3,18 1,19 C 2.5,17.5 3,16.5 3,16 C 3,15.5 2.5,14.5 1,13 Z" fill="currentColor" />
-                  <path d="M 14,14 C 13,8 9,2 5,0 C 9,3 13,8 14,14 Z" fill="currentColor" style={{ transformOrigin: '14px 14px', animation: 'bird-flap-left-flyaway-top 32s ease-in-out infinite' }} />
-                </svg>
-              </g>
 
-              {/* Bird 2: Flyaway from Right Tree (x: 1212, y: 341) */}
-              <g style={{
-                transformOrigin: '1212px 341px',
-                animation: 'bird-flyaway-right 28s ease-in-out 8s infinite',
-              }}>
-                <svg viewBox="0 0 32 32" width="12" height="12" x={1212 - 6} y={341 - 6}>
-                  <path d="M 14,18 C 13,24 9,30 5,32 C 9,29 13,24 14,18 Z" fill="currentColor" style={{ transformOrigin: '14px 18px', animation: 'bird-flap-right-flyaway-bottom 28s ease-in-out 8s infinite' }} />
-                  <path d="M 2,16 C 5,14 10,13 18,13 C 24,13 28,11.5 31,12 C 29,15 25,18 18,18 C 12,18 5,18 2,16 Z M 1,13 C 3,14 4,15.5 4,16 C 4,16.5 3,18 1,19 C 2.5,17.5 3,16.5 3,16 C 3,15.5 2.5,14.5 1,13 Z" fill="currentColor" />
-                  <path d="M 14,14 C 13,8 9,2 5,0 C 9,3 13,8 14,14 Z" fill="currentColor" style={{ transformOrigin: '14px 14px', animation: 'bird-flap-right-flyaway-top 28s ease-in-out 8s infinite' }} />
-                </svg>
-              </g>
-
-              {/* Bird 3: Traveling tree-to-tree in left cluster (x: 112 -> x: 178) */}
-              <g style={{
-                transformOrigin: '112px 309px',
-                animation: 'bird-tree-to-tree 26s ease-in-out 4s infinite',
-              }}>
-                <svg viewBox="0 0 32 32" width="12" height="12" x={112 - 6} y={309 - 6}>
-                  <path d="M 14,18 C 13,24 9,30 5,32 C 9,29 13,24 14,18 Z" fill="currentColor" style={{ transformOrigin: '14px 18px', animation: 'bird-flap-treetotree-bottom 26s ease-in-out 4s infinite' }} />
-                  <path d="M 2,16 C 5,14 10,13 18,13 C 24,13 28,11.5 31,12 C 29,15 25,18 18,18 C 12,18 5,18 2,16 Z M 1,13 C 3,14 4,15.5 4,16 C 4,16.5 3,18 1,19 C 2.5,17.5 3,16.5 3,16 C 3,15.5 2.5,14.5 1,13 Z" fill="currentColor" />
-                  <path d="M 14,14 C 13,8 9,2 5,0 C 9,3 13,8 14,14 Z" fill="currentColor" style={{ transformOrigin: '14px 14px', animation: 'bird-flap-treetotree-top 26s ease-in-out 4s infinite' }} />
-                </svg>
-              </g>
-            </g>
-          )}
 
           {/* FOREGROUND FIREFLIES: Rendered in front of trees, contains larger and traveling particles */}
           {starFade > 0.05 && (
@@ -441,6 +421,38 @@ const Scene = memo(function Scene({
         <rect x="0" y={HORIZON} width="1440" height="48" fill={pal.waterWarm} opacity="0.55" />
         {/* Milky white water overlay */}
         <rect x="0" y={HORIZON} width="1440" height={900-HORIZON} fill="rgba(255, 255, 255, 0.32)" style={{ mixBlendMode: 'overlay' }} />
+
+        {/* Bubbles popping up from the water */}
+        <g style={{ pointerEvents: 'none' }}>
+          {[
+            { x: 260, y: 880, r: 2.8, dur: 5.8, delay: 0.5 },
+            { x: 340, y: 850, r: 3.5, dur: 6.5, delay: 2.2 },
+            { x: 480, y: 890, r: 2.2, dur: 5.0, delay: 1.1 },
+            { x: 610, y: 860, r: 3.0, dur: 7.2, delay: 3.8 },
+            { x: 750, y: 875, r: 2.6, dur: 6.0, delay: 0.2 },
+            { x: 890, y: 840, r: 3.8, dur: 8.0, delay: 4.5 },
+            { x: 1020, y: 885, r: 2.4, dur: 5.4, delay: 1.7 },
+            { x: 1180, y: 865, r: 3.2, dur: 6.8, delay: 3.1 },
+            { x: 1320, y: 895, r: 2.0, dur: 4.8, delay: 0.9 },
+            { x: 150, y: 870, r: 3.4, dur: 7.0, delay: 5.2 },
+            { x: 540, y: 878, r: 2.7, dur: 6.3, delay: 2.7 },
+            { x: 960, y: 892, r: 3.1, dur: 7.8, delay: 1.4 },
+          ].map((b, i) => (
+            <g key={`bubble-${i}`} transform={`translate(${b.x}, ${b.y})`}>
+              <circle
+                cx="0"
+                cy="0"
+                r={b.r}
+                fill="rgba(255, 255, 255, 0.25)"
+                stroke={pal.waterLight}
+                strokeWidth="0.6"
+                style={{
+                  animation: `bubble-rise ${b.dur}s ease-in ${b.delay}s infinite, bubble-sway ${b.dur * 0.4}s ease-in-out infinite`,
+                }}
+              />
+            </g>
+          ))}
+        </g>
 
         {/* Water reflections of celestial elements */}
         <foreignObject x="0" y={HORIZON} width="1440" height={900-HORIZON}>
@@ -906,29 +918,29 @@ function SkyBackground() {
             />
           </div>
 
-          {/* Dynamic Flock of Flying Black Crows (daytime) */}
+          {/* Dynamic Flock of Flying Birds (daytime) */}
           {starFade < 0.95 && (
             <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 1, pointerEvents: 'none' }}>
               {[
-                { top: '15%', scale: 0.38, speed: 11, delay: 0 },
-                { top: '12%', scale: 0.35, speed: 12, delay: 1.2 },
-                { top: '18%', scale: 0.32, speed: 13, delay: 0.6 },
-                { top: '22%', scale: 0.40, speed: 10, delay: 2.1 },
-                { top: '26%', scale: 0.36, speed: 11.5, delay: 3.5 },
-                { top: '14%', scale: 0.34, speed: 12.5, delay: 4.8 },
-                { top: '20%', scale: 0.42, speed: 9.5, delay: 6.0 },
-                { top: '16%', scale: 0.37, speed: 11.2, delay: 7.4 },
+                { top: '12%', scale: 0.30, speed: 32, delay: 0 },
+                { top: '15%', scale: 0.34, speed: 28, delay: 3.5 },
+                { top: '10%', scale: 0.28, speed: 35, delay: 1.8 },
+                { top: '18%', scale: 0.36, speed: 30, delay: 7.0 },
+                { top: '22%', scale: 0.32, speed: 38, delay: 5.2 },
+                { top: '14%', scale: 0.26, speed: 34, delay: 10.0 },
+                { top: '20%', scale: 0.38, speed: 26, delay: 14.0 },
+                { top: '16%', scale: 0.30, speed: 40, delay: 18.0 },
               ].map((b, i) => (
                 <img
                   key={`flock-bird-${i}`}
                   src={birdGif}
-                  alt="bird"
+                  alt=""
                   style={{
                     position: 'absolute',
                     top: b.top,
-                    width: `${32 + b.scale * 30}px`,
+                    width: `${28 + b.scale * 40}px`,
                     height: 'auto',
-                    transformOrigin: 'top left',
+                    transformOrigin: 'center center',
                     animation: `flock-fly-rtl ${b.speed}s linear ${b.delay}s infinite`,
                     mixBlendMode: 'multiply',
                     pointerEvents: 'none',
