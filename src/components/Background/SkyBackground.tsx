@@ -897,6 +897,32 @@ function SkyBackground() {
             />
           </div>
 
+          {/* Dynamic Flock of Flying Black Crows (daytime) */}
+          {starFade < 0.95 && (
+            <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 1, pointerEvents: 'none' }}>
+              {[
+                { top: '15%', scale: 0.38, speed: 11, delay: 0 },
+                { top: '12%', scale: 0.35, speed: 12, delay: 1.2 },
+                { top: '18%', scale: 0.32, speed: 13, delay: 0.6 },
+                { top: '22%', scale: 0.40, speed: 10, delay: 2.1 },
+                { top: '26%', scale: 0.36, speed: 11.5, delay: 3.5 },
+                { top: '14%', scale: 0.34, speed: 12.5, delay: 4.8 },
+                { top: '20%', scale: 0.42, speed: 9.5, delay: 6.0 },
+                { top: '16%', scale: 0.37, speed: 11.2, delay: 7.4 },
+              ].map((b, i) => (
+                <div
+                  key={`flock-bird-${i}`}
+                  className="crow-bird"
+                  style={{
+                    top: b.top,
+                    animation: `crow-flap 0.52s steps(1) infinite, flock-fly-rtl ${b.speed}s linear ${b.delay}s infinite`,
+                    transformOrigin: 'top left',
+                  }}
+                />
+              ))}
+            </div>
+          )}
+
         </>
       )}
     </div>

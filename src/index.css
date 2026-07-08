@@ -259,6 +259,49 @@ body {
   50% { transform: translate(-80px, 30px); }
 }
 
+/* Crow Sprite Sheet & Flock Animations */
+.crow-bird {
+  position: absolute;
+  width: 140px;
+  height: 56px;
+  background-image: url('/src/assets/crow_sprite.png');
+  background-size: 700px 112px; /* 5 columns x 2 rows = 10 frames */
+  animation: crow-flap 0.65s steps(1) infinite;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+@keyframes crow-flap {
+  0%   { background-position: 0px 0px; }
+  10%  { background-position: -140px 0px; }
+  20%  { background-position: -280px 0px; }
+  30%  { background-position: -420px 0px; }
+  40%  { background-position: -560px 0px; }
+  50%  { background-position: 0px -56px; }
+  60%  { background-position: -140px -56px; }
+  70%  { background-position: -280px -56px; }
+  80%  { background-position: -420px -56px; }
+  90%  { background-position: -560px -56px; }
+  100% { background-position: 0px 0px; }
+}
+
+@keyframes flock-fly-rtl {
+  0% {
+    transform: translate(100vw, -10vh) scale(0.35);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.85;
+  }
+  90% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-30vw, 40vh) scale(0.65);
+    opacity: 0;
+  }
+}
+
 @keyframes bird-tree-to-tree {
   0%, 25% { transform: translate(0, 0) scale(1); }
   35% { transform: translate(33px, -15px) scale(0.95); }
