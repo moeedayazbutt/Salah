@@ -155,7 +155,8 @@ export default function NextPrayerTimer() {
     }
   }, [displayPhase]);
 
-  const displayPrayer = currentPrayer || nextPrayer;
+  const showUpcoming = currentPrayer?.key === 'sunrise';
+  const displayPrayer = showUpcoming ? nextPrayer : (currentPrayer || nextPrayer);
 
   const timeStr  = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   const dateStr  = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -259,7 +260,7 @@ export default function NextPrayerTimer() {
           }} />
           <div className="flex flex-col items-center relative" style={{ gap: 6, zIndex: 1 }}>
             <span className="font-ui tracking-widest uppercase" style={{ fontSize: 'clamp(0.75rem, 1.3vw, 1.4rem)', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.22em', textShadow: shadow }}>
-              CURRENT PRAYER
+              {showUpcoming ? 'UPCOMING PRAYER' : 'CURRENT PRAYER'}
             </span>
             <div className="flex items-baseline justify-center gap-4 flex-wrap">
               <span

@@ -1019,60 +1019,69 @@ function SkyBackground() {
           {/* Flying birds at various z-depths (daytime) */}
           {starFade < 0.95 && (
             <>
-              {/* Layer 1: Behind mountains (z2) — far, small, slow */}
-              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 2, pointerEvents: 'none' }}>
-                {[
-                  { top: '18%', scale: 0.18, speed: 110, delay: 2 },
-                ].map((b, i) => (
-                  <img key={`bird-bg-${i}`} src={birdGif} alt="" style={{
-                    position: 'absolute', top: b.top,
-                    width: `${20 + b.scale * 40}px`, height: 'auto',
-                    animation: `flock-fly-ltr ${b.speed}s linear ${b.delay}s infinite`,
-                    filter: 'brightness(0)',
-                    opacity: 1,
-                    pointerEvents: 'none',
-                  }} />
-                ))}
-              </div>
-
-              {/* Layer 2: In front of sun but behind clouds (z3) */}
+              {/* Layer 2: In front of sun but behind clouds (z3) — LTR */}
               <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 3, pointerEvents: 'none' }}>
                 {[
-                  { top: '14%', scale: 0.26, speed: 80, delay: 0 },
-                  { top: '10%', scale: 0.24, speed: 90, delay: 5 },
+                  { top: '14%', scale: 0.26, speed: 80, delay: 0, ltr: true },
                 ].map((b, i) => (
-                  <img key={`bird-mid-${i}`} src={birdGif} alt="" style={{
-                    position: 'absolute', top: b.top,
-                    width: `${24 + b.scale * 40}px`, height: 'auto',
-                    animation: `flock-fly-ltr ${b.speed}s linear ${b.delay}s infinite`,
-                    filter: 'brightness(0)',
-                    opacity: 1,
-                    pointerEvents: 'none',
-                  }} />
+                  b.ltr ? (
+                    <img key={`bird-mid-${i}`} src={birdGif} alt="" style={{
+                      position: 'absolute', top: b.top,
+                      width: `${24 + b.scale * 40}px`, height: 'auto',
+                      animation: `flock-fly-ltr ${b.speed}s linear ${b.delay}s infinite`,
+                      filter: 'brightness(0)',
+                      opacity: 1,
+                      pointerEvents: 'none',
+                    }} />
+                  ) : (
+                    <div key={`bird-mid-${i}`} style={{ transform: 'scaleX(-1)' }}>
+                      <img src={birdGif} alt="" style={{
+                        position: 'absolute', top: b.top,
+                        width: `${24 + b.scale * 40}px`, height: 'auto',
+                        animation: `flock-fly-rtl ${b.speed}s linear ${b.delay}s infinite`,
+                        filter: 'brightness(0)',
+                        opacity: 1,
+                        pointerEvents: 'none',
+                      }} />
+                    </div>
+                  )
                 ))}
               </div>
 
-              {/* Layer 3: In front of clouds (z5) — closer, larger */}
+              {/* Layer 3: In front of clouds (z5) — closer, larger — RTL */}
               <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 5, pointerEvents: 'none' }}>
                 {[
-                  { top: '12%', scale: 0.32, speed: 64, delay: 3.5 },
-                  { top: '16%', scale: 0.30, speed: 72, delay: 10 },
+                  { top: '12%', scale: 0.32, speed: 64, delay: 3.5, ltr: false },
                 ].map((b, i) => (
-                  <img key={`bird-fg-${i}`} src={birdGif} alt="" style={{
-                    position: 'absolute', top: b.top,
-                    width: `${28 + b.scale * 40}px`, height: 'auto',
-                    animation: `flock-fly-ltr ${b.speed}s linear ${b.delay}s infinite`,
-                    filter: 'brightness(0)',
-                    opacity: 1,
-                    pointerEvents: 'none',
-                  }} />
+                  b.ltr ? (
+                    <img key={`bird-fg-${i}`} src={birdGif} alt="" style={{
+                      position: 'absolute', top: b.top,
+                      width: `${28 + b.scale * 40}px`, height: 'auto',
+                      animation: `flock-fly-ltr ${b.speed}s linear ${b.delay}s infinite`,
+                      filter: 'brightness(0)',
+                      opacity: 1,
+                      pointerEvents: 'none',
+                    }} />
+                  ) : (
+                    <div key={`bird-fg-${i}`} style={{ transform: 'scaleX(-1)' }}>
+                      <img src={birdGif} alt="" style={{
+                        position: 'absolute', top: b.top,
+                        width: `${28 + b.scale * 40}px`, height: 'auto',
+                        animation: `flock-fly-rtl ${b.speed}s linear ${b.delay}s infinite`,
+                        filter: 'brightness(0)',
+                        opacity: 1,
+                        pointerEvents: 'none',
+                      }} />
+                    </div>
+                  )
                 ))}
               </div>
 
-              {/* Distant tight flock of 10 birds moving together (z2, very far) */}
+              {/* Distant tight flock of 10 birds moving together (z2, very far) — RTL */}
               <div style={{
                 position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 2, pointerEvents: 'none',
-                animation: 'flock-distant-ltr 180s linear 20s infinite',
+                animation: 'flock-distant-rtl 180s linear 20s infinite',
+                transform: 'scaleX(-1)',
               }}>
                 {[
                   { top: 120, left: 0 }, { top: 128, left: 14 }, { top: 118, left: 28 },
