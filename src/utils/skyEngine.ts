@@ -53,6 +53,22 @@ function dayOfYear(date: Date): number {
   return Math.floor(diff / (1000 * 60 * 60 * 24));
 }
 
+export function getMoonPhaseInfo(phase: number): { phase: number; name: string; illumination: number } {
+  const illumination = (1 - Math.cos(phase * 2 * Math.PI)) / 2;
+  
+  let name: string;
+  if (phase < 0.025 || phase > 0.975) name = 'New Moon';
+  else if (phase < 0.25) name = 'Waxing Crescent';
+  else if (phase < 0.275) name = 'First Quarter';
+  else if (phase < 0.5) name = 'Waxing Gibbous';
+  else if (phase < 0.525) name = 'Full Moon';
+  else if (phase < 0.75) name = 'Waning Gibbous';
+  else if (phase < 0.775) name = 'Last Quarter';
+  else name = 'Waning Crescent';
+  
+  return { phase, name, illumination };
+}
+
 export function getMoonPhase(date: Date): { phase: number; name: string; illumination: number } {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
@@ -75,29 +91,16 @@ export function getMoonPhase(date: Date): { phase: number; name: string; illumin
   const newMoons = daysSinceNew / 29.53058867;
   const phase = newMoons - Math.floor(newMoons);
   
-  const illumination = (1 - Math.cos(phase * 2 * Math.PI)) / 2;
-  
-  let name: string;
-  if (phase < 0.025 || phase > 0.975) name = 'New Moon';
-  else if (phase < 0.25) name = 'Waxing Crescent';
-  else if (phase < 0.275) name = 'First Quarter';
-  else if (phase < 0.5) name = 'Waxing Gibbous';
-  else if (phase < 0.525) name = 'Full Moon';
-  else if (phase < 0.75) name = 'Waning Gibbous';
-  else if (phase < 0.775) name = 'Last Quarter';
-  else name = 'Waning Crescent';
-  
-  return { phase, name, illumination };
+  return getMoonPhaseInfo(phase);
 }
 
 export function determineSkyPhase(elevation: number, azimuth = 90): SkyPhase {
-  // azimuth > 180 → sun is west of south → afternoon/evening half of day
   const isPM = azimuth > 180;
 
   const phases: Record<string, { name: string; gradient: string; pattern: string; patternOpacity: number }> = {
     night:     { name: 'Night',     gradient: 'linear-gradient(180deg, #060810 0%, #090C1A 30%, #0C1025 70%, #0E1230 100%)', pattern: 'girih-tiles',     patternOpacity: 0.03  },
-    fajr:      { name: 'Fajr',      gradient: 'linear-gradient(180deg, #0A0D1E 0%, #1A1F4A 25%, #2D2B6B 50%, #4A3B7E 75%, #6B4A8A 100%)', pattern: 'eight-point-star', patternOpacity: 0.025 },
-    sunrise:   { name: 'Sunrise',   gradient: 'linear-gradient(180deg, #1A1F4A 0%, #4A3060 15%, #8A4A60 30%, #C46A4C 50%, #E88A4A 70%, #F5B06A 85%, #FFE090 100%)', pattern: 'muqarnas',       patternOpacity: 0.03  },
+    fajr:      { name: 'Fajr',      gradient: 'linear-gradient(180deg, #07091B 0%, #13173C 30%, #26215E 60%, #48316C 80%, #A26852 100%)', pattern: 'eight-point-star', patternOpacity: 0.025 },
+    sunrise:   { name: 'Sunrise',   gradient: 'linear-gradient(180deg, #12163C 0%, #3C2258 20%, #74335C 45%, #B8504A 70%, #E67E3A 85%, #FFD070 100%)', pattern: 'muqarnas',       patternOpacity: 0.03  },
     morning:   { name: 'Morning',   gradient: 'linear-gradient(180deg, #E8C070 0%, #F0D080 15%, #B8DCF0 40%, #80C8EE 65%, #50B0E8 85%, #3498DB 100%)', pattern: 'girih-tiles',     patternOpacity: 0.02  },
     midday:    { name: 'Midday',    gradient: 'linear-gradient(180deg, #60C0F0 0%, #3498DB 20%, #2080C0 45%, #1868A8 70%, #104878 100%)', pattern: 'kufic-border',    patternOpacity: 0.015 },
     afternoon: { name: 'Afternoon', gradient: 'linear-gradient(180deg, #2080C0 0%, #3498DB 20%, #60C0EE 45%, #A0D4EE 65%, #D0B870 85%, #E8A858 100%)', pattern: 'girih-tiles',     patternOpacity: 0.02  },
@@ -107,12 +110,19 @@ export function determineSkyPhase(elevation: number, azimuth = 90): SkyPhase {
   };
 
   let id: string;
-  if      (elevation <= -18) id = 'night';
-  else if (elevation <= -12) id = 'fajr';
-  else if (elevation <= 0)   id = isPM ? 'maghrib'   : 'sunrise';
-  else if (elevation <= 30)  id = isPM ? 'sunset'    : 'morning';
-  else if (elevation <= 60)  id = isPM ? 'afternoon' : 'midday';
-  else                       id = 'midday';
+  if (elevation <= -18) {
+    id = 'night';
+  } else if (elevation <= -8) {
+    id = isPM ? 'isha' : 'fajr';
+  } else if (elevation <= 0) {
+    id = isPM ? 'maghrib' : 'sunrise';
+  } else if (elevation <= 30) {
+    id = isPM ? 'sunset' : 'morning';
+  } else if (elevation <= 60) {
+    id = isPM ? 'afternoon' : 'midday';
+  } else {
+    id = 'midday';
+  }
 
   return { id, ...phases[id] };
 }
@@ -143,5 +153,24 @@ export function calculateSunPositionFromPrayers(
     const elevation = -90 * Math.sin(p * Math.PI);
     const azimuth = (270 + p * 180) % 360;
     return { elevation, azimuth };
+  }
+}
+
+export function getMoonPath(phase: number): string {
+  if (phase <= 0.015 || phase >= 0.985) return ""; // New moon is fully dark
+  
+  if (phase === 0.5) {
+    return "M 50 0 A 50 50 0 1 1 50 100 A 50 50 0 1 1 50 0 Z";
+  }
+  
+  if (phase < 0.5) {
+    const rx = Math.abs(50 * (1 - 4 * phase));
+    const sweep = phase < 0.25 ? 0 : 1;
+    return `M 50 0 A 50 50 0 0 1 50 100 A ${rx} 50 0 0 ${sweep} 50 0 Z`;
+  } else {
+    const adjustedPhase = phase - 0.5;
+    const rx = Math.abs(50 * (1 - 4 * adjustedPhase));
+    const sweep = adjustedPhase < 0.25 ? 1 : 0;
+    return `M 50 100 A 50 50 0 0 1 50 0 A ${rx} 50 0 0 ${sweep} 50 100 Z`;
   }
 }

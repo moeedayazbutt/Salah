@@ -49,6 +49,8 @@ interface AppState {
   setSkySliderAuto: (v: boolean) => void;
   skySliderDragging: boolean;
   setSkySliderDragging: (v: boolean) => void;
+  moonManualPhase: number | null;
+  setMoonManualPhase: (phase: number | null) => void;
 
   // Location
   lastKnownLocation: Coordinates | null;
@@ -134,6 +136,8 @@ export const useStore = create<AppState>()(
       setSkySliderAuto: (skySliderAuto) => set({ skySliderAuto }),
       skySliderDragging: false,
       setSkySliderDragging: (skySliderDragging) => set({ skySliderDragging }),
+      moonManualPhase: null,
+      setMoonManualPhase: (moonManualPhase) => set({ moonManualPhase }),
 
       // Location
       lastKnownLocation: null,
@@ -200,3 +204,5 @@ export const useHijriDate = () => useStore((state) => state.hijriDate);
 export const useIsSettingsOpen = () => useStore((state) => state.isSettingsOpen);
 export const useIsInitialized = () => useStore((state) => state.isInitialized);
 export const useIsAzaanPlaying = () => useStore((state) => state.isAzaanPlaying);
+export const useMoonManualPhase = () => useStore((state) => state.moonManualPhase);
+export const useSetMoonManualPhase = () => useStore((state) => state.setMoonManualPhase);

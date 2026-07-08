@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useId, memo } from 'react';
 import { useSkyPhase, useMoonPosition } from '../../hooks/usePrayerTimes';
 import { useStore } from '../../store';
-import { calculateSunPosition, calculateSunPositionFromPrayers, determineSkyPhase } from '../../utils/skyEngine';
+import { calculateSunPosition, calculateSunPositionFromPrayers, determineSkyPhase, getMoonPath } from '../../utils/skyEngine';
 
 const DEFAULT_GRADIENT = 'linear-gradient(180deg, #080A1A 0%, #0E1230 25%, #151A3A 60%, #1A1F3E 100%)';
 
@@ -32,80 +32,80 @@ function getPalette(id: string): Palette {
         peakSun:'#eaa47e', peakShadow:'#40608c', peak2:'#6080aa',
         midHill:'#3a7098', ridgeTree:'#2a4a6a', fgDark:'#163640', fgRust:'#7e5040',
         bank:'#508048', bankLight:'#74a656',
-        water:'#34889a', waterWarm:'#e6b49c', waterLight:'#7cc6d0', reflOpacity:0.65,
+        water:'#34889a', waterWarm:'#e6b49c', waterLight:'#7cc6d0', reflOpacity:0.30,
         hazeWarm:'rgba(245,200,150,0.5)',
         sunCore:'#fff4cf', sunEdge:'#ffc233', sunGlow:'rgba(255,198,70,0.5)',
-        birdColor:'rgba(20,40,55,0.55)' };
+        birdColor:'rgba(20,40,55,0.55)' } as any;
     case 'midday':
       return { cloud:'#f7ecd8', cloudUnder:'#f3c9a0', cloudOpacity:0.95,
         farRidge:'#93b4cb', warmLight:'#e9a878', warmDark:'#c58a92',
         peakSun:'#ea9a70', peakShadow:'#3c5c88', peak2:'#5a7aa6',
         midHill:'#366a94', ridgeTree:'#274766', fgDark:'#14323f', fgRust:'#7c4a38',
         bank:'#4c7c48', bankLight:'#6fa054',
-        water:'#2f8296', waterWarm:'#e0a48c', waterLight:'#74c2cc', reflOpacity:0.68,
+        water:'#2f8296', waterWarm:'#e0a48c', waterLight:'#74c2cc', reflOpacity:0.32,
         hazeWarm:'rgba(240,185,135,0.55)',
         sunCore:'#fff1c0', sunEdge:'#ffb81a', sunGlow:'rgba(255,190,50,0.5)',
-        birdColor:'rgba(18,38,52,0.55)' };
+        birdColor:'rgba(18,38,52,0.55)' } as any;
     case 'afternoon':
       return { cloud:'#fbeeda', cloudUnder:'#f6c69a', cloudOpacity:0.88,
         farRidge:'#a6b0c2', warmLight:'#e89a6a', warmDark:'#c07e84',
         peakSun:'#ec8f60', peakShadow:'#46567e', peak2:'#64749c',
         midHill:'#486a8a', ridgeTree:'#2e4660', fgDark:'#182e38', fgRust:'#855038',
         bank:'#567e42', bankLight:'#7ba24e',
-        water:'#3c8496', waterWarm:'#eaa886', waterLight:'#78c0c4', reflOpacity:0.68,
+        water:'#3c8496', waterWarm:'#eaa886', waterLight:'#78c0c4', reflOpacity:0.32,
         hazeWarm:'rgba(250,190,120,0.55)',
         sunCore:'#ffe9b0', sunEdge:'#ff9e18', sunGlow:'rgba(255,160,40,0.52)',
-        birdColor:'rgba(40,30,15,0.5)' };
+        birdColor:'rgba(40,30,15,0.5)' } as any;
     case 'sunrise':
       return { cloud:'#ffd9b4', cloudUnder:'#ffb488', cloudOpacity:0.72,
         farRidge:'#b78fa0', warmLight:'#f0a878', warmDark:'#cf7f80',
         peakSun:'#ffb07a', peakShadow:'#6a4f7e', peak2:'#8a6a8e',
         midHill:'#7a5a80', ridgeTree:'#4a3550', fgDark:'#2a1f30', fgRust:'#8a4a40',
         bank:'#6a6a48', bankLight:'#94925a',
-        water:'#b98a80', waterWarm:'#ffce9e', waterLight:'#d9b0a4', reflOpacity:0.72,
+        water:'#b98a80', waterWarm:'#ffce9e', waterLight:'#d9b0a4', reflOpacity:0.35,
         hazeWarm:'rgba(255,180,110,0.6)',
         sunCore:'#fff0c8', sunEdge:'#ff9020', sunGlow:'rgba(255,140,40,0.6)',
-        birdColor:'rgba(60,30,15,0.5)' };
+        birdColor:'rgba(60,30,15,0.5)' } as any;
     case 'sunset':
       return { cloud:'#ff9f68', cloudUnder:'#e07850', cloudOpacity:0.7,
         farRidge:'#8a5a78', warmLight:'#e07850', warmDark:'#a85462',
         peakSun:'#ff9a5c', peakShadow:'#4a3560', peak2:'#6e4a6e',
         midHill:'#5a3a5e', ridgeTree:'#341f3c', fgDark:'#1f0f1c', fgRust:'#7a3a30',
         bank:'#5a5236', bankLight:'#7e6e40',
-        water:'#a5605e', waterWarm:'#ff9a6a', waterLight:'#c98a86', reflOpacity:0.72,
+        water:'#a5605e', waterWarm:'#ff9a6a', waterLight:'#c98a86', reflOpacity:0.35,
         hazeWarm:'rgba(255,120,50,0.6)',
         sunCore:'#ffe6b0', sunEdge:'#ff6a12', sunGlow:'rgba(255,90,20,0.6)',
-        birdColor:'rgba(50,18,8,0.5)' };
+        birdColor:'rgba(50,18,8,0.5)' } as any;
     case 'maghrib':
       return { cloud:'#b070cc', cloudUnder:'#8a4aa0', cloudOpacity:0.32,
         farRidge:'#4a3560', warmLight:'#7a4a6a', warmDark:'#5a3452',
         peakSun:'#8a5a72', peakShadow:'#2c1c42', peak2:'#3e2a4e',
         midHill:'#2e1e42', ridgeTree:'#1a1028', fgDark:'#100a1a', fgRust:'#40202c',
         bank:'#2e2a30', bankLight:'#403c42',
-        water:'#241a3e', waterWarm:'#4a2c50', waterLight:'#3a2c58', reflOpacity:0.60,
+        water:'#241a3e', waterWarm:'#4a2c50', waterLight:'#3a2c58', reflOpacity:0.28,
         hazeWarm:'rgba(150,50,120,0.4)',
         sunCore:'#ffc9a0', sunEdge:'#d8483a', sunGlow:'rgba(200,50,80,0.45)',
-        birdColor:'rgba(0,0,0,0)' };
+        birdColor:'rgba(0,0,0,0)' } as any;
     case 'fajr':
       return { cloud:'#7d84b8', cloudUnder:'#5a5c90', cloudOpacity:0.28,
         farRidge:'#34365e', warmLight:'#4a4470', warmDark:'#383056',
         peakSun:'#5a5488', peakShadow:'#22213e', peak2:'#2e2c4e',
         midHill:'#24243e', ridgeTree:'#14142a', fgDark:'#0c0c1a', fgRust:'#2a2440',
         bank:'#22243a', bankLight:'#303452',
-        water:'#141a38', waterWarm:'#2f2f60', waterLight:'#2a3768', reflOpacity:0.55,
+        water:'#141a38', waterWarm:'#2f2f60', waterLight:'#2a3768', reflOpacity:0.25,
         hazeWarm:'rgba(90,90,180,0.3)',
         sunCore:'#dfe4ff', sunEdge:'#8a90c8', sunGlow:'rgba(90,90,180,0.28)',
-        birdColor:'rgba(0,0,0,0)' };
+        birdColor:'rgba(0,0,0,0)' } as any;
     default: // night, isha
       return { cloud:'#3a4268', cloudUnder:'#2a3050', cloudOpacity:0.12,
         farRidge:'#1e2848', warmLight:'#2a3252', warmDark:'#1e2440',
         peakSun:'#2a3458', peakShadow:'#141b34', peak2:'#1a2340',
         midHill:'#141d38', ridgeTree:'#0c1226', fgDark:'#070a16', fgRust:'#1a1e34',
         bank:'#0e1626', bankLight:'#16203a',
-        water:'#0a1028', waterWarm:'#182046', waterLight:'#1a2a55', reflOpacity:0.50,
+        water:'#0a1028', waterWarm:'#182046', waterLight:'#1a2a55', reflOpacity:0.22,
         hazeWarm:'rgba(40,50,110,0.25)',
         sunCore:'#ffffff', sunEdge:'#c8d2ff', sunGlow:'rgba(200,215,255,0.32)',
-        birdColor:'rgba(0,0,0,0)' };
+        birdColor:'rgba(0,0,0,0)' } as any;
   }
 }
 
@@ -237,7 +237,7 @@ const Scene = memo(function Scene({
             <stop offset="0%"  stopColor={pal.water} stopOpacity="0" />
             <stop offset="100%" stopColor={pal.water} stopOpacity="0.9" />
           </linearGradient>
-          <radialGradient id={warmId} cx="28%" cy="100%" r="62%">
+          <radialGradient id={warmId} cx={`${sunLeftPct}%`} cy="100%" r="62%">
             <stop offset="0%"  stopColor={pal.hazeWarm} />
             <stop offset="100%" stopColor={pal.hazeWarm.replace(/[\d.]+\)$/,'0)')} />
           </radialGradient>
@@ -256,6 +256,8 @@ const Scene = memo(function Scene({
         {/* Water */}
         <rect x="0" y={HORIZON} width="1440" height={900-HORIZON} fill={pal.water} />
         <rect x="0" y={HORIZON} width="1440" height="48" fill={pal.waterWarm} opacity="0.55" />
+        {/* Milky white water overlay */}
+        <rect x="0" y={HORIZON} width="1440" height={900-HORIZON} fill="rgba(255, 255, 255, 0.32)" style={{ mixBlendMode: 'overlay' }} />
 
         {/* Water reflections of celestial elements */}
         <foreignObject x="0" y={HORIZON} width="1440" height={900-HORIZON}>
@@ -372,8 +374,9 @@ function makeFlock(seed:number, count:number, spreadX:number, spreadY:number): B
   const arm = Math.ceil(count/2);
   for (let i=0;i<arm;i++) {
     const jx=(r()-0.5)*10, jy=(r()-0.5)*7;
-    birds.push({ x:i*spreadX+jx, y:i*spreadY+jy, size:16-i*0.35+r()*3, flapDur:0.55+r()*0.5, flapDelay:r()*0.9, tilt:-25+r()*45 });
-    if (i>0) birds.push({ x:i*spreadX+jx, y:-i*spreadY+jy, size:16-i*0.35+r()*3, flapDur:0.55+r()*0.5, flapDelay:r()*0.9, tilt:-25+r()*45 });
+    // Add wider speed variance (from 0.45s to 1.35s) and larger delay spread
+    birds.push({ x:i*spreadX+jx, y:i*spreadY+jy, size:16-i*0.35+r()*3, flapDur:0.45+r()*0.9, flapDelay:r()*1.5, tilt:-15+r()*30 });
+    if (i>0) birds.push({ x:i*spreadX+jx, y:-i*spreadY+jy, size:16-i*0.35+r()*3, flapDur:0.45+r()*0.9, flapDelay:r()*1.5, tilt:-15+r()*30 });
   }
   return birds;
 }
@@ -386,26 +389,26 @@ const SilhouettedBird = memo(({ b }: { b:Bird }) => (
       position:'absolute', left:b.x, top:b.y, overflow:'visible',
       transform: `rotate(${b.tilt}deg)`,
     }} aria-hidden="true">
-    {/* Bottom Wing */}
+    {/* Abstract Duck Bottom Wing */}
     <path
-      d="M 13,17 C 12,23 9,28 5,31 C 8,28 12,23 13,17 Z"
+      d="M 14,18 C 13,24 9,30 5,32 C 9,29 13,24 14,18 Z"
       fill="currentColor"
       style={{
-        transformOrigin: '13px 17px',
+        transformOrigin: '14px 18px',
         animation: `flap-bottom ${b.flapDur}s ease-in-out ${b.flapDelay}s infinite`
       }}
     />
-    {/* Body + Tail */}
+    {/* Abstract Duck Body + Tail */}
     <path
-      d="M 2,16 C 4,14.5 8,14 13,14 C 18,14 22,15 26,16 C 22,17 18,18 13,18 C 8,18 4,17.5 2,16 M 1,11 C 3,13 4,15 4,16 C 4,17 3,19 1,21 C 2.5,19 3,17.5 3,16 C 3,14.5 2.5,13 1,11 Z"
+      d="M 2,16 C 5,14 10,13 18,13 C 24,13 28,11.5 31,12 C 29,15 25,18 18,18 C 12,18 5,18 2,16 Z M 1,13 C 3,14 4,15.5 4,16 C 4,16.5 3,18 1,19 C 2.5,17.5 3,16.5 3,16 C 3,15.5 2.5,14.5 1,13 Z"
       fill="currentColor"
     />
-    {/* Top Wing */}
+    {/* Abstract Duck Top Wing */}
     <path
-      d="M 13,15 C 12,9 9,4 5,1 C 8,4 12,9 13,15 Z"
+      d="M 14,14 C 13,8 9,2 5,0 C 9,3 13,8 14,14 Z"
       fill="currentColor"
       style={{
-        transformOrigin: '13px 15px',
+        transformOrigin: '14px 14px',
         animation: `flap-top ${b.flapDur}s ease-in-out ${b.flapDelay}s infinite`
       }}
     />
@@ -484,6 +487,11 @@ function Sun({ topPct, leftPct, size, opacity, pal }:
 
 function Moon({ topPct, leftPct, size, opacity }:
   { topPct:number; leftPct:number; size:number; opacity:number }) {
+  const moonPosition = useStore((s) => s.moonPosition);
+  const moonManualPhase = useStore((s) => s.moonManualPhase);
+  const currentPhase = moonManualPhase !== null ? moonManualPhase : (moonPosition?.phase ?? 0.5);
+  const pathD = getMoonPath(currentPhase);
+
   return (
     <div style={{
       position:'absolute', top:`${topPct}%`, left:`${leftPct}%`, width:size, height:size,
@@ -496,18 +504,35 @@ function Moon({ topPct, leftPct, size, opacity }:
         background:'radial-gradient(circle, rgba(214,226,255,0.45) 0%, rgba(200,214,255,0.20) 34%, rgba(190,206,255,0.07) 56%, transparent 74%)',
         animation:'celestial-glow 9s ease-in-out infinite',
       }} />
-      {/* disc */}
+      {/* disc outline / shadow backdrop */}
       <div style={{
         position:'relative', width:'100%', height:'100%', borderRadius:'50%',
-        background:'radial-gradient(circle at 38% 34%, #ffffff 0%, #f3f5fb 42%, #dbe0ee 78%, #c3cadf 100%)',
-        boxShadow:'0 0 40px rgba(210,222,255,0.75), 0 0 90px rgba(200,214,255,0.4), inset -6px -6px 16px rgba(150,160,190,0.35), inset 5px 5px 14px rgba(255,255,255,0.5)',
+        background: 'rgba(255, 255, 255, 0.05)',
+        boxShadow: '0 0 10px rgba(210,222,255,0.15)',
         overflow:'hidden',
       }}>
-        {/* soft maria / craters */}
-        <div style={{ position:'absolute', width:'26%', height:'26%', top:'20%', left:'40%', background:'radial-gradient(circle, rgba(150,160,190,0.30), transparent 70%)', borderRadius:'50%' }} />
-        <div style={{ position:'absolute', width:'18%', height:'18%', top:'52%', left:'26%', background:'radial-gradient(circle, rgba(150,160,190,0.26), transparent 70%)', borderRadius:'50%' }} />
-        <div style={{ position:'absolute', width:'13%', height:'13%', top:'60%', left:'58%', background:'radial-gradient(circle, rgba(150,160,190,0.22), transparent 70%)', borderRadius:'50%' }} />
-        <div style={{ position:'absolute', width:'10%', height:'10%', top:'30%', left:'66%', background:'radial-gradient(circle, rgba(150,160,190,0.2), transparent 70%)', borderRadius:'50%' }} />
+        {pathD && (
+          <svg viewBox="0 0 100 100" style={{
+            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+          }}>
+            <path
+              d={pathD}
+              fill="url(#moon-glow-grad-detail)"
+            />
+            <defs>
+              <radialGradient id="moon-glow-grad-detail" cx="38%" cy="34%" r="70%">
+                <stop offset="0%" stopColor="#ffffff" />
+                <stop offset="42%" stopColor="#f3f5fb" />
+                <stop offset="78%" stopColor="#dbe0ee" />
+                <stop offset="100%" stopColor="#c3cadf" />
+              </radialGradient>
+            </defs>
+          </svg>
+        )}
+        {/* subtle maria texture */}
+        <div style={{ position:'absolute', width:'26%', height:'26%', top:'20%', left:'40%', background:'radial-gradient(circle, rgba(150,160,190,0.18), transparent 70%)', borderRadius:'50%', mixBlendMode: 'multiply' }} />
+        <div style={{ position:'absolute', width:'18%', height:'18%', top:'52%', left:'26%', background:'radial-gradient(circle, rgba(150,160,190,0.15), transparent 70%)', borderRadius:'50%', mixBlendMode: 'multiply' }} />
+        <div style={{ position:'absolute', width:'13%', height:'13%', top:'60%', left:'58%', background:'radial-gradient(circle, rgba(150,160,190,0.12), transparent 70%)', borderRadius:'50%', mixBlendMode: 'multiply' }} />
       </div>
     </div>
   );

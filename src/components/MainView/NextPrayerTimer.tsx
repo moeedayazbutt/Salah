@@ -191,37 +191,45 @@ export default function NextPrayerTimer() {
     <div className="flex-1 relative overflow-hidden flex flex-col">
       {isAzaanPlaying && (
         <div className="azaan-glow-container">
-          {/* Top Side - Red/Magenta Blob */}
-          <div className="absolute rounded-full pointer-events-none" style={{
-            top: '-20%', left: '20%', width: '60vw', height: '28vh',
-            background: 'radial-gradient(circle, rgba(239, 68, 68, 0.98) 0%, rgba(236, 72, 153, 0.5) 45%, rgba(236, 72, 153, 0) 70%)',
-            filter: 'blur(50px)',
+          {/* Top Side - Swirling Conic Gradient */}
+          <div className="absolute pointer-events-none" style={{
+            top: '-12%', left: '15%', width: '70vw', height: '24vh',
+            background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000)',
+            filter: 'blur(35px)',
             mixBlendMode: 'screen',
-            animation: 'gemini-blob-1 3.2s ease-in-out infinite alternate',
+            opacity: 0.98,
+            animation: 'spin-fast 2.2s linear infinite',
+            borderRadius: '50%',
           }} />
-          {/* Bottom Side - Cyan/Blue Blob */}
-          <div className="absolute rounded-full pointer-events-none" style={{
-            bottom: '-20%', left: '15%', width: '70vw', height: '28vh',
-            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.98) 0%, rgba(59, 130, 246, 0.5) 45%, rgba(59, 130, 246, 0) 70%)',
-            filter: 'blur(50px)',
+          {/* Bottom Side - Swirling Conic Gradient */}
+          <div className="absolute pointer-events-none" style={{
+            bottom: '-12%', left: '15%', width: '70vw', height: '24vh',
+            background: 'conic-gradient(from 180deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000)',
+            filter: 'blur(35px)',
             mixBlendMode: 'screen',
-            animation: 'gemini-blob-2 3.8s ease-in-out infinite alternate',
+            opacity: 0.98,
+            animation: 'spin-fast 2.5s linear infinite reverse',
+            borderRadius: '50%',
           }} />
-          {/* Left Side - Yellow/Orange Blob */}
-          <div className="absolute rounded-full pointer-events-none" style={{
-            top: '15%', left: '-15%', width: '22vw', height: '70vh',
-            background: 'radial-gradient(circle, rgba(234, 179, 8, 0.98) 0%, rgba(245, 158, 11, 0.5) 45%, rgba(245, 158, 11, 0) 70%)',
-            filter: 'blur(55px)',
+          {/* Left Side - Swirling Conic Gradient */}
+          <div className="absolute pointer-events-none" style={{
+            top: '15%', left: '-10%', width: '20vw', height: '70vh',
+            background: 'conic-gradient(from 90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000)',
+            filter: 'blur(35px)',
             mixBlendMode: 'screen',
-            animation: 'gemini-blob-3 3.5s ease-in-out infinite alternate',
+            opacity: 0.98,
+            animation: 'spin-fast 2.8s linear infinite',
+            borderRadius: '50%',
           }} />
-          {/* Right Side - Purple/Blue Blob */}
-          <div className="absolute rounded-full pointer-events-none" style={{
-            top: '15%', right: '-15%', width: '22vw', height: '70vh',
-            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.98) 0%, rgba(59, 130, 246, 0.5) 45%, rgba(59, 130, 246, 0) 70%)',
-            filter: 'blur(55px)',
+          {/* Right Side - Swirling Conic Gradient */}
+          <div className="absolute pointer-events-none" style={{
+            top: '15%', right: '-10%', width: '20vw', height: '70vh',
+            background: 'conic-gradient(from 270deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000)',
+            filter: 'blur(35px)',
             mixBlendMode: 'screen',
-            animation: 'gemini-blob-4 4.2s ease-in-out infinite alternate',
+            opacity: 0.98,
+            animation: 'spin-fast 2.4s linear infinite reverse',
+            borderRadius: '50%',
           }} />
         </div>
       )}
@@ -290,10 +298,9 @@ export default function NextPrayerTimer() {
               fontSize: 'clamp(5rem, 18vw, 16rem)',
               fontWeight: 600,
               letterSpacing: 'clamp(2px, 0.5vw, 8px)',
-              color: '#FBBF24',
-              textShadow: '0 2px 24px rgba(0,0,0,0.5), 0 0 40px rgba(251,191,36,0.25)',
               fontVariantNumeric: 'tabular-nums',
               zIndex: 1,
+              ...prayerNameStyle,
             }}
           >
             {formattedCountdown}
