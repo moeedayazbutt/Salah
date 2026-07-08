@@ -110,18 +110,36 @@ export function determineSkyPhase(elevation: number, azimuth = 90): SkyPhase {
   };
 
   let id: string;
-  if (elevation <= -18) {
-    id = 'night';
-  } else if (elevation <= -11) {
-    id = isPM ? 'isha' : 'fajr';
-  } else if (elevation <= 2) {
-    id = isPM ? 'maghrib' : 'sunrise';
-  } else if (elevation <= 35) {
-    id = isPM ? 'sunset' : 'morning';
-  } else if (elevation <= 60) {
-    id = isPM ? 'afternoon' : 'midday';
+  if (isPM) {
+    // PM: Slower sunset twilight transition (50% slower nightfall)
+    if (elevation <= -24) {
+      id = 'night';
+    } else if (elevation <= -16) {
+      id = 'isha';
+    } else if (elevation <= 2) {
+      id = 'maghrib';
+    } else if (elevation <= 35) {
+      id = 'sunset';
+    } else if (elevation <= 60) {
+      id = 'afternoon';
+    } else {
+      id = 'midday';
+    }
   } else {
-    id = 'midday';
+    // AM: Faster dawn transition (50% speedier morning brightening)
+    if (elevation <= -18) {
+      id = 'night';
+    } else if (elevation <= -14) {
+      id = 'fajr';
+    } else if (elevation <= -4) {
+      id = 'sunrise';
+    } else if (elevation <= 25) {
+      id = 'morning';
+    } else if (elevation <= 60) {
+      id = 'midday';
+    } else {
+      id = 'midday';
+    }
   }
 
   return { id, ...phases[id] };

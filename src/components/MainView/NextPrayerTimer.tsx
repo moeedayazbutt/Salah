@@ -134,7 +134,6 @@ export default function NextPrayerTimer() {
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
         color: 'transparent',
-        filter: 'drop-shadow(0 1px 2px rgba(255,255,255,0.45))',
       };
     } else {
       return {
@@ -142,7 +141,6 @@ export default function NextPrayerTimer() {
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
         color: 'transparent',
-        filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.85))',
       };
     }
   }, [isLightBg]);
