@@ -489,7 +489,7 @@ const Scene = memo(function Scene({
                   position: 'absolute', top: b.top,
                   width: `${b.size}px`, height: 'auto',
                   animation: `flock-fly-ltr ${b.speed}s linear ${b.delay}s infinite`,
-                  filter: 'brightness(0)',
+                  filter: 'brightness(0) saturate(0%)',
                   opacity: 0.5,
                   pointerEvents: 'none',
                 }} />
@@ -963,7 +963,7 @@ function SkyBackground() {
                       position: 'absolute', top: b.top,
                       width: `${24 + b.scale * 40}px`, height: 'auto',
                       animation: `flock-fly-ltr ${b.speed}s linear ${b.delay}s infinite`,
-                      filter: 'brightness(0)',
+                      filter: 'brightness(0) saturate(0%)',
                       opacity: 1,
                       pointerEvents: 'none',
                     }} />
@@ -972,8 +972,8 @@ function SkyBackground() {
                       <img src={birdGif} alt="" style={{
                         position: 'absolute', top: b.top,
                         width: `${24 + b.scale * 40}px`, height: 'auto',
-                        animation: `flock-fly-rtl ${b.speed}s linear ${b.delay}s infinite`,
-                        filter: 'brightness(0)',
+                        animation: `flock-fly-ltr ${b.speed}s linear ${b.delay}s infinite`,
+                        filter: 'brightness(0) saturate(0%)',
                         opacity: 1,
                         pointerEvents: 'none',
                       }} />
@@ -992,7 +992,7 @@ function SkyBackground() {
                       position: 'absolute', top: b.top,
                       width: `${28 + b.scale * 40}px`, height: 'auto',
                       animation: `flock-fly-ltr ${b.speed}s linear ${b.delay}s infinite`,
-                      filter: 'brightness(0)',
+                      filter: 'brightness(0) saturate(0%)',
                       opacity: 1,
                       pointerEvents: 'none',
                     }} />
@@ -1001,8 +1001,8 @@ function SkyBackground() {
                       <img src={birdGif} alt="" style={{
                         position: 'absolute', top: b.top,
                         width: `${28 + b.scale * 40}px`, height: 'auto',
-                        animation: `flock-fly-rtl ${b.speed}s linear ${b.delay}s infinite`,
-                        filter: 'brightness(0)',
+                        animation: `flock-fly-ltr ${b.speed}s linear ${b.delay}s infinite`,
+                        filter: 'brightness(0) saturate(0%)',
                         opacity: 1,
                         pointerEvents: 'none',
                       }} />
@@ -1014,7 +1014,7 @@ function SkyBackground() {
               {/* Distant tight flock of 10 birds moving together (z2, very far) — RTL */}
               <div style={{
                 position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 2, pointerEvents: 'none',
-                animation: 'flock-distant-rtl 180s linear 20s infinite',
+                animation: 'flock-distant-ltr 180s linear 20s infinite',
               }}>
               <div style={{ transform: 'scaleX(-1)' }}>
                 {[
