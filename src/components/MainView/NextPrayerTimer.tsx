@@ -122,28 +122,38 @@ export default function NextPrayerTimer() {
     return phase;
   }, [skySliderAuto, skyDisplayHours, solarPos, settings.coordinates, phase, now]);
 
-  const isLightBg = useMemo(() => {
-    const id = displayPhase?.id;
-    return id === 'morning' || id === 'midday' || id === 'afternoon';
-  }, [displayPhase]);
-
-  const contrastTextStyle = useMemo((): React.CSSProperties => {
-    if (isLightBg) {
-      return {
-        background: 'linear-gradient(135deg, #050818 0%, #151F3A 60%, #202D5A 100%)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        color: 'transparent',
-      };
-    } else {
-      return {
-        background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF59D 40%, #FFB300 100%)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        color: 'transparent',
-      };
+  const prayerNameStyle = useMemo((): React.CSSProperties => {
+    const name = displayPhase?.name as string | undefined;
+    switch (name) {
+      case 'morning':
+      case 'midday':
+      case 'afternoon':
+        return {
+          background: 'linear-gradient(135deg, #ffffff 0%, #FFF9C4 50%, #FFE082 100%)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.7))',
+        };
+      case 'sunrise':
+        return {
+          background: 'linear-gradient(135deg, #FFFFFF 0%, #FFE0B2 45%, #FF8F00 100%)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.5))',
+        };
+      case 'sunset':
+      case 'maghrib':
+        return {
+          background: 'linear-gradient(135deg, #FFFFFF 0%, #FCE4EC 45%, #E91E63 100%)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.5))',
+        };
+      default: // night, fajr, isha
+        return {
+          background: 'linear-gradient(135deg, #FFD600 0%, #F59E0B 30%, #14B8A6 70%, #0D9488 100%)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          filter: 'drop-shadow(0 0 40px rgba(245,158,11,0.3))',
+        };
     }
-  }, [isLightBg]);
+  }, [displayPhase]);
 
   const displayPrayer = currentPrayer || nextPrayer;
 
@@ -225,39 +235,17 @@ export default function NextPrayerTimer() {
 
         {/* TOP: Date + Clock */}
         <div className="flex items-start justify-between flex-shrink-0" style={{ marginBottom: 0 }}>
-          <div className="flex flex-col" style={{ gap: 2 }}>
-            <span style={{
-              fontFamily: "'Oswald', sans-serif",
-              fontWeight: 400,
-              fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)',
-              letterSpacing: '0.04em',
-              lineHeight: 1.1,
-              ...contrastTextStyle,
-            }}>
+          <div className="flex flex-col" style={{ gap: 1 }}>
+            <span className="font-ui" style={{ fontSize: 'clamp(0.9rem, 1.8vw, 1.9rem)', color: 'rgba(255,255,255,0.92)', fontWeight: 400, lineHeight: 1.2, textShadow: shadow }}>
               {dateStr}
             </span>
             {hijriStr && (
-              <span style={{
-                fontFamily: "'Oswald', sans-serif",
-                fontWeight: 400,
-                fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)',
-                letterSpacing: '0.04em',
-                lineHeight: 1.1,
-                ...contrastTextStyle,
-              }}>
+              <span className="font-ui" style={{ fontSize: 'clamp(0.9rem, 1.8vw, 1.9rem)', color: 'rgba(255,255,255,0.92)', lineHeight: 1.2, textShadow: shadow }}>
                 {hijriStr}
               </span>
             )}
           </div>
-          <span style={{
-            fontFamily: "'Oswald', sans-serif",
-            fontWeight: 400,
-            fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)',
-            letterSpacing: '0.04em',
-            lineHeight: 1.1,
-            fontVariantNumeric: 'tabular-nums',
-            ...contrastTextStyle,
-          }}>
+          <span style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 400, fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)', color: '#FFFFFF', letterSpacing: '0.04em', lineHeight: 1, marginTop: 2, fontVariantNumeric: 'tabular-nums', textShadow: shadow }}>
             {formattedTime}
           </span>
         </div>
@@ -272,11 +260,7 @@ export default function NextPrayerTimer() {
             filter: 'blur(6px)',
           }} />
           <div className="flex flex-col items-center relative" style={{ gap: 6, zIndex: 1 }}>
-            <span className="font-ui tracking-widest uppercase" style={{
-              fontSize: 'clamp(0.75rem, 1.3vw, 1.4rem)',
-              letterSpacing: '0.22em',
-              ...contrastTextStyle,
-            }}>
+            <span className="font-ui tracking-widest uppercase" style={{ fontSize: 'clamp(0.75rem, 1.3vw, 1.4rem)', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.22em', textShadow: shadow }}>
               CURRENT PRAYER
             </span>
             <div className="flex items-baseline justify-center gap-4 flex-wrap">
@@ -291,15 +275,12 @@ export default function NextPrayerTimer() {
                   whiteSpace: 'nowrap',
                   overflow: 'visible',
                   transition: 'filter 2s ease, background 2s ease',
-                  ...contrastTextStyle,
+                  ...prayerNameStyle,
                 }}
               >
                 {displayPrayer?.nameAr || '—'}
               </span>
-              <span className="font-ui font-light uppercase flex-shrink-0" style={{
-                fontSize: 'clamp(1rem, 2vw, 2.2rem)',
-                ...contrastTextStyle,
-              }}>
+              <span className="font-ui font-light uppercase flex-shrink-0" style={{ fontSize: 'clamp(1rem, 2vw, 2.2rem)', color: 'rgba(255,255,255,0.6)', textShadow: shadow }}>
                 {displayPrayer?.nameEn || '—'}
               </span>
             </div>
@@ -315,7 +296,7 @@ export default function NextPrayerTimer() {
               letterSpacing: 'clamp(2px, 0.5vw, 8px)',
               fontVariantNumeric: 'tabular-nums',
               zIndex: 1,
-              ...contrastTextStyle,
+              ...prayerNameStyle,
             }}
           >
             {formattedCountdown}
