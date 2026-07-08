@@ -1036,40 +1036,40 @@ function SkyBackground() {
                 ))}
               </div>
               </div>
-            </>
 
-            {/* Moose/deer herd using the new stock animation — behind foreground trees (z4) */}
-            <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 4, pointerEvents: 'none' }}>
-              {/* Herd 1: left-to-right, 4 animals */}
-              <div style={{ animation: 'moose-walk-ltr 120s linear 0s infinite' }}>
-                {[
-                  { left: 0, top: 0 },
-                  { left: 28, top: 2 },
-                  { left: 52, top: -1 },
-                  { left: 72, top: 3 },
-                ].map((m, i) => (
-                  <img key={`moose-ltr-${i}`} src={mooseAnim} alt="" style={{
-                    position: 'absolute', top: `calc(59% + ${m.top}px)`, left: `${m.left}px`,
-                    width: `${36 + i * 2}px`, height: 'auto',
-                    opacity: 0.85,
-                  }} />
-                ))}
+              {/* Moose/deer herd using the new stock animation — behind foreground trees (z4) */}
+              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 4, pointerEvents: 'none' }}>
+                {/* Herd 1: left-to-right, 4 animals */}
+                <div style={{ animation: 'moose-walk-ltr 120s linear 0s infinite' }}>
+                  {[
+                    { left: 0, top: 0 },
+                    { left: 28, top: 2 },
+                    { left: 52, top: -1 },
+                    { left: 72, top: 3 },
+                  ].map((m, i) => (
+                    <img key={`moose-ltr-${i}`} src={mooseAnim} alt="" style={{
+                      position: 'absolute', top: `calc(59% + ${m.top}px)`, left: `${m.left}px`,
+                      width: `${36 + i * 2}px`, height: 'auto',
+                      opacity: 0.85,
+                    }} />
+                  ))}
+                </div>
+                {/* Herd 2: right-to-left, 3 animals */}
+                <div style={{ transform: 'scaleX(-1)', animation: 'moose-walk-rtl 140s linear 40s infinite' }}>
+                  {[
+                    { left: 0, top: 2 },
+                    { left: 26, top: 0 },
+                    { left: 50, top: 4 },
+                  ].map((m, i) => (
+                    <img key={`moose-rtl-${i}`} src={mooseAnim} alt="" style={{
+                      position: 'absolute', top: `calc(59% + ${m.top}px)`, left: `${m.left}px`,
+                      width: `${34 + i * 3}px`, height: 'auto',
+                      opacity: 0.85,
+                    }} />
+                  ))}
+                </div>
               </div>
-              {/* Herd 2: right-to-left, 3 animals */}
-              <div style={{ transform: 'scaleX(-1)', animation: 'moose-walk-rtl 140s linear 40s infinite' }}>
-                {[
-                  { left: 0, top: 2 },
-                  { left: 26, top: 0 },
-                  { left: 50, top: 4 },
-                ].map((m, i) => (
-                  <img key={`moose-rtl-${i}`} src={mooseAnim} alt="" style={{
-                    position: 'absolute', top: `calc(59% + ${m.top}px)`, left: `${m.left}px`,
-                    width: `${34 + i * 3}px`, height: 'auto',
-                    opacity: 0.85,
-                  }} />
-                ))}
-              </div>
-            </div>
+            </>
           )}
 
         </>
