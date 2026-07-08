@@ -1015,8 +1015,8 @@ function SkyBackground() {
               <div style={{
                 position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 2, pointerEvents: 'none',
                 animation: 'flock-distant-rtl 180s linear 20s infinite',
-                transform: 'scaleX(-1)',
               }}>
+              <div style={{ transform: 'scaleX(-1)' }}>
                 {[
                   { top: 120, left: 0 }, { top: 128, left: 14 }, { top: 118, left: 28 },
                   { top: 132, left: 8 }, { top: 124, left: 42 }, { top: 136, left: 22 },
@@ -1034,6 +1034,7 @@ function SkyBackground() {
                     animationDelay: `${i * 0.08}s`,
                   }} />
                 ))}
+              </div>
               </div>
             </>
 
