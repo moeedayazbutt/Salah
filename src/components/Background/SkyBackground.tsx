@@ -788,6 +788,7 @@ function SkyBackground() {
     left: string;
     len: number;
     dur: number;
+    dir: 'up' | 'down';
   }
   const [shootingStar, setShootingStar] = useState<ShootingStar | null>(null);
 
@@ -803,11 +804,18 @@ function SkyBackground() {
     const triggerNext = () => {
       const nextDelay = 18000 + Math.random() * 14000;
       activeTimeout = setTimeout(() => {
+        const dir = Math.random() > 0.4 ? 'down' : 'up';
+        // If going up, start lower (e.g. 20% to 40% height) to allow room to fly upwards
+        const topVal = dir === 'up' 
+          ? 20 + Math.random() * 20 
+          : 5 + Math.random() * 20;
+
         const star: ShootingStar = {
-          top: `${5 + Math.random() * 20}%`,
+          top: `${topVal}%`,
           left: `${10 + Math.random() * 60}%`,
           len: 100 + Math.random() * 60,
           dur: 0.6 + Math.random() * 0.5,
+          dir,
         };
         setShootingStar(star);
 
@@ -864,9 +872,9 @@ function SkyBackground() {
               {shootingStar && (
                 <div style={{
                   position:'absolute', top:shootingStar.top, left:shootingStar.left, width:shootingStar.len, height:2,
-                  background:'linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0))',
+                  background:'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.98) 100%)',
                   borderRadius:2, opacity:starFade,
-                  animation:`shoot-once ${shootingStar.dur}s ease-in forwards`,
+                  animation:`shoot-${shootingStar.dir}-once ${shootingStar.dur}s ease-in forwards`,
                   filter:'drop-shadow(0 0 4px rgba(255,255,255,0.8))',
                 }} />
               )}
