@@ -77,7 +77,7 @@ const DEFAULT_SETTINGS: PrayerSettings = {
   theme: 'auto',
   hijriAdjustment: 0,
   adjustments: { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 },
-  autoNightMode: { enabled: true, mode: 'sunsetSunrise', start: '22:00', end: '06:00' },
+  autoNightMode: { enabled: false, mode: 'sunsetSunrise', start: '22:00', end: '06:00' },
   azaan: {
     enabled: true,
     selectedMuazzin: 'istanbul',
