@@ -249,7 +249,7 @@ export default function NextPrayerTimer() {
         </div>
 
         {/* MIDDLE GROUP — vertically centred between top bar and strip */}
-        <div className="flex-1 flex flex-col items-center justify-center relative" style={{ minHeight: 0, gap: 'clamp(4px, 1vh, 14px)' }}>
+        <div className="flex-1 flex flex-col items-center justify-center relative" style={{ minHeight: 0, gap: 'clamp(2px, 0.5vh, 7px)' }}>
           {/* Soft scrim so the prayer name + countdown never merge into the scenery */}
           <div aria-hidden="true" style={{
             position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
@@ -267,7 +267,7 @@ export default function NextPrayerTimer() {
                 dir="rtl" lang="ar"
                 className="font-arabic-display hero-arabic-name"
                 style={{
-                  fontSize: 'clamp(3.8rem, 11vw, 10rem)',
+                  fontSize: 'clamp(4.94rem, 14.3vw, 13rem)',
                   lineHeight: 1.28,
                   paddingBottom: '0.14em',
                   whiteSpace: 'nowrap',
@@ -278,7 +278,7 @@ export default function NextPrayerTimer() {
               >
                 {displayPrayer?.nameAr || '—'}
               </span>
-              <span className="font-ui font-light uppercase flex-shrink-0" style={{ fontSize: 'clamp(1rem, 2vw, 2.2rem)', color: 'rgba(255,255,255,0.6)', textShadow: shadow }}>
+              <span className="font-ui font-light uppercase flex-shrink-0" style={{ fontSize: 'clamp(1.3rem, 2.6vw, 2.86rem)', color: 'rgba(255,255,255,0.6)', textShadow: shadow }}>
                 {displayPrayer?.nameEn || '—'}
               </span>
             </div>
@@ -289,7 +289,7 @@ export default function NextPrayerTimer() {
             className="leading-none hero-countdown relative"
             style={{
               fontFamily: "'Oswald', sans-serif",
-              fontSize: 'clamp(5rem, 18vw, 16rem)',
+              fontSize: 'clamp(6.5rem, 23.4vw, 20.8rem)',
               fontWeight: 600,
               letterSpacing: 'clamp(2px, 0.5vw, 8px)',
               fontVariantNumeric: 'tabular-nums',
