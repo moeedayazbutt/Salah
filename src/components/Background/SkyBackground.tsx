@@ -657,9 +657,9 @@ function SkyBackground() {
         finalMoonTop = 75;
       }
       
-      // Sunrise brightness starts from 15% and continues up to 100%
-      if (p >= 0.15) {
-        finalSunOpacity = (p - 0.15) / (1 - 0.15);
+      // Sunrise brightness starts from 8% and achieves target level by 70.7% progress (4:15 AM)
+      if (p >= 0.08) {
+        finalSunOpacity = Math.min(1, (p - 0.08) / 0.77);
       } else {
         finalSunOpacity = 0;
       }
