@@ -54,9 +54,13 @@
   50%      { opacity: 1;    transform: scale(1.05); }
 }
 /* Bird wing flap */
-@keyframes flap {
-  0%, 100% { transform: scaleY(1); }
-  50%      { transform: scaleY(0.42); }
+@keyframes flap-top {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(-35deg) scaleX(0.8); }
+}
+@keyframes flap-bottom {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(35deg) scaleX(0.8); }
 }
 /* Shooting star — brief diagonal streak, then long dark gap */
 @keyframes shoot {
@@ -67,8 +71,24 @@
 }
 /* Star twinkle (brightness + tiny scale) */
 @keyframes star-twinkle {
-  0%, 100% { opacity: 0.25; transform: scale(0.7); }
-  50%      { opacity: 1;    transform: scale(1.15); }
+  0%, 100% { opacity: 0.15; transform: scale(0.5); }
+  50%      { opacity: 1;    transform: scale(1.4); }
+}
+
+@keyframes borderGlowPulse {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 0.95; }
+}
+
+.azaan-glow-border {
+  border: 4px solid transparent;
+  border-image: linear-gradient(135deg, #FFD600, #F59E0B, #14B8A6, #0D9488) 1;
+  animation: borderGlowPulse 2.5s ease-in-out infinite;
+  box-shadow: inset 0 0 40px rgba(245, 158, 11, 0.6), inset 0 0 80px rgba(20, 184, 166, 0.4);
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 50;
 }
 
 /* ─── Base ─────────────────────────────────────────── */

@@ -44,18 +44,18 @@ export interface PrayerSettings {
   theme: ThemeMode;
   hijriAdjustment: number;
   adjustments: PrayerAdjustments;
-  notifications: {
-    enabled: boolean;
-    beforeMinutes: number;
-    silent: boolean;
-    customSound: boolean;
-  };
   autoNightMode: {
     enabled: boolean;
     mode: 'fixed' | 'sunsetSunrise';
     start: string; // 'HH:MM' — used when mode === 'fixed'
     end: string;   // 'HH:MM'
   };
+  azaan: {
+    enabled: boolean;
+    selectedMuazzin: string; // 'makkah' | 'madinah' | 'cairo' | 'alaqsa' | 'istanbul'
+    exitAodOnPlay: boolean;
+  };
+  selectedCityName: string;
 }
 
 export interface PrayerInfo {
@@ -263,6 +263,11 @@ export const DEFAULT_SETTINGS: PrayerSettings = {
   theme: 'auto',
   hijriAdjustment: 0,
   adjustments: { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 },
-  notifications: { enabled: false, beforeMinutes: 5, silent: false, customSound: false },
   autoNightMode: { enabled: false, mode: 'fixed', start: '22:00', end: '06:00' },
+  azaan: {
+    enabled: true,
+    selectedMuazzin: 'makkah',
+    exitAodOnPlay: true,
+  },
+  selectedCityName: '',
 };

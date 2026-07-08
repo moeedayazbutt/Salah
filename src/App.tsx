@@ -1,6 +1,5 @@
 import { usePrayerTimeEngine } from './hooks/usePrayerTimes';
 import { useGeolocation, useRequestGeolocation } from './hooks/useGeolocation';
-import { useAdhanNotifications } from './hooks/useNotifications';
 import { useFullscreen } from './hooks/useFullscreen';
 import { useAutoNightMode } from './hooks/useNightMode';
 import { useStore } from './store';
@@ -45,7 +44,6 @@ function EmptyState({ onGetLocation }: { onGetLocation: () => void }) {
 function App() {
   usePrayerTimeEngine();
   useGeolocation();
-  useAdhanNotifications();
   useAutoNightMode();
 
   const { isFullscreen, enter: enterFullscreen, exit: exitFullscreen } = useFullscreen();

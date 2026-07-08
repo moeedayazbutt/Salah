@@ -57,6 +57,10 @@ interface AppState {
   // Initialization
   isInitialized: boolean;
   setInitialized: (init: boolean) => void;
+
+  // Azaan playing state
+  isAzaanPlaying: boolean;
+  setAzaanPlaying: (v: boolean) => void;
 }
 
 const DEFAULT_SETTINGS: PrayerSettings = {
@@ -69,8 +73,13 @@ const DEFAULT_SETTINGS: PrayerSettings = {
   theme: 'auto',
   hijriAdjustment: 0,
   adjustments: { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 },
-  notifications: { enabled: false, beforeMinutes: 5, silent: false, customSound: false },
   autoNightMode: { enabled: false, mode: 'fixed', start: '22:00', end: '06:00' },
+  azaan: {
+    enabled: true,
+    selectedMuazzin: 'makkah',
+    exitAodOnPlay: true,
+  },
+  selectedCityName: '',
 };
 
 export const useStore = create<AppState>()(
@@ -133,6 +142,10 @@ export const useStore = create<AppState>()(
       // Init
       isInitialized: false,
       setInitialized: (isInitialized) => set({ isInitialized }),
+
+      // Azaan playing
+      isAzaanPlaying: false,
+      setAzaanPlaying: (isAzaanPlaying) => set({ isAzaanPlaying }),
     }),
     {
       name: 'salah-settings',
@@ -170,3 +183,4 @@ export const useQiblaDirection = () => useStore((state) => state.qiblaDirection)
 export const useHijriDate = () => useStore((state) => state.hijriDate);
 export const useIsSettingsOpen = () => useStore((state) => state.isSettingsOpen);
 export const useIsInitialized = () => useStore((state) => state.isInitialized);
+export const useIsAzaanPlaying = () => useStore((state) => state.isAzaanPlaying);

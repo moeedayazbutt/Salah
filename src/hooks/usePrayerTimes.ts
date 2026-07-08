@@ -2,6 +2,7 @@ import { useEffect, useCallback, useRef } from 'react';
 import { calculatePrayerTimes, getPrayerInfo, formatCountdown, calculateQibla, calculateHijriDate } from '../utils/prayerTimes';
 import { calculateSunPosition, determineSkyPhase, getMoonPhase } from '../utils/skyEngine';
 import { useStore } from '../store';
+import { playAzaan, stopAzaan } from '../utils/azaanEngine';
 
 export function usePrayerTimeEngine() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -18,6 +19,10 @@ export function usePrayerTimeEngine() {
   const setQiblaDirection = useStore((s) => s.setQiblaDirection);
   const setHijriDate = useStore((s) => s.setHijriDate);
   const setIsInitialized = useStore((s) => s.setInitialized);
+  const setAodMode = useStore((s) => s.setAodMode);
+  const setAzaanPlaying = useStore((s) => s.setAzaanPlaying);
+  const lastAzaanPlayedRef = useRef<string | null>(null);
+  const tempDisabledAodRef = useRef<boolean>(false);
 
   const tick = useCallback(() => {
     const now = new Date();
@@ -58,6 +63,34 @@ export function usePrayerTimeEngine() {
         const next = info.find((p) => p.isNext) || null;
         setCurrentPrayer(current);
         setNextPrayer(next);
+
+        // Auto play azaan
+        if (current && current.key !== 'sunrise' && settings.azaan.enabled) {
+          const key = `${current.key}-${current.time.getTime()}`;
+          const timeDiff = Math.abs(now.getTime() - current.time.getTime());
+          if (timeDiff < 60000 && lastAzaanPlayedRef.current !== key) {
+            lastAzaanPlayedRef.current = key;
+            playAzaan(
+              settings.azaan.selectedMuazzin,
+              current.key === 'fajr',
+              () => {
+                setAzaanPlaying(true);
+                const currentAod = useStore.getState().aodMode;
+                if (settings.azaan.exitAodOnPlay && currentAod) {
+                  setAodMode(false);
+                  tempDisabledAodRef.current = true;
+                }
+              },
+              () => {
+                setAzaanPlaying(false);
+                if (tempDisabledAodRef.current) {
+                  setAodMode(true);
+                  tempDisabledAodRef.current = false;
+                }
+              }
+            );
+          }
+        }
 
         if (next) {
           let diff = next.time.getTime() - now.getTime();
@@ -101,6 +134,7 @@ export function usePrayerTimeEngine() {
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
+      stopAzaan();
     };
   }, [tick]);
 }

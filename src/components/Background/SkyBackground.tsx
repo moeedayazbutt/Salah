@@ -32,7 +32,7 @@ function getPalette(id: string): Palette {
         peakSun:'#eaa47e', peakShadow:'#40608c', peak2:'#6080aa',
         midHill:'#3a7098', ridgeTree:'#2a4a6a', fgDark:'#163640', fgRust:'#7e5040',
         bank:'#508048', bankLight:'#74a656',
-        water:'#34889a', waterWarm:'#e6b49c', waterLight:'#7cc6d0', reflOpacity:0.48,
+        water:'#34889a', waterWarm:'#e6b49c', waterLight:'#7cc6d0', reflOpacity:0.65,
         hazeWarm:'rgba(245,200,150,0.5)',
         sunCore:'#fff4cf', sunEdge:'#ffc233', sunGlow:'rgba(255,198,70,0.5)',
         birdColor:'rgba(20,40,55,0.55)' };
@@ -42,7 +42,7 @@ function getPalette(id: string): Palette {
         peakSun:'#ea9a70', peakShadow:'#3c5c88', peak2:'#5a7aa6',
         midHill:'#366a94', ridgeTree:'#274766', fgDark:'#14323f', fgRust:'#7c4a38',
         bank:'#4c7c48', bankLight:'#6fa054',
-        water:'#2f8296', waterWarm:'#e0a48c', waterLight:'#74c2cc', reflOpacity:0.5,
+        water:'#2f8296', waterWarm:'#e0a48c', waterLight:'#74c2cc', reflOpacity:0.68,
         hazeWarm:'rgba(240,185,135,0.55)',
         sunCore:'#fff1c0', sunEdge:'#ffb81a', sunGlow:'rgba(255,190,50,0.5)',
         birdColor:'rgba(18,38,52,0.55)' };
@@ -52,7 +52,7 @@ function getPalette(id: string): Palette {
         peakSun:'#ec8f60', peakShadow:'#46567e', peak2:'#64749c',
         midHill:'#486a8a', ridgeTree:'#2e4660', fgDark:'#182e38', fgRust:'#855038',
         bank:'#567e42', bankLight:'#7ba24e',
-        water:'#3c8496', waterWarm:'#eaa886', waterLight:'#78c0c4', reflOpacity:0.5,
+        water:'#3c8496', waterWarm:'#eaa886', waterLight:'#78c0c4', reflOpacity:0.68,
         hazeWarm:'rgba(250,190,120,0.55)',
         sunCore:'#ffe9b0', sunEdge:'#ff9e18', sunGlow:'rgba(255,160,40,0.52)',
         birdColor:'rgba(40,30,15,0.5)' };
@@ -62,7 +62,7 @@ function getPalette(id: string): Palette {
         peakSun:'#ffb07a', peakShadow:'#6a4f7e', peak2:'#8a6a8e',
         midHill:'#7a5a80', ridgeTree:'#4a3550', fgDark:'#2a1f30', fgRust:'#8a4a40',
         bank:'#6a6a48', bankLight:'#94925a',
-        water:'#b98a80', waterWarm:'#ffce9e', waterLight:'#d9b0a4', reflOpacity:0.55,
+        water:'#b98a80', waterWarm:'#ffce9e', waterLight:'#d9b0a4', reflOpacity:0.72,
         hazeWarm:'rgba(255,180,110,0.6)',
         sunCore:'#fff0c8', sunEdge:'#ff9020', sunGlow:'rgba(255,140,40,0.6)',
         birdColor:'rgba(60,30,15,0.5)' };
@@ -72,7 +72,7 @@ function getPalette(id: string): Palette {
         peakSun:'#ff9a5c', peakShadow:'#4a3560', peak2:'#6e4a6e',
         midHill:'#5a3a5e', ridgeTree:'#341f3c', fgDark:'#1f0f1c', fgRust:'#7a3a30',
         bank:'#5a5236', bankLight:'#7e6e40',
-        water:'#a5605e', waterWarm:'#ff9a6a', waterLight:'#c98a86', reflOpacity:0.55,
+        water:'#a5605e', waterWarm:'#ff9a6a', waterLight:'#c98a86', reflOpacity:0.72,
         hazeWarm:'rgba(255,120,50,0.6)',
         sunCore:'#ffe6b0', sunEdge:'#ff6a12', sunGlow:'rgba(255,90,20,0.6)',
         birdColor:'rgba(50,18,8,0.5)' };
@@ -82,7 +82,7 @@ function getPalette(id: string): Palette {
         peakSun:'#8a5a72', peakShadow:'#2c1c42', peak2:'#3e2a4e',
         midHill:'#2e1e42', ridgeTree:'#1a1028', fgDark:'#100a1a', fgRust:'#40202c',
         bank:'#2e2a30', bankLight:'#403c42',
-        water:'#241a3e', waterWarm:'#4a2c50', waterLight:'#3a2c58', reflOpacity:0.42,
+        water:'#241a3e', waterWarm:'#4a2c50', waterLight:'#3a2c58', reflOpacity:0.60,
         hazeWarm:'rgba(150,50,120,0.4)',
         sunCore:'#ffc9a0', sunEdge:'#d8483a', sunGlow:'rgba(200,50,80,0.45)',
         birdColor:'rgba(0,0,0,0)' };
@@ -92,7 +92,7 @@ function getPalette(id: string): Palette {
         peakSun:'#5a5488', peakShadow:'#22213e', peak2:'#2e2c4e',
         midHill:'#24243e', ridgeTree:'#14142a', fgDark:'#0c0c1a', fgRust:'#2a2440',
         bank:'#22243a', bankLight:'#303452',
-        water:'#141a38', waterWarm:'#2f2f60', waterLight:'#2a3768', reflOpacity:0.38,
+        water:'#141a38', waterWarm:'#2f2f60', waterLight:'#2a3768', reflOpacity:0.55,
         hazeWarm:'rgba(90,90,180,0.3)',
         sunCore:'#dfe4ff', sunEdge:'#8a90c8', sunGlow:'rgba(90,90,180,0.28)',
         birdColor:'rgba(0,0,0,0)' };
@@ -102,7 +102,7 @@ function getPalette(id: string): Palette {
         peakSun:'#2a3458', peakShadow:'#141b34', peak2:'#1a2340',
         midHill:'#141d38', ridgeTree:'#0c1226', fgDark:'#070a16', fgRust:'#1a1e34',
         bank:'#0e1626', bankLight:'#16203a',
-        water:'#0a1028', waterWarm:'#182046', waterLight:'#1a2a55', reflOpacity:0.34,
+        water:'#0a1028', waterWarm:'#182046', waterLight:'#1a2a55', reflOpacity:0.50,
         hazeWarm:'rgba(40,50,110,0.25)',
         sunCore:'#ffffff', sunEdge:'#c8d2ff', sunGlow:'rgba(200,215,255,0.32)',
         birdColor:'rgba(0,0,0,0)' };
@@ -198,8 +198,15 @@ function Mountains({ pal }: { pal:Palette }) {
 /* ═══════════════════════════════════════════════════════════
    SCENE — one full landscape for a palette. Crossfaded by opacity.
    ═══════════════════════════════════════════════════════════ */
-const Scene = memo(function Scene({ pal, speed, sunLeftPct, sunGlowOpacity }:
-  { pal:Palette; speed:number; sunLeftPct:number; sunGlowOpacity:number }) {
+const Scene = memo(function Scene({
+  pal, speed, sunLeftPct, sunGlowOpacity,
+  starFade, moonOpacity, moonTop, moonLeft, moonSize,
+  sunOpacity, sunTop, sunSize, showBirds
+}: {
+  pal:Palette; speed:number; sunLeftPct:number; sunGlowOpacity:number;
+  starFade:number; moonOpacity:number; moonTop:number; moonLeft:number; moonSize:number;
+  sunOpacity:number; sunTop:number; sunSize:number; showBirds:boolean;
+}) {
   const uid = useId().replace(/:/g,'');
   const reflId = `refl${uid}`;
   const warmId = `warm${uid}`;
@@ -250,6 +257,45 @@ const Scene = memo(function Scene({ pal, speed, sunLeftPct, sunGlowOpacity }:
         <rect x="0" y={HORIZON} width="1440" height={900-HORIZON} fill={pal.water} />
         <rect x="0" y={HORIZON} width="1440" height="48" fill={pal.waterWarm} opacity="0.55" />
 
+        {/* Water reflections of celestial elements */}
+        <foreignObject x="0" y={HORIZON} width="1440" height={900-HORIZON}>
+          <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
+            <div style={{
+              position: 'absolute', bottom: '100%', left: 0, right: 0, height: '900px',
+              transform: 'scaleY(-1)', transformOrigin: 'bottom', filter: 'blur(3px)', opacity: 0.75
+            }}>
+              {/* Stars reflection */}
+              {starFade > 0 && STARS.map((st,i) => (
+                <div key={`refl-star-${i}`} className="absolute rounded-full bg-white" style={{
+                  left:st.left, top:st.top, width:st.size, height:st.size,
+                  animation:`star-twinkle ${st.dur} ease-in-out ${st.delay} infinite`,
+                  opacity:st.op*starFade * 0.7,
+                }} />
+              ))}
+              {/* Moon reflection */}
+              {moonOpacity > 0.01 && <Moon topPct={moonTop} leftPct={moonLeft} size={moonSize} opacity={moonOpacity} />}
+              {/* Sun reflection */}
+              {sunOpacity > 0.01 && <Sun topPct={sunTop} leftPct={sunLeftPct} size={sunSize} opacity={sunOpacity} pal={pal} />}
+              {/* Clouds reflection */}
+              {pal.cloudOpacity > 0.05 && CLOUD_CFG.map((c,i) => (
+                <div key={`refl-cloud-${i}`} style={{
+                  position:'absolute', top:`${c.top}%`, left:0,
+                  animation:`${c.dir==='rtl'?'cloud-drift':'cloud-drift-rev'} ${c.duration/speed}s linear ${c.delay/speed}s infinite`,
+                }}>
+                  <CloudCluster cloud={pal.cloud} under={pal.cloudUnder} opacity={pal.cloudOpacity*c.opa * 0.8} width={c.width} />
+                </div>
+              ))}
+              {/* Birds reflection */}
+              {showBirds && (
+                <div style={{ position:'absolute', inset:0, overflow:'hidden' }}>
+                  <FlockLayer birds={BIG_FLOCK}   color={pal.birdColor} top={18} dir="ltr" duration={58} delay={-24} speed={speed} />
+                  <FlockLayer birds={SMALL_FLOCK} color={pal.birdColor} top={10} dir="ltr" duration={78} delay={-48} speed={speed} />
+                </div>
+              )}
+            </div>
+          </div>
+        </foreignObject>
+
         {/* Mirror reflection */}
         <g transform={`translate(0,${HORIZON*2}) scale(1,-1)`} opacity={pal.reflOpacity}>
           <Mountains pal={pal} />
@@ -294,9 +340,9 @@ function CloudCluster({ cloud, under, opacity, width }:
 interface CloudCfg { top:number; width:number; dir:'rtl'|'ltr'; duration:number; delay:number; opa:number; }
 const CLOUD_CFG: CloudCfg[] = [
   { top:1,  width:420, dir:'rtl', duration:160, delay:0,  opa:1.0 },
-  { top:8,  width:300, dir:'ltr', duration:130, delay:22, opa:0.9 },
-  { top:3,  width:360, dir:'rtl', duration:185, delay:48, opa:0.8 },
-  { top:14, width:240, dir:'ltr', duration:115, delay:12, opa:0.85 },
+  { top:8,  width:300, dir:'ltr', duration:130, delay:-22, opa:0.9 },
+  { top:3,  width:360, dir:'rtl', duration:185, delay:-48, opa:0.8 },
+  { top:14, width:240, dir:'ltr', duration:115, delay:-12, opa:0.85 },
 ];
 function CloudLayer({ pal, speed }: { pal:Palette; speed:number }) {
   if (pal.cloudOpacity <= 0.05) return null;
@@ -334,11 +380,29 @@ function makeFlock(seed:number, count:number, spreadX:number, spreadY:number): B
 const BIG_FLOCK   = makeFlock(1337, 26, 21, 9);
 const SMALL_FLOCK = makeFlock(7,    12, 15, 7);
 
-const Gull = memo(({ b }: { b:Bird }) => (
-  <svg width={b.size} height={b.size*0.5} viewBox="0 0 24 12"
+const Goose = memo(({ b }: { b:Bird }) => (
+  <svg width={b.size * 1.5} height={b.size * 1.5} viewBox="0 0 32 32"
     style={{ position:'absolute', left:b.x, top:b.y, overflow:'visible' }} aria-hidden="true">
-    <path d="M1,9 Q6,3 12,8 Q18,3 23,9" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"
-      style={{ transformOrigin:'12px 8px', animation:`flap ${b.flapDur}s ease-in-out ${b.flapDelay}s infinite` }} />
+    <path
+      d="M 13,16 C 12,22 10,27 7,31 C 9,28 14,22 15,16 Z"
+      fill="currentColor"
+      style={{
+        transformOrigin: '14px 16px',
+        animation: `flap-bottom ${b.flapDur}s ease-in-out ${b.flapDelay}s infinite`
+      }}
+    />
+    <path
+      d="M 0,16 C 2,15 4,15.5 6,16.5 C 10,16 15,15.5 20,14.5 C 25,13.5 29,14 31,14.5 C 32,14.7 32,15.2 31,15.5 C 28,16.5 24,17.5 20,18 C 15,18 10,18.5 6,18.5 C 3,18.5 1,18 0,16 Z"
+      fill="currentColor"
+    />
+    <path
+      d="M 13,16 C 12,10 9,5 6,1 C 9,4 14,10 15,16 Z"
+      fill="currentColor"
+      style={{
+        transformOrigin: '14px 16px',
+        animation: `flap-top ${b.flapDur}s ease-in-out ${b.flapDelay}s infinite`
+      }}
+    />
   </svg>
 ));
 
@@ -347,9 +411,9 @@ function FlockLayer({ birds, color, top, dir, duration, delay, speed }:
   return (
     <div style={{
       position:'absolute', top:`${top}%`, left:0, color,
-      animation:`${dir==='rtl'?'fly-rtl':'fly-ltr'} ${duration/speed}s linear ${delay/speed}s infinite`,
+      animation: `${dir==='rtl'?'fly-rtl':'fly-ltr'} ${duration/speed}s linear ${delay/speed}s infinite`,
     }}>
-      {birds.map((b,i) => <Gull key={i} b={b} />)}
+      {birds.map((b,i) => <Goose key={i} b={b} />)}
     </div>
   );
 }
@@ -383,6 +447,15 @@ function Sun({ topPct, leftPct, size, opacity, pal }:
       transform:'translate(-50%,-50%)', zIndex:2, pointerEvents:'none',
       opacity, transition:'opacity 2.5s ease-in-out, top 1.5s ease, left 1.5s ease',
     }}>
+      {/* Subtle Sunrays */}
+      <div style={{
+        position: 'absolute', top: '-100%', left: '-100%', width: '300%', height: '300%',
+        background: `repeating-conic-gradient(from 0deg, ${pal.sunGlow} 0deg 15deg, transparent 15deg 30deg)`,
+        borderRadius: '50%',
+        opacity: 0.15,
+        animation: 'rotateRays 120s linear infinite, celestial-glow 8s ease-in-out infinite',
+        mixBlendMode: 'screen',
+      }} />
       <div style={{
         position:'absolute', top:'-70%', left:'-70%', width:'240%', height:'240%', borderRadius:'50%',
         background:`radial-gradient(circle, ${pal.sunGlow} 0%, transparent 68%)`,
@@ -481,16 +554,15 @@ function SkyBackground() {
   /* Celestial geometry */
   const vw = typeof window !== 'undefined' ? window.innerWidth : 1280;
   const sunSize  = Math.max(105, Math.min(200, vw * 0.13));
-  const moonSize = Math.max(95,  Math.min(165, vw * 0.105));
+  const moonSize = Math.max(66,  Math.min(115, vw * 0.0735));
 
   const sunTop     = Math.min(66, Math.max(5, 60 - elevation * 0.85));
   const sunLeft    = Math.min(95, Math.max(5, ((azimuth - 60) / 240) * 90 + 5));
   const sunOpacity = Math.max(0, Math.min(1, (elevation + 6) / 7));
 
-  // Moon sits behind the mountains on the right: it rises up from behind the
-  // small right-hand peaks as night deepens, then sinks back down (no arc).
+  // Moon trajectory: goes high up (8%) at night, under mountains (75%) in day
   const moonElev    = -elevation;
-  const moonTop     = Math.min(56, Math.max(13, 55 - moonElev * 0.95));
+  const moonTop     = Math.min(75, Math.max(8, 48 - moonElev * 1.1));
   const moonLeft    = 81;
   const moonOpacity = Math.max(0, Math.min(1, (moonElev + 6) / 9));
 
@@ -508,13 +580,29 @@ function SkyBackground() {
           {/* Stars + shooting stars (z1) */}
           {starFade > 0 && (
             <div style={{ position:'absolute', inset:0, zIndex:1, pointerEvents:'none' }}>
-              {STARS.map((st,i) => (
-                <div key={i} className="absolute rounded-full bg-white" style={{
-                  left:st.left, top:st.top, width:st.size, height:st.size,
-                  animation:`star-twinkle ${st.dur} ease-in-out ${st.delay} infinite`,
-                  opacity:st.op*starFade, transition:'opacity 2.5s ease-in-out',
-                }} />
-              ))}
+              {STARS.map((st,i) => {
+                const hasStreak = i % 12 === 0;
+                return (
+                  <div key={i} className="absolute" style={{
+                    left:st.left, top:st.top,
+                    opacity:st.op*starFade, transition:'opacity 2.5s ease-in-out',
+                  }}>
+                    <div className="rounded-full bg-white" style={{
+                      width:st.size, height:st.size,
+                      animation:`star-twinkle ${st.dur} ease-in-out ${st.delay} infinite`,
+                    }} />
+                    {hasStreak && (
+                      <div className="absolute" style={{
+                        top: '50%', left: '50%', transform: 'translate(-50%,-50%)', pointerEvents: 'none',
+                        animation:`star-twinkle ${st.dur} ease-in-out ${st.delay} infinite`,
+                      }}>
+                        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '12px', height: '1px', background: 'radial-gradient(circle, rgba(255,255,255,0.9), transparent)' }} />
+                        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '1px', height: '12px', background: 'radial-gradient(circle, rgba(255,255,255,0.9), transparent)' }} />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
               {SHOOTING.map((sh,i) => (
                 <div key={`sh${i}`} style={{
                   position:'absolute', top:sh.top, left:sh.left, width:sh.len, height:2,
@@ -537,17 +625,25 @@ function SkyBackground() {
 
           {/* Landscape crossfade (z4) */}
           <div style={{ position:'absolute', inset:0, zIndex:4, pointerEvents:'none', opacity:active==='a'?1:0, transition:'opacity 2.5s cubic-bezier(0.4,0,0.2,1)' }}>
-            <Scene pal={layerA.pal} speed={speed} sunLeftPct={sunLeft} sunGlowOpacity={sunOpacity} />
+            <Scene
+              pal={layerA.pal} speed={speed} sunLeftPct={sunLeft} sunGlowOpacity={sunOpacity}
+              starFade={starFade} moonOpacity={moonOpacity} moonTop={moonTop} moonLeft={moonLeft} moonSize={moonSize}
+              sunOpacity={sunOpacity} sunTop={sunTop} sunSize={sunSize} showBirds={showBirds}
+            />
           </div>
           <div style={{ position:'absolute', inset:0, zIndex:4, pointerEvents:'none', opacity:active==='b'?1:0, transition:'opacity 2.5s cubic-bezier(0.4,0,0.2,1)' }}>
-            <Scene pal={layerB.pal} speed={speed} sunLeftPct={sunLeft} sunGlowOpacity={sunOpacity} />
+            <Scene
+              pal={layerB.pal} speed={speed} sunLeftPct={sunLeft} sunGlowOpacity={sunOpacity}
+              starFade={starFade} moonOpacity={moonOpacity} moonTop={moonTop} moonLeft={moonLeft} moonSize={moonSize}
+              sunOpacity={sunOpacity} sunTop={sunTop} sunSize={sunSize} showBirds={showBirds}
+            />
           </div>
 
           {/* Birds (z5, big flock, daytime) */}
           {showBirds && (
             <div style={{ position:'absolute', inset:0, overflow:'hidden', zIndex:5, pointerEvents:'none' }}>
-              <FlockLayer birds={BIG_FLOCK}   color={pal.birdColor} top={18} dir="rtl" duration={58} delay={0}  speed={speed} />
-              <FlockLayer birds={SMALL_FLOCK} color={pal.birdColor} top={10} dir="rtl" duration={78} delay={24} speed={speed} />
+              <FlockLayer birds={BIG_FLOCK}   color={pal.birdColor} top={18} dir="ltr" duration={58} delay={-24} speed={speed} />
+              <FlockLayer birds={SMALL_FLOCK} color={pal.birdColor} top={10} dir="ltr" duration={78} delay={-48} speed={speed} />
             </div>
           )}
         </>

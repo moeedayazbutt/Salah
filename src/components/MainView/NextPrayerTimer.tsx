@@ -101,7 +101,8 @@ export default function NextPrayerTimer() {
   const settings        = useStore((s) => s.settings);
   const skyDisplayHours = useStore((s) => s.skyDisplayHours);
   const skySliderAuto   = useStore((s) => s.skySliderAuto);
-  useStore((s) => s.aodMode); // consumed by CSS class on root
+  const aodMode         = useStore((s) => s.aodMode);
+  const isAzaanPlaying  = useStore((s) => s.isAzaanPlaying);
 
   /* Live clock */
   const [now, setNow] = useState(() => new Date());
@@ -154,7 +155,7 @@ export default function NextPrayerTimer() {
     }
   }, [displayPhase]);
 
-  const displayPrayer = nextPrayer || currentPrayer;
+  const displayPrayer = currentPrayer || nextPrayer;
 
   const timeStr  = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   const dateStr  = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -162,8 +163,38 @@ export default function NextPrayerTimer() {
 
   const shadow = '0 2px 12px rgba(0,0,0,0.55)';
 
+  const formattedCountdown = useMemo(() => {
+    return countdown.split('').map((char, index) => {
+      const isColon = char === ':';
+      return (
+        <span key={index} style={{ display: 'inline-block', width: isColon ? '0.3em' : '0.62em', textAlign: 'center' }}>
+          {char}
+        </span>
+      );
+    });
+  }, [countdown]);
+
+  const formattedTime = useMemo(() => {
+    return timeStr.split('').map((char, index) => {
+      const isColonOrSpace = char === ':' || char === ' ';
+      const isAmPm = char === 'A' || char === 'P' || char === 'M';
+      const width = isColonOrSpace ? '0.3em' : isAmPm ? '0.85em' : '0.62em';
+      return (
+        <span key={index} style={{ display: 'inline-block', width, textAlign: 'center' }}>
+          {char}
+        </span>
+      );
+    });
+  }, [timeStr]);
+
   return (
     <div className="flex-1 relative overflow-hidden flex flex-col">
+      {isAzaanPlaying && (
+        <div className="absolute inset-0 z-50 pointer-events-none azaan-glow-border" style={{
+          boxShadow: 'inset 0 0 40px rgba(245, 158, 11, 0.6), inset 0 0 80px rgba(20, 184, 166, 0.4)',
+        }} />
+      )}
+
       {/* ── CONTENT (floats over the layered SkyBackground) ── */}
       <div className="relative flex flex-col h-full z-10" style={{ padding: '18px 36px 10px' }}>
 
@@ -174,13 +205,13 @@ export default function NextPrayerTimer() {
               {dateStr}
             </span>
             {hijriStr && (
-              <span className="font-ui" style={{ fontSize: 'clamp(0.7rem, 1.3vw, 1.3rem)', color: 'rgba(255,255,255,0.6)', lineHeight: 1.2, textShadow: shadow }}>
+              <span className="font-ui" style={{ fontSize: 'clamp(0.9rem, 1.8vw, 1.9rem)', color: 'rgba(255,255,255,0.92)', lineHeight: 1.2, textShadow: shadow }}>
                 {hijriStr}
               </span>
             )}
           </div>
           <span style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 400, fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)', color: '#FFFFFF', letterSpacing: '0.04em', lineHeight: 1, marginTop: 2, fontVariantNumeric: 'tabular-nums', textShadow: shadow }}>
-            {timeStr}
+            {formattedTime}
           </span>
         </div>
 
@@ -195,7 +226,7 @@ export default function NextPrayerTimer() {
           }} />
           <div className="flex flex-col items-center relative" style={{ gap: 6, zIndex: 1 }}>
             <span className="font-ui tracking-widest uppercase" style={{ fontSize: 'clamp(0.75rem, 1.3vw, 1.4rem)', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.22em', textShadow: shadow }}>
-              NEXT PRAYER
+              CURRENT PRAYER
             </span>
             <div className="flex items-baseline justify-center gap-4 flex-wrap">
               <span
@@ -234,7 +265,7 @@ export default function NextPrayerTimer() {
               zIndex: 1,
             }}
           >
-            {countdown}
+            {formattedCountdown}
           </span>
         </div>
 
@@ -246,9 +277,9 @@ export default function NextPrayerTimer() {
               padding: 'clamp(4px, 0.8vh, 10px) 6px',
               borderRadius: 10,
               background: prayer.isCurrent
-                ? 'rgba(255,215,0,0.20)'
+                ? (aodMode ? 'rgba(255,255,255,0.1)' : 'rgba(255,215,0,0.20)')
                 : 'rgba(20,26,55,0.30)',
-              border: `1px solid ${prayer.isCurrent ? 'rgba(255,215,0,0.5)' : 'rgba(255,255,255,0.18)'}`,
+              border: `1px solid ${prayer.isCurrent ? (aodMode ? 'rgba(255,255,255,0.4)' : 'rgba(255,215,0,0.5)') : 'rgba(255,255,255,0.18)'}`,
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)',
               gap: 3,
@@ -256,11 +287,11 @@ export default function NextPrayerTimer() {
               <PrayerIcon
                 prayerKey={prayer.key}
                 size={Math.max(16, Math.min(26, window.innerWidth / 60))}
-                color={prayer.isCurrent ? '#FFD600' : 'rgba(255,255,255,0.6)'}
+                color={aodMode ? '#FFFFFF' : (prayer.isCurrent ? '#FFD600' : 'rgba(255,255,255,0.6)')}
               />
               <span dir="rtl" lang="ar" className="font-arabic" style={{
                 fontSize: 'clamp(1.1rem, 2vw, 2.2rem)',
-                color: prayer.isCurrent ? '#FFD600' : 'rgba(255,255,255,0.9)',
+                color: aodMode ? '#FFFFFF' : (prayer.isCurrent ? '#FFD600' : 'rgba(255,255,255,0.9)'),
                 lineHeight: 1.1,
                 textShadow: shadow,
               }}>
@@ -270,7 +301,7 @@ export default function NextPrayerTimer() {
                 fontFamily: "'Oswald', sans-serif",
                 fontSize: 'clamp(0.85rem, 1.4vw, 1.5rem)',
                 fontWeight: 400,
-                color: prayer.isCurrent ? 'rgba(255,215,0,0.95)' : 'rgba(255,255,255,0.75)',
+                color: aodMode ? '#FFFFFF' : (prayer.isCurrent ? 'rgba(255,215,0,0.95)' : 'rgba(255,255,255,0.75)'),
                 fontVariantNumeric: 'tabular-nums',
                 letterSpacing: '0.02em',
                 textShadow: shadow,
@@ -278,7 +309,7 @@ export default function NextPrayerTimer() {
                 {formatTime(prayer.time, settings.timeFormat, settings.timezone)}
               </span>
               {prayer.isCurrent && (
-                <div className="prayer-active-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: '#F59E0B', flexShrink: 0 }} />
+                <div className="prayer-active-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: aodMode ? '#FFFFFF' : '#F59E0B', flexShrink: 0 }} />
               )}
             </div>
           ))}
