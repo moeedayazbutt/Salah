@@ -385,50 +385,20 @@ body {
   50% { transform: translateX(8px); }
 }
 
-/* Moose / Deer Herd Walking — slow walk, stop, look around, resume */
+/* Moose / Deer Herd Walking — translate stock animation across screen */
 @keyframes moose-walk-ltr {
-  0%   { transform: translateX(-80px); opacity: 0; }
+  0%   { transform: translateX(-200px); opacity: 0; }
   1%   { opacity: 0.85; }
-  25%  { transform: translateX(400px); opacity: 0.85; }
-  /* Pause & look around */
-  28%  { transform: translateX(400px); opacity: 0.85; }
-  38%  { transform: translateX(420px); opacity: 0.85; }
-  /* Resume walking */
-  80%  { transform: translateX(1520px); opacity: 0.85; }
-  82%  { transform: translateX(1520px); opacity: 0; }
-  100% { transform: translateX(1520px); opacity: 0; }
+  80%  { transform: translateX(1600px); opacity: 0.85; }
+  82%  { transform: translateX(1600px); opacity: 0; }
+  100% { transform: translateX(1600px); opacity: 0; }
 }
 @keyframes moose-walk-rtl {
-  0%   { transform: translateX(1520px) scaleX(-1); opacity: 0; }
+  0%   { transform: translateX(1600px); opacity: 0; }
   1%   { opacity: 0.85; }
-  25%  { transform: translateX(1100px) scaleX(-1); opacity: 0.85; }
-  /* Pause & look around */
-  28%  { transform: translateX(1100px) scaleX(-1); opacity: 0.85; }
-  38%  { transform: translateX(1080px) scaleX(-1); opacity: 0.85; }
-  /* Resume walking */
-  80%  { transform: translateX(-80px) scaleX(-1); opacity: 0.85; }
-  82%  { transform: translateX(-80px) scaleX(-1); opacity: 0; }
-  100% { transform: translateX(-80px) scaleX(-1); opacity: 0; }
-}
-
-@keyframes moose-leg-walk {
-  0%, 28%, 38%, 82%, 100% { transform: rotate(0deg); }
-  7%  { transform: rotate(15deg); }
-  14% { transform: rotate(-15deg); }
-  21% { transform: rotate(15deg); }
-  50% { transform: rotate(-15deg); }
-  57% { transform: rotate(15deg); }
-  64% { transform: rotate(-15deg); }
-  71% { transform: rotate(15deg); }
-  78% { transform: rotate(-15deg); }
-}
-
-@keyframes moose-head-look {
-  0%, 25%, 40%, 100% { transform: rotate(0deg); }
-  29% { transform: rotate(-12deg); }
-  32% { transform: rotate(8deg); }
-  35% { transform: rotate(-5deg); }
-  38% { transform: rotate(0deg); }
+  80%  { transform: translateX(-200px); opacity: 0.85; }
+  82%  { transform: translateX(-200px); opacity: 0; }
+  100% { transform: translateX(-200px); opacity: 0; }
 }
 
 /* Beach/shore ground strip */

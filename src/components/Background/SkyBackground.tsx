@@ -3,6 +3,7 @@ import { useSkyPhase, useMoonPosition } from '../../hooks/usePrayerTimes';
 import { useStore } from '../../store';
 import { calculateSunPosition, calculateSunPositionFromPrayers, determineSkyPhase, getMoonPath } from '../../utils/skyEngine';
 import birdGif from '../../assets/bird1.gif';
+import mooseAnim from '../../assets/moose_anim.webp';
 
 const DEFAULT_GRADIENT = 'linear-gradient(180deg, #080A1A 0%, #0E1230 25%, #151A3A 60%, #1A1F3E 100%)';
 
@@ -208,74 +209,7 @@ function Mountains({ pal }: { pal:Palette }) {
         fill={pal.bankLight} opacity="0.45"
       />
 
-      {/* Moose / deer herd (3-4 animals) walking together — behind foreground trees */}
-      {/* Herd group 1: walks left-to-right, 4 animals close together */}
-      {[
-        { xOff: 0,  yBase: 532, size: 26, speed: 120, delay: 0 },
-        { xOff: 28, yBase: 534, size: 22, speed: 120, delay: 0 },
-        { xOff: 52, yBase: 531, size: 28, speed: 120, delay: 0 },
-        { xOff: 72, yBase: 535, size: 20, speed: 120, delay: 0 },
-      ].map((m, i) => (
-        <g key={`moose-ltr-${i}`} style={{
-          animation: `moose-walk-ltr ${m.speed}s linear ${m.delay}s infinite`,
-        }}>
-          <svg viewBox="0 0 32 32" width={m.size} height={m.size} x={m.xOff} y={m.yBase} style={{ overflow: 'visible' }}>
-            {/* Body + back */}
-            <path d="M 8,16 C 8,13 10,11 14,11 L 20,11 C 22,11 23,12 24,14 L 24,16 C 24,18 22,20 20,20 L 12,20 C 10,20 8,18 8,16 Z" fill={pal.fgDark} />
-            {/* Neck + head */}
-            <g style={{ transformOrigin: '22px 12px', animation: `moose-head-look ${m.speed}s ease-in-out ${m.delay}s infinite` }}>
-              <path d="M 22,14 L 24,8 L 28,6 L 29,7 L 26,9 L 24,14 Z" fill={pal.fgDark} />
-              {/* Antlers */}
-              <path d="M 27,6 L 29,3 L 28,3 L 26,5 Z M 28,6 L 31,4 L 30,3 L 27,5 Z" fill={pal.fgDark} opacity="0.8" />
-            </g>
-            {/* Front legs */}
-            <g style={{ transformOrigin: '19px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3}s infinite` }}>
-              <rect x="18" y="20" width="1.5" height="8" fill={pal.fgDark} />
-            </g>
-            <g style={{ transformOrigin: '21px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3 + 0.4}s infinite` }}>
-              <rect x="20.5" y="20" width="1.5" height="8" fill={pal.fgDark} />
-            </g>
-            {/* Hind legs */}
-            <g style={{ transformOrigin: '11px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3 + 0.2}s infinite` }}>
-              <rect x="10" y="20" width="1.5" height="8" fill={pal.fgDark} />
-            </g>
-            <g style={{ transformOrigin: '13px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3 + 0.6}s infinite` }}>
-              <rect x="12.5" y="20" width="1.5" height="8" fill={pal.fgDark} />
-            </g>
-          </svg>
-        </g>
-      ))}
-
-      {/* Herd group 2: walks right-to-left, 3 animals */}
-      {[
-        { xOff: 0,  yBase: 534, size: 24, speed: 140, delay: 40 },
-        { xOff: 26, yBase: 532, size: 26, speed: 140, delay: 40 },
-        { xOff: 50, yBase: 536, size: 20, speed: 140, delay: 40 },
-      ].map((m, i) => (
-        <g key={`moose-rtl-${i}`} style={{
-          animation: `moose-walk-rtl ${m.speed}s linear ${m.delay}s infinite`,
-        }}>
-          <svg viewBox="0 0 32 32" width={m.size} height={m.size} x={m.xOff} y={m.yBase} style={{ overflow: 'visible' }}>
-            <path d="M 8,16 C 8,13 10,11 14,11 L 20,11 C 22,11 23,12 24,14 L 24,16 C 24,18 22,20 20,20 L 12,20 C 10,20 8,18 8,16 Z" fill={pal.fgDark} />
-            <g style={{ transformOrigin: '22px 12px', animation: `moose-head-look ${m.speed}s ease-in-out ${m.delay}s infinite` }}>
-              <path d="M 22,14 L 24,8 L 28,6 L 29,7 L 26,9 L 24,14 Z" fill={pal.fgDark} />
-              <path d="M 27,6 L 29,3 L 28,3 L 26,5 Z M 28,6 L 31,4 L 30,3 L 27,5 Z" fill={pal.fgDark} opacity="0.8" />
-            </g>
-            <g style={{ transformOrigin: '19px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3}s infinite` }}>
-              <rect x="18" y="20" width="1.5" height="8" fill={pal.fgDark} />
-            </g>
-            <g style={{ transformOrigin: '21px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3 + 0.4}s infinite` }}>
-              <rect x="20.5" y="20" width="1.5" height="8" fill={pal.fgDark} />
-            </g>
-            <g style={{ transformOrigin: '11px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3 + 0.2}s infinite` }}>
-              <rect x="10" y="20" width="1.5" height="8" fill={pal.fgDark} />
-            </g>
-            <g style={{ transformOrigin: '13px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3 + 0.6}s infinite` }}>
-              <rect x="12.5" y="20" width="1.5" height="8" fill={pal.fgDark} />
-            </g>
-          </svg>
-        </g>
-      ))}
+      {/* Moose/deer are now rendered via HTML overlay using the new stock animation */}
 
       {FG_PINES.map(([x,b,h,k],i) => (
         <Pine key={`f${i}`} x={x} base={b} h={h} trunk fill={k==='rust'?pal.fgRust:pal.fgDark} />
@@ -1102,6 +1036,39 @@ function SkyBackground() {
                 ))}
               </div>
             </>
+
+            {/* Moose/deer herd using the new stock animation — behind foreground trees (z4) */}
+            <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 4, pointerEvents: 'none' }}>
+              {/* Herd 1: left-to-right, 4 animals */}
+              <div style={{ animation: 'moose-walk-ltr 120s linear 0s infinite' }}>
+                {[
+                  { left: 0, top: 0 },
+                  { left: 28, top: 2 },
+                  { left: 52, top: -1 },
+                  { left: 72, top: 3 },
+                ].map((m, i) => (
+                  <img key={`moose-ltr-${i}`} src={mooseAnim} alt="" style={{
+                    position: 'absolute', top: `calc(59% + ${m.top}px)`, left: `${m.left}px`,
+                    width: `${36 + i * 2}px`, height: 'auto',
+                    opacity: 0.85,
+                  }} />
+                ))}
+              </div>
+              {/* Herd 2: right-to-left, 3 animals */}
+              <div style={{ transform: 'scaleX(-1)', animation: 'moose-walk-rtl 140s linear 40s infinite' }}>
+                {[
+                  { left: 0, top: 2 },
+                  { left: 26, top: 0 },
+                  { left: 50, top: 4 },
+                ].map((m, i) => (
+                  <img key={`moose-rtl-${i}`} src={mooseAnim} alt="" style={{
+                    position: 'absolute', top: `calc(59% + ${m.top}px)`, left: `${m.left}px`,
+                    width: `${34 + i * 3}px`, height: 'auto',
+                    opacity: 0.85,
+                  }} />
+                ))}
+              </div>
+            </div>
           )}
 
         </>
