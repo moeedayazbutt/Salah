@@ -34,7 +34,7 @@ function getPalette(id: string): Palette {
         bank:'#508048', bankLight:'#74a656',
         water:'#34889a', waterWarm:'#e6b49c', waterLight:'#7cc6d0', reflOpacity:0.48,
         hazeWarm:'rgba(245,200,150,0.5)',
-        sunCore:'#fffdf2', sunEdge:'#ffe9a8', sunGlow:'rgba(255,230,160,0.42)',
+        sunCore:'#fff4cf', sunEdge:'#ffc233', sunGlow:'rgba(255,198,70,0.5)',
         birdColor:'rgba(20,40,55,0.55)' };
     case 'midday':
       return { cloud:'#f7ecd8', cloudUnder:'#f3c9a0', cloudOpacity:0.95,
@@ -44,7 +44,7 @@ function getPalette(id: string): Palette {
         bank:'#4c7c48', bankLight:'#6fa054',
         water:'#2f8296', waterWarm:'#e0a48c', waterLight:'#74c2cc', reflOpacity:0.5,
         hazeWarm:'rgba(240,185,135,0.55)',
-        sunCore:'#fff7e2', sunEdge:'#ffd98a', sunGlow:'rgba(255,210,140,0.4)',
+        sunCore:'#fff1c0', sunEdge:'#ffb81a', sunGlow:'rgba(255,190,50,0.5)',
         birdColor:'rgba(18,38,52,0.55)' };
     case 'afternoon':
       return { cloud:'#fbeeda', cloudUnder:'#f6c69a', cloudOpacity:0.88,
@@ -54,7 +54,7 @@ function getPalette(id: string): Palette {
         bank:'#567e42', bankLight:'#7ba24e',
         water:'#3c8496', waterWarm:'#eaa886', waterLight:'#78c0c4', reflOpacity:0.5,
         hazeWarm:'rgba(250,190,120,0.55)',
-        sunCore:'#fff4d8', sunEdge:'#ffcf82', sunGlow:'rgba(255,195,110,0.45)',
+        sunCore:'#ffe9b0', sunEdge:'#ff9e18', sunGlow:'rgba(255,160,40,0.52)',
         birdColor:'rgba(40,30,15,0.5)' };
     case 'sunrise':
       return { cloud:'#ffd9b4', cloudUnder:'#ffb488', cloudOpacity:0.72,
@@ -64,7 +64,7 @@ function getPalette(id: string): Palette {
         bank:'#6a6a48', bankLight:'#94925a',
         water:'#b98a80', waterWarm:'#ffce9e', waterLight:'#d9b0a4', reflOpacity:0.55,
         hazeWarm:'rgba(255,180,110,0.6)',
-        sunCore:'#fff6dc', sunEdge:'#ffca70', sunGlow:'rgba(255,170,80,0.55)',
+        sunCore:'#fff0c8', sunEdge:'#ff9020', sunGlow:'rgba(255,140,40,0.6)',
         birdColor:'rgba(60,30,15,0.5)' };
     case 'sunset':
       return { cloud:'#ff9f68', cloudUnder:'#e07850', cloudOpacity:0.7,
@@ -74,7 +74,7 @@ function getPalette(id: string): Palette {
         bank:'#5a5236', bankLight:'#7e6e40',
         water:'#a5605e', waterWarm:'#ff9a6a', waterLight:'#c98a86', reflOpacity:0.55,
         hazeWarm:'rgba(255,120,50,0.6)',
-        sunCore:'#fff0cf', sunEdge:'#ff9b3c', sunGlow:'rgba(240,110,30,0.55)',
+        sunCore:'#ffe6b0', sunEdge:'#ff6a12', sunGlow:'rgba(255,90,20,0.6)',
         birdColor:'rgba(50,18,8,0.5)' };
     case 'maghrib':
       return { cloud:'#b070cc', cloudUnder:'#8a4aa0', cloudOpacity:0.32,
@@ -84,7 +84,7 @@ function getPalette(id: string): Palette {
         bank:'#2e2a30', bankLight:'#403c42',
         water:'#241a3e', waterWarm:'#4a2c50', waterLight:'#3a2c58', reflOpacity:0.42,
         hazeWarm:'rgba(150,50,120,0.4)',
-        sunCore:'#ffd9b0', sunEdge:'#c85a5a', sunGlow:'rgba(180,50,120,0.4)',
+        sunCore:'#ffc9a0', sunEdge:'#d8483a', sunGlow:'rgba(200,50,80,0.45)',
         birdColor:'rgba(0,0,0,0)' };
     case 'fajr':
       return { cloud:'#7d84b8', cloudUnder:'#5a5c90', cloudOpacity:0.28,
@@ -390,8 +390,8 @@ function Sun({ topPct, leftPct, size, opacity, pal }:
       }} />
       <div style={{
         width:'100%', height:'100%', borderRadius:'50%',
-        background:`radial-gradient(circle at 42% 40%, ${pal.sunCore} 0%, ${pal.sunCore} 30%, ${pal.sunEdge} 100%)`,
-        boxShadow:`0 0 ${size*0.5}px ${pal.sunGlow}`,
+        background:`radial-gradient(circle at 44% 42%, ${pal.sunCore} 0%, ${pal.sunCore} 14%, ${pal.sunEdge} 66%, ${pal.sunEdge} 100%)`,
+        boxShadow:`0 0 ${size*0.6}px ${pal.sunGlow}`,
       }} />
     </div>
   );
@@ -402,20 +402,20 @@ function Moon({ topPct, leftPct, size, opacity }:
   return (
     <div style={{
       position:'absolute', top:`${topPct}%`, left:`${leftPct}%`, width:size, height:size,
-      transform:'translate(-50%,-50%)', zIndex:2, pointerEvents:'none',
+      transform:'translate(-50%,-50%)', zIndex:6, pointerEvents:'none',
       opacity, transition:'opacity 2.5s ease-in-out, top 1.5s ease, left 1.5s ease',
     }}>
       {/* soft outer glow */}
       <div style={{
-        position:'absolute', top:'-55%', left:'-55%', width:'210%', height:'210%', borderRadius:'50%',
-        background:'radial-gradient(circle, rgba(200,214,255,0.22) 0%, rgba(200,214,255,0.06) 45%, transparent 70%)',
+        position:'absolute', top:'-85%', left:'-85%', width:'270%', height:'270%', borderRadius:'50%',
+        background:'radial-gradient(circle, rgba(214,226,255,0.45) 0%, rgba(200,214,255,0.20) 34%, rgba(190,206,255,0.07) 56%, transparent 74%)',
         animation:'celestial-glow 9s ease-in-out infinite',
       }} />
       {/* disc */}
       <div style={{
         position:'relative', width:'100%', height:'100%', borderRadius:'50%',
         background:'radial-gradient(circle at 38% 34%, #ffffff 0%, #f3f5fb 42%, #dbe0ee 78%, #c3cadf 100%)',
-        boxShadow:'0 0 26px rgba(210,222,255,0.55), inset -6px -6px 16px rgba(150,160,190,0.35), inset 5px 5px 14px rgba(255,255,255,0.5)',
+        boxShadow:'0 0 40px rgba(210,222,255,0.75), 0 0 90px rgba(200,214,255,0.4), inset -6px -6px 16px rgba(150,160,190,0.35), inset 5px 5px 14px rgba(255,255,255,0.5)',
         overflow:'hidden',
       }}>
         {/* soft maria / craters */}
@@ -480,18 +480,20 @@ function SkyBackground() {
 
   /* Celestial geometry */
   const vw = typeof window !== 'undefined' ? window.innerWidth : 1280;
-  const sunSize  = Math.max(150, Math.min(300, vw * 0.19));
-  const moonSize = Math.max(90,  Math.min(160, vw * 0.10));
+  const sunSize  = Math.max(105, Math.min(200, vw * 0.13));
+  const moonSize = Math.max(95,  Math.min(165, vw * 0.105));
 
   const sunTop     = Math.min(66, Math.max(5, 60 - elevation * 0.85));
   const sunLeft    = Math.min(95, Math.max(5, ((azimuth - 60) / 240) * 90 + 5));
   const sunOpacity = Math.max(0, Math.min(1, (elevation + 6) / 7));
 
+  // Moon rides high in the open sky (in front of the peaks) so it is never
+  // occluded by the mountains — visible whenever the sun is down.
   const moonElev    = -elevation;
   const moonAz      = (azimuth + 180) % 360;
-  const moonTop     = Math.min(66, Math.max(5, 60 - moonElev * 0.85));
-  const moonLeft    = Math.min(95, Math.max(5, ((moonAz - 60) / 240) * 90 + 5));
-  const moonOpacity = Math.max(0, Math.min(1, (moonElev + 4) / 8));
+  const moonTop     = Math.min(40, Math.max(6, 42 - moonElev * 0.55));
+  const moonLeft    = Math.min(92, Math.max(8, ((moonAz - 60) / 240) * 84 + 8));
+  const moonOpacity = Math.max(0, Math.min(1, (moonElev + 6) / 9));
 
   const starFade  = elevation >= 3 ? 0 : elevation <= -15 ? 1 : (-elevation + 3) / 18;
   const showBirds = ['morning','midday','afternoon'].includes(phaseId);
