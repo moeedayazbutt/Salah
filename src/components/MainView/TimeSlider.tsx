@@ -7,6 +7,7 @@ export default function TimeSlider() {
   const skySliderAuto = useStore((s) => s.skySliderAuto);
   const setSkyDisplayHours = useStore((s) => s.setSkyDisplayHours);
   const setSkySliderAuto = useStore((s) => s.setSkySliderAuto);
+  const setSkySliderDragging = useStore((s) => s.setSkySliderDragging);
   const aodMode = useStore((s) => s.aodMode);
   const settings = useStore((s) => s.settings);
 
@@ -85,6 +86,11 @@ export default function TimeSlider() {
         step={0.25}
         value={currentValue}
         onChange={handleChange}
+        onMouseDown={() => setSkySliderDragging(true)}
+        onMouseUp={() => setSkySliderDragging(false)}
+        onTouchStart={() => setSkySliderDragging(true)}
+        onTouchEnd={() => setSkySliderDragging(false)}
+        onBlur={() => setSkySliderDragging(false)}
         className="time-slider flex-1"
         style={{ background: trackGradient }}
         aria-label="Time of day sky preview"

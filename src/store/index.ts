@@ -47,6 +47,8 @@ interface AppState {
   setSkyDisplayHours: (h: number | null) => void;
   skySliderAuto: boolean;
   setSkySliderAuto: (v: boolean) => void;
+  skySliderDragging: boolean;
+  setSkySliderDragging: (v: boolean) => void;
 
   // Location
   lastKnownLocation: Coordinates | null;
@@ -120,6 +122,8 @@ export const useStore = create<AppState>()(
       setSkyDisplayHours: (skyDisplayHours) => set({ skyDisplayHours }),
       skySliderAuto: true,
       setSkySliderAuto: (skySliderAuto) => set({ skySliderAuto }),
+      skySliderDragging: false,
+      setSkySliderDragging: (skySliderDragging) => set({ skySliderDragging }),
 
       // Location
       lastKnownLocation: null,

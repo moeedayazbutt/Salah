@@ -31,12 +31,44 @@
   100% { transform: translateX(110vw); opacity: 0; }
 }
 @keyframes cloud-drift {
-  0%   { transform: translateX(0px); }
-  100% { transform: translateX(-115vw); }
+  0%   { transform: translateX(108vw); }
+  100% { transform: translateX(-120vw); }
 }
 @keyframes cloud-drift-rev {
-  0%   { transform: translateX(0px); }
-  100% { transform: translateX(115vw); }
+  0%   { transform: translateX(-120vw); }
+  100% { transform: translateX(108vw); }
+}
+/* Water surface shimmer — horizontal glints drifting slowly */
+@keyframes water-shimmer {
+  0%, 100% { opacity: 0.20; transform: translateX(-10px) scaleX(1); }
+  50%      { opacity: 0.55; transform: translateX(10px) scaleX(1.06); }
+}
+/* Reflection gentle wavering */
+@keyframes reflect-waver {
+  0%, 100% { transform: scaleY(1)     translateY(0); }
+  50%      { transform: scaleY(1.012) translateY(2px); }
+}
+/* Sun / moon soft breathing glow */
+@keyframes celestial-glow {
+  0%, 100% { opacity: 0.80; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.05); }
+}
+/* Bird wing flap */
+@keyframes flap {
+  0%, 100% { transform: scaleY(1); }
+  50%      { transform: scaleY(0.42); }
+}
+/* Shooting star — brief diagonal streak, then long dark gap */
+@keyframes shoot {
+  0%   { transform: translate3d(0,0,0) rotate(20deg); opacity: 0; }
+  1.5% { opacity: 1; }
+  9%   { transform: translate3d(360px,132px,0) rotate(20deg); opacity: 0; }
+  100% { transform: translate3d(360px,132px,0) rotate(20deg); opacity: 0; }
+}
+/* Star twinkle (brightness + tiny scale) */
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.7); }
+  50%      { opacity: 1;    transform: scale(1.15); }
 }
 
 /* ─── Base ─────────────────────────────────────────── */
