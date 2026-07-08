@@ -189,24 +189,93 @@ function Mountains({ pal }: { pal:Palette }) {
       <path d={FG_RIGHT_MASS} fill={pal.fgDark} />
       <path d={BANK_LEFT} fill={pal.bank} />
       <path d={BANK_RIGHT} fill={pal.bankLight} />
-      
-      {/* Abstract walking moose/deer silhouettes — behind foreground trees */}
-      {/* Moose 1: walks left-to-right */}
-      <g style={{
-        animation: 'moose-walk-ltr 55s linear 5s infinite',
-      }}>
-        <svg viewBox="0 0 28 28" width="28" height="28" x="0" y="526" style={{ overflow: 'visible' }}>
-          <path d="M 5,24 L 6,24 L 7,17 L 14,17 L 15,24 L 16,24 L 14.5,15 L 17,14 L 20,8 L 19,5 L 17.5,6 L 16.5,8 L 15.5,10 L 13.5,11 L 8,11 L 6,15 L 5,24 Z M 20,8 C 21,7 22,5.5 23,4.5 L 22,4.5 C 21,5.5 20.5,6.5 20,8 Z M 19,5 L 18,3 L 17.5,4.5 L 19,5 Z" fill={pal.fgDark} />
-        </svg>
-      </g>
-      {/* Deer 2: walks right-to-left, different timing */}
-      <g style={{
-        animation: 'moose-walk-rtl 65s linear 30s infinite',
-      }}>
-        <svg viewBox="0 0 24 24" width="22" height="22" x="0" y="530" style={{ overflow: 'visible' }}>
-          <path d="M 4,20 L 5,20 L 6,14 L 12,14 L 13,20 L 14,20 L 12.5,13 L 15,12 L 17,7 L 16,5 L 15,6 L 14,8 L 12.5,9.5 L 7.5,9.5 L 5.5,13 L 4,20 Z M 17,7 C 18,6 19,5 20,4 L 19,4 C 18,5 17.5,5.5 17,7 Z" fill={pal.fgDark} />
-        </svg>
-      </g>
+
+      {/* Shore / beach ground strip where trees meet water */}
+      <path
+        d="M0,556 C30,558 90,562 180,560 C220,559 260,561 310,560 L310,570 L0,570 Z"
+        fill={pal.bank} opacity="0.7"
+      />
+      <path
+        d="M0,560 C40,563 120,566 200,563 C260,561 310,564 310,563 L310,572 L0,572 Z"
+        fill={pal.bankLight} opacity="0.45"
+      />
+      <path
+        d="M1100,556 C1150,558 1220,562 1300,560 C1360,559 1410,561 1440,560 L1440,570 L1100,570 Z"
+        fill={pal.bank} opacity="0.7"
+      />
+      <path
+        d="M1100,560 C1160,563 1250,566 1340,563 C1400,561 1440,564 1440,563 L1440,572 L1100,572 Z"
+        fill={pal.bankLight} opacity="0.45"
+      />
+
+      {/* Moose / deer herd (3-4 animals) walking together — behind foreground trees */}
+      {/* Herd group 1: walks left-to-right, 4 animals close together */}
+      {[
+        { xOff: 0,  yBase: 532, size: 26, speed: 120, delay: 0 },
+        { xOff: 28, yBase: 534, size: 22, speed: 120, delay: 0 },
+        { xOff: 52, yBase: 531, size: 28, speed: 120, delay: 0 },
+        { xOff: 72, yBase: 535, size: 20, speed: 120, delay: 0 },
+      ].map((m, i) => (
+        <g key={`moose-ltr-${i}`} style={{
+          animation: `moose-walk-ltr ${m.speed}s linear ${m.delay}s infinite`,
+        }}>
+          <svg viewBox="0 0 32 32" width={m.size} height={m.size} x={m.xOff} y={m.yBase} style={{ overflow: 'visible' }}>
+            {/* Body + back */}
+            <path d="M 8,16 C 8,13 10,11 14,11 L 20,11 C 22,11 23,12 24,14 L 24,16 C 24,18 22,20 20,20 L 12,20 C 10,20 8,18 8,16 Z" fill={pal.fgDark} />
+            {/* Neck + head */}
+            <g style={{ transformOrigin: '22px 12px', animation: `moose-head-look ${m.speed}s ease-in-out ${m.delay}s infinite` }}>
+              <path d="M 22,14 L 24,8 L 28,6 L 29,7 L 26,9 L 24,14 Z" fill={pal.fgDark} />
+              {/* Antlers */}
+              <path d="M 27,6 L 29,3 L 28,3 L 26,5 Z M 28,6 L 31,4 L 30,3 L 27,5 Z" fill={pal.fgDark} opacity="0.8" />
+            </g>
+            {/* Front legs */}
+            <g style={{ transformOrigin: '19px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3}s infinite` }}>
+              <rect x="18" y="20" width="1.5" height="8" fill={pal.fgDark} />
+            </g>
+            <g style={{ transformOrigin: '21px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3 + 0.4}s infinite` }}>
+              <rect x="20.5" y="20" width="1.5" height="8" fill={pal.fgDark} />
+            </g>
+            {/* Hind legs */}
+            <g style={{ transformOrigin: '11px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3 + 0.2}s infinite` }}>
+              <rect x="10" y="20" width="1.5" height="8" fill={pal.fgDark} />
+            </g>
+            <g style={{ transformOrigin: '13px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3 + 0.6}s infinite` }}>
+              <rect x="12.5" y="20" width="1.5" height="8" fill={pal.fgDark} />
+            </g>
+          </svg>
+        </g>
+      ))}
+
+      {/* Herd group 2: walks right-to-left, 3 animals */}
+      {[
+        { xOff: 0,  yBase: 534, size: 24, speed: 140, delay: 40 },
+        { xOff: 26, yBase: 532, size: 26, speed: 140, delay: 40 },
+        { xOff: 50, yBase: 536, size: 20, speed: 140, delay: 40 },
+      ].map((m, i) => (
+        <g key={`moose-rtl-${i}`} style={{
+          animation: `moose-walk-rtl ${m.speed}s linear ${m.delay}s infinite`,
+        }}>
+          <svg viewBox="0 0 32 32" width={m.size} height={m.size} x={m.xOff} y={m.yBase} style={{ overflow: 'visible' }}>
+            <path d="M 8,16 C 8,13 10,11 14,11 L 20,11 C 22,11 23,12 24,14 L 24,16 C 24,18 22,20 20,20 L 12,20 C 10,20 8,18 8,16 Z" fill={pal.fgDark} />
+            <g style={{ transformOrigin: '22px 12px', animation: `moose-head-look ${m.speed}s ease-in-out ${m.delay}s infinite` }}>
+              <path d="M 22,14 L 24,8 L 28,6 L 29,7 L 26,9 L 24,14 Z" fill={pal.fgDark} />
+              <path d="M 27,6 L 29,3 L 28,3 L 26,5 Z M 28,6 L 31,4 L 30,3 L 27,5 Z" fill={pal.fgDark} opacity="0.8" />
+            </g>
+            <g style={{ transformOrigin: '19px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3}s infinite` }}>
+              <rect x="18" y="20" width="1.5" height="8" fill={pal.fgDark} />
+            </g>
+            <g style={{ transformOrigin: '21px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3 + 0.4}s infinite` }}>
+              <rect x="20.5" y="20" width="1.5" height="8" fill={pal.fgDark} />
+            </g>
+            <g style={{ transformOrigin: '11px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3 + 0.2}s infinite` }}>
+              <rect x="10" y="20" width="1.5" height="8" fill={pal.fgDark} />
+            </g>
+            <g style={{ transformOrigin: '13px 20px', animation: `moose-leg-walk ${m.speed}s ease-in-out ${m.delay + i * 0.3 + 0.6}s infinite` }}>
+              <rect x="12.5" y="20" width="1.5" height="8" fill={pal.fgDark} />
+            </g>
+          </svg>
+        </g>
+      ))}
 
       {FG_PINES.map(([x,b,h,k],i) => (
         <Pine key={`f${i}`} x={x} base={b} h={h} trunk fill={k==='rust'?pal.fgRust:pal.fgDark} />
@@ -477,6 +546,37 @@ const Scene = memo(function Scene({
                 }}>
                   <CloudCluster cloud={pal.cloud} under={pal.cloudUnder} opacity={pal.cloudOpacity*c.opa * 0.8} width={c.width} />
                 </div>
+              ))}
+              {/* Birds reflection in water */}
+              {starFade < 0.95 && [
+                { top: '14%', speed: 40, delay: 0, size: 24 },
+                { top: '12%', speed: 32, delay: 3.5, size: 28 },
+                { top: '16%', speed: 36, delay: 10, size: 26 },
+              ].map((b, i) => (
+                <img key={`refl-bird-${i}`} src={birdGif} alt="" style={{
+                  position: 'absolute', top: b.top,
+                  width: `${b.size}px`, height: 'auto',
+                  animation: `flock-fly-rtl ${b.speed}s linear ${b.delay}s infinite`,
+                  filter: 'grayscale(100%) brightness(0.6)',
+                  opacity: 0.3,
+                  pointerEvents: 'none',
+                }} />
+              ))}
+              {/* Fireflies reflection in water */}
+              {starFade > 0.05 && [
+                { left: '3%', top: '60%', dur: 4.8 },
+                { left: '12%', top: '58%', dur: 5.2 },
+                { left: '82%', top: '60%', dur: 4.9 },
+                { left: '90%', top: '57%', dur: 5.5 },
+              ].map((ff, i) => (
+                <div key={`refl-ff-${i}`} className="rounded-full" style={{
+                  position: 'absolute', left: ff.left, top: ff.top,
+                  width: '3px', height: '3px',
+                  background: '#bfff00',
+                  boxShadow: '0 0 4px #bfff00',
+                  opacity: starFade * 0.35,
+                  animation: `firefly-glow ${ff.dur}s ease-in-out infinite`,
+                }} />
               ))}
             </div>
           </div>
@@ -918,36 +1018,89 @@ function SkyBackground() {
             />
           </div>
 
-          {/* Dynamic Flock of Flying Birds (daytime) */}
+          {/* Flying birds at various z-depths (daytime) */}
           {starFade < 0.95 && (
-            <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 1, pointerEvents: 'none' }}>
-              {[
-                { top: '12%', scale: 0.30, speed: 32, delay: 0 },
-                { top: '15%', scale: 0.34, speed: 28, delay: 3.5 },
-                { top: '10%', scale: 0.28, speed: 35, delay: 1.8 },
-                { top: '18%', scale: 0.36, speed: 30, delay: 7.0 },
-                { top: '22%', scale: 0.32, speed: 38, delay: 5.2 },
-                { top: '14%', scale: 0.26, speed: 34, delay: 10.0 },
-                { top: '20%', scale: 0.38, speed: 26, delay: 14.0 },
-                { top: '16%', scale: 0.30, speed: 40, delay: 18.0 },
-              ].map((b, i) => (
-                <img
-                  key={`flock-bird-${i}`}
-                  src={birdGif}
-                  alt=""
-                  style={{
-                    position: 'absolute',
-                    top: b.top,
-                    width: `${28 + b.scale * 40}px`,
-                    height: 'auto',
+            <>
+              {/* Layer 1: Behind mountains (z2) — far, small, slow */}
+              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 2, pointerEvents: 'none' }}>
+                {[
+                  { top: '18%', scale: 0.18, speed: 55, delay: 2 },
+                  { top: '22%', scale: 0.20, speed: 50, delay: 8 },
+                ].map((b, i) => (
+                  <img key={`bird-bg-${i}`} src={birdGif} alt="" style={{
+                    position: 'absolute', top: b.top,
+                    width: `${20 + b.scale * 40}px`, height: 'auto',
                     transformOrigin: 'center center',
                     animation: `flock-fly-rtl ${b.speed}s linear ${b.delay}s infinite`,
-                    mixBlendMode: 'multiply',
+                    filter: 'grayscale(100%) brightness(0.55)',
+                    opacity: 0.5,
                     pointerEvents: 'none',
-                  }}
-                />
-              ))}
-            </div>
+                  }} />
+                ))}
+              </div>
+
+              {/* Layer 2: In front of sun but behind clouds (z3) */}
+              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 3, pointerEvents: 'none' }}>
+                {[
+                  { top: '14%', scale: 0.26, speed: 40, delay: 0 },
+                  { top: '10%', scale: 0.24, speed: 45, delay: 5 },
+                  { top: '20%', scale: 0.28, speed: 38, delay: 12 },
+                ].map((b, i) => (
+                  <img key={`bird-mid-${i}`} src={birdGif} alt="" style={{
+                    position: 'absolute', top: b.top,
+                    width: `${24 + b.scale * 40}px`, height: 'auto',
+                    transformOrigin: 'center center',
+                    animation: `flock-fly-rtl ${b.speed}s linear ${b.delay}s infinite`,
+                    filter: 'grayscale(80%) brightness(0.6)',
+                    opacity: 0.65,
+                    pointerEvents: 'none',
+                  }} />
+                ))}
+              </div>
+
+              {/* Layer 3: In front of clouds (z5) — closer, larger */}
+              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 5, pointerEvents: 'none' }}>
+                {[
+                  { top: '12%', scale: 0.32, speed: 32, delay: 3.5 },
+                  { top: '16%', scale: 0.30, speed: 36, delay: 10 },
+                  { top: '8%',  scale: 0.34, speed: 30, delay: 16 },
+                ].map((b, i) => (
+                  <img key={`bird-fg-${i}`} src={birdGif} alt="" style={{
+                    position: 'absolute', top: b.top,
+                    width: `${28 + b.scale * 40}px`, height: 'auto',
+                    transformOrigin: 'center center',
+                    animation: `flock-fly-rtl ${b.speed}s linear ${b.delay}s infinite`,
+                    filter: 'grayscale(60%) brightness(0.5)',
+                    opacity: 0.75,
+                    pointerEvents: 'none',
+                  }} />
+                ))}
+              </div>
+
+              {/* Distant tight flock of 10 birds moving together (z2, very far) */}
+              <div style={{
+                position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 2, pointerEvents: 'none',
+                animation: 'flock-distant-rtl 90s linear 20s infinite',
+              }}>
+                {[
+                  { top: 120, left: 0 }, { top: 128, left: 14 }, { top: 118, left: 28 },
+                  { top: 132, left: 8 }, { top: 124, left: 42 }, { top: 136, left: 22 },
+                  { top: 116, left: 50 }, { top: 130, left: 36 }, { top: 122, left: 56 },
+                  { top: 138, left: 46 },
+                ].map((p, i) => (
+                  <img key={`distant-bird-${i}`} src={birdGif} alt="" style={{
+                    position: 'absolute',
+                    top: `${p.top}px`,
+                    left: `${p.left}px`,
+                    width: '16px', height: 'auto',
+                    filter: 'grayscale(100%) brightness(0.6)',
+                    opacity: 0.45,
+                    pointerEvents: 'none',
+                    animationDelay: `${i * 0.08}s`,
+                  }} />
+                ))}
+              </div>
+            </>
           )}
 
         </>
