@@ -352,13 +352,6 @@ body {
 }
 
 /* Moose / Deer Herd Walking — translate stock animation across screen */
-@keyframes moose-walk-ltr {
-  0%   { transform: translateX(-200px); opacity: 0; }
-  1%   { opacity: 0.85; }
-  80%  { transform: translateX(1600px); opacity: 0.85; }
-  82%  { transform: translateX(1600px); opacity: 0; }
-  100% { transform: translateX(1600px); opacity: 0; }
-}
 @keyframes moose-walk-rtl {
   0%   { transform: translateX(1600px); opacity: 0; }
   1%   { opacity: 0.85; }

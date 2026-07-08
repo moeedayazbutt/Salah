@@ -209,7 +209,34 @@ function Mountains({ pal }: { pal:Palette }) {
         fill={pal.bankLight} opacity="0.45"
       />
 
-      {/* Moose/deer are now rendered via HTML overlay using the new stock animation */}
+      {/* Moose/deer herd using the stock animation — WebP faces LEFT by default */}
+      {/* Herd group 1: walks left-to-right, 4 animals — scaleX(-1) flips both direction and sprite */}
+      {[
+        { xOff: 0,  yBase: 532, size: 26, speed: 120, delay: 0 },
+        { xOff: 28, yBase: 534, size: 22, speed: 120, delay: 0 },
+        { xOff: 52, yBase: 531, size: 28, speed: 120, delay: 0 },
+        { xOff: 72, yBase: 535, size: 20, speed: 120, delay: 0 },
+      ].map((m, i) => (
+        <g key={`moose-ltr-${i}`} style={{
+          animation: `moose-walk-rtl ${m.speed}s linear ${m.delay}s infinite`,
+          transform: 'scaleX(-1)',
+        }}>
+          <image href={mooseAnim} width={m.size * 2} height={m.size * 1.05} x={m.xOff - m.size} y={m.yBase - m.size * 0.8} />
+        </g>
+      ))}
+
+      {/* Herd group 2: walks right-to-left, 3 animals — no flip needed (faces left by default) */}
+      {[
+        { xOff: 0,  yBase: 534, size: 24, speed: 140, delay: 40 },
+        { xOff: 26, yBase: 532, size: 26, speed: 140, delay: 40 },
+        { xOff: 50, yBase: 536, size: 20, speed: 140, delay: 40 },
+      ].map((m, i) => (
+        <g key={`moose-rtl-${i}`} style={{
+          animation: `moose-walk-rtl ${m.speed}s linear ${m.delay}s infinite`,
+        }}>
+          <image href={mooseAnim} width={m.size * 2} height={m.size * 1.05} x={m.xOff - m.size} y={m.yBase - m.size * 0.8} />
+        </g>
+      ))}
 
       {FG_PINES.map(([x,b,h,k],i) => (
         <Pine key={`f${i}`} x={x} base={b} h={h} trunk fill={k==='rust'?pal.fgRust:pal.fgDark} />
@@ -1037,38 +1064,6 @@ function SkyBackground() {
               </div>
               </div>
 
-              {/* Moose/deer herd using the new stock animation — behind foreground trees (z4) */}
-              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 4, pointerEvents: 'none' }}>
-                {/* Herd 1: left-to-right, 4 animals */}
-                <div style={{ animation: 'moose-walk-ltr 120s linear 0s infinite' }}>
-                  {[
-                    { left: 0, top: 0 },
-                    { left: 28, top: 2 },
-                    { left: 52, top: -1 },
-                    { left: 72, top: 3 },
-                  ].map((m, i) => (
-                    <img key={`moose-ltr-${i}`} src={mooseAnim} alt="" style={{
-                      position: 'absolute', top: `calc(59% + ${m.top}px)`, left: `${m.left}px`,
-                      width: `${36 + i * 2}px`, height: 'auto',
-                      opacity: 0.85,
-                    }} />
-                  ))}
-                </div>
-                {/* Herd 2: right-to-left, 3 animals */}
-                <div style={{ transform: 'scaleX(-1)', animation: 'moose-walk-rtl 140s linear 40s infinite' }}>
-                  {[
-                    { left: 0, top: 2 },
-                    { left: 26, top: 0 },
-                    { left: 50, top: 4 },
-                  ].map((m, i) => (
-                    <img key={`moose-rtl-${i}`} src={mooseAnim} alt="" style={{
-                      position: 'absolute', top: `calc(59% + ${m.top}px)`, left: `${m.left}px`,
-                      width: `${34 + i * 3}px`, height: 'auto',
-                      opacity: 0.85,
-                    }} />
-                  ))}
-                </div>
-              </div>
             </>
           )}
 
