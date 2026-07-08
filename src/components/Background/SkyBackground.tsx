@@ -303,19 +303,33 @@ const Scene = memo(function Scene({
           {starFade > 0.05 && (
             <g style={{ opacity: starFade }}>
               {[
-                // Mid pines (further away, smaller fireflies radius 0.8)
-                { x: 260, y: 490, r: 0.8, dur: 5.2, delay: 0.5, drift: 'firefly-drift-1' },
-                { x: 298, y: 495, r: 0.8, dur: 4.8, delay: 1.1, drift: 'firefly-drift-2' },
-                { x: 344, y: 480, r: 0.8, dur: 5.5, delay: 2.3, drift: 'firefly-drift-1' },
-                { x: 392, y: 490, r: 0.8, dur: 4.2, delay: 0.1, drift: 'firefly-drift-2' },
-                { x: 440, y: 480, r: 0.8, dur: 6.0, delay: 1.8, drift: 'firefly-drift-1' },
-                { x: 520, y: 485, r: 0.8, dur: 5.0, delay: 0.9, drift: 'firefly-drift-2' },
-                { x: 250, y: 440, r: 0.8, dur: 4.5, delay: 1.4, drift: 'firefly-drift-1' },
-                // Background of foreground trees (radius 1.1, clips behind trunks/foliage)
-                { x: 90, y: 440, r: 1.1, dur: 5.8, delay: 0.3, drift: 'firefly-drift-2' },
-                { x: 160, y: 430, r: 1.1, dur: 4.6, delay: 1.7, drift: 'firefly-drift-1' },
-                { x: 1190, y: 430, r: 1.1, dur: 5.3, delay: 0.8, drift: 'firefly-drift-2' },
-                { x: 1300, y: 420, r: 1.1, dur: 4.9, delay: 2.0, drift: 'firefly-drift-1' },
+                // Left cluster mid pines / tree bases (y closer to water horizon 560)
+                { x: 50, y: 540, r: 0.8, dur: 5.2, delay: 0.5, drift: 'firefly-drift-1' },
+                { x: 75, y: 535, r: 0.8, dur: 4.8, delay: 1.1, drift: 'firefly-drift-2' },
+                { x: 90, y: 550, r: 1.1, dur: 5.8, delay: 0.3, drift: 'firefly-drift-2' },
+                { x: 110, y: 530, r: 0.8, dur: 4.2, delay: 0.8, drift: 'firefly-drift-1' },
+                { x: 135, y: 545, r: 0.8, dur: 5.0, delay: 1.7, drift: 'firefly-drift-2' },
+                { x: 160, y: 540, r: 1.1, dur: 4.6, delay: 1.7, drift: 'firefly-drift-1' },
+                { x: 190, y: 535, r: 0.8, dur: 6.0, delay: 2.2, drift: 'firefly-drift-2' },
+                { x: 220, y: 548, r: 0.8, dur: 4.5, delay: 0.9, drift: 'firefly-drift-1' },
+                
+                // Mid distance hills
+                { x: 260, y: 515, r: 0.8, dur: 5.3, delay: 0.6, drift: 'firefly-drift-2' },
+                { x: 298, y: 520, r: 0.8, dur: 4.9, delay: 1.3, drift: 'firefly-drift-1' },
+                { x: 344, y: 512, r: 0.8, dur: 5.7, delay: 2.5, drift: 'firefly-drift-2' },
+                { x: 392, y: 518, r: 0.8, dur: 4.4, delay: 0.2, drift: 'firefly-drift-1' },
+                { x: 440, y: 515, r: 0.8, dur: 6.2, delay: 1.9, drift: 'firefly-drift-2' },
+                { x: 480, y: 510, r: 0.8, dur: 5.1, delay: 1.1, drift: 'firefly-drift-1' },
+                { x: 520, y: 512, r: 0.8, dur: 4.7, delay: 0.4, drift: 'firefly-drift-2' },
+
+                // Right cluster tree bases
+                { x: 1160, y: 535, r: 0.8, dur: 5.4, delay: 0.7, drift: 'firefly-drift-1' },
+                { x: 1190, y: 540, r: 1.1, dur: 5.3, delay: 0.8, drift: 'firefly-drift-2' },
+                { x: 1220, y: 532, r: 0.8, dur: 4.6, delay: 1.5, drift: 'firefly-drift-1' },
+                { x: 1260, y: 548, r: 0.8, dur: 6.1, delay: 2.1, drift: 'firefly-drift-2' },
+                { x: 1300, y: 542, r: 1.1, dur: 4.9, delay: 2.0, drift: 'firefly-drift-1' },
+                { x: 1350, y: 538, r: 0.8, dur: 5.6, delay: 1.2, drift: 'firefly-drift-2' },
+                { x: 1410, y: 545, r: 0.8, dur: 4.3, delay: 0.5, drift: 'firefly-drift-1' },
               ].map((ff, i) => (
                 <circle
                   key={`bg-ff-${i}`}
@@ -338,25 +352,40 @@ const Scene = memo(function Scene({
           {/* Day-time: sitting and flying birds */}
           {starFade < 0.95 && (
             <g style={{ color: pal.fgDark }}>
-              {/* Bird on Left Tree Tip */}
+              {/* Bird 1: Flyaway from Left Tree (x: 112, y: 309) */}
               <g style={{
                 transformOrigin: '112px 309px',
                 animation: 'bird-flyaway-left 32s ease-in-out infinite',
               }}>
-                <path
-                  d="M 112,309 C 112,306 114,304 117,304 C 119,304 120,306 120,309 C 118,308.5 115,308.5 112,309 Z M 116,304 C 116,302.5 117,301.5 118,301.5 C 118.5,301.5 119,302 119,302.5 C 118.5,303 117.5,303.8 116,304 Z"
-                  fill="currentColor"
-                />
+                <svg viewBox="0 0 32 32" width="12" height="12" x={112 - 6} y={309 - 6}>
+                  <path d="M 14,18 C 13,24 9,30 5,32 C 9,29 13,24 14,18 Z" fill="currentColor" style={{ transformOrigin: '14px 18px', animation: 'bird-flap-left-flyaway-bottom 32s ease-in-out infinite' }} />
+                  <path d="M 2,16 C 5,14 10,13 18,13 C 24,13 28,11.5 31,12 C 29,15 25,18 18,18 C 12,18 5,18 2,16 Z M 1,13 C 3,14 4,15.5 4,16 C 4,16.5 3,18 1,19 C 2.5,17.5 3,16.5 3,16 C 3,15.5 2.5,14.5 1,13 Z" fill="currentColor" />
+                  <path d="M 14,14 C 13,8 9,2 5,0 C 9,3 13,8 14,14 Z" fill="currentColor" style={{ transformOrigin: '14px 14px', animation: 'bird-flap-left-flyaway-top 32s ease-in-out infinite' }} />
+                </svg>
               </g>
-              {/* Bird on Right Tree Tip */}
+
+              {/* Bird 2: Flyaway from Right Tree (x: 1212, y: 341) */}
               <g style={{
                 transformOrigin: '1212px 341px',
                 animation: 'bird-flyaway-right 28s ease-in-out 8s infinite',
               }}>
-                <path
-                  d="M 1212,341 C 1212,338 1214,336 1217,336 C 1219,336 1220,338 1220,341 C 1218,340.5 1215,340.5 1212,341 Z M 1216,336 C 1216,334.5 1217,333.5 1218,333.5 C 1218.5,333.5 1219,334 1219,334.5 C 1218.5,335 1217.5,335.8 1216,336 Z"
-                  fill="currentColor"
-                />
+                <svg viewBox="0 0 32 32" width="12" height="12" x={1212 - 6} y={341 - 6}>
+                  <path d="M 14,18 C 13,24 9,30 5,32 C 9,29 13,24 14,18 Z" fill="currentColor" style={{ transformOrigin: '14px 18px', animation: 'bird-flap-right-flyaway-bottom 28s ease-in-out 8s infinite' }} />
+                  <path d="M 2,16 C 5,14 10,13 18,13 C 24,13 28,11.5 31,12 C 29,15 25,18 18,18 C 12,18 5,18 2,16 Z M 1,13 C 3,14 4,15.5 4,16 C 4,16.5 3,18 1,19 C 2.5,17.5 3,16.5 3,16 C 3,15.5 2.5,14.5 1,13 Z" fill="currentColor" />
+                  <path d="M 14,14 C 13,8 9,2 5,0 C 9,3 13,8 14,14 Z" fill="currentColor" style={{ transformOrigin: '14px 14px', animation: 'bird-flap-right-flyaway-top 28s ease-in-out 8s infinite' }} />
+                </svg>
+              </g>
+
+              {/* Bird 3: Traveling tree-to-tree in left cluster (x: 112 -> x: 178) */}
+              <g style={{
+                transformOrigin: '112px 309px',
+                animation: 'bird-tree-to-tree 26s ease-in-out 4s infinite',
+              }}>
+                <svg viewBox="0 0 32 32" width="12" height="12" x={112 - 6} y={309 - 6}>
+                  <path d="M 14,18 C 13,24 9,30 5,32 C 9,29 13,24 14,18 Z" fill="currentColor" style={{ transformOrigin: '14px 18px', animation: 'bird-flap-treetotree-bottom 26s ease-in-out 4s infinite' }} />
+                  <path d="M 2,16 C 5,14 10,13 18,13 C 24,13 28,11.5 31,12 C 29,15 25,18 18,18 C 12,18 5,18 2,16 Z M 1,13 C 3,14 4,15.5 4,16 C 4,16.5 3,18 1,19 C 2.5,17.5 3,16.5 3,16 C 3,15.5 2.5,14.5 1,13 Z" fill="currentColor" />
+                  <path d="M 14,14 C 13,8 9,2 5,0 C 9,3 13,8 14,14 Z" fill="currentColor" style={{ transformOrigin: '14px 14px', animation: 'bird-flap-treetotree-top 26s ease-in-out 4s infinite' }} />
+                </svg>
               </g>
             </g>
           )}
@@ -365,18 +394,29 @@ const Scene = memo(function Scene({
           {starFade > 0.05 && (
             <g style={{ opacity: starFade }}>
               {[
-                // Left tree foreground cluster (radius 1.6)
-                { x: 44, y: 480, r: 1.6, dur: 4.8, delay: 0, anim: 'firefly-drift-1' },
-                { x: 112, y: 390, r: 1.6, dur: 7.5, delay: 0.5, anim: 'firefly-travel-left' }, // travels from one tree to another!
-                { x: 178, y: 460, r: 1.6, dur: 5.0, delay: 1.5, anim: 'firefly-drift-2' },
-                { x: 228, y: 510, r: 1.6, dur: 4.7, delay: 0.8, anim: 'firefly-drift-1' },
-                // Right tree foreground cluster
-                { x: 1150, y: 500, r: 1.6, dur: 4.9, delay: 0.2, anim: 'firefly-drift-2' },
-                { x: 1212, y: 400, r: 1.6, dur: 8.0, delay: 1.7, anim: 'firefly-travel-right' }, // travels!
-                { x: 1272, y: 470, r: 1.6, dur: 4.4, delay: 0.9, anim: 'firefly-drift-1' },
-                { x: 1334, y: 430, r: 1.6, dur: 6.0, delay: 2.5, anim: 'firefly-drift-2' },
-                { x: 1392, y: 495, r: 1.6, dur: 4.6, delay: 1.1, anim: 'firefly-drift-1' },
-                { x: 1436, y: 440, r: 1.6, dur: 5.3, delay: 0.4, anim: 'firefly-drift-2' },
+                // Left cluster foreground (y closer to water horizon 560, radius 1.6)
+                { x: 44, y: 535, r: 1.6, dur: 4.8, delay: 0.0, anim: 'firefly-drift-1' },
+                { x: 70, y: 545, r: 1.6, dur: 5.2, delay: 1.3, anim: 'firefly-drift-2' },
+                { x: 112, y: 520, r: 1.6, dur: 7.5, delay: 0.5, anim: 'firefly-travel-left' }, // travels!
+                { x: 140, y: 542, r: 1.6, dur: 4.5, delay: 2.0, anim: 'firefly-drift-1' },
+                { x: 178, y: 530, r: 1.6, dur: 5.0, delay: 1.5, anim: 'firefly-drift-2' },
+                { x: 200, y: 548, r: 1.6, dur: 5.6, delay: 0.9, anim: 'firefly-drift-1' },
+                { x: 228, y: 535, r: 1.6, dur: 4.7, delay: 0.8, anim: 'firefly-drift-2' },
+                { x: 250, y: 540, r: 1.6, dur: 4.2, delay: 0.3, anim: 'firefly-drift-1' },
+
+                // Right cluster foreground
+                { x: 1150, y: 535, r: 1.6, dur: 4.9, delay: 0.2, anim: 'firefly-drift-2' },
+                { x: 1175, y: 548, r: 1.6, dur: 5.3, delay: 1.0, anim: 'firefly-drift-1' },
+                { x: 1212, y: 525, r: 1.6, dur: 8.0, delay: 1.7, anim: 'firefly-travel-right' }, // travels!
+                { x: 1240, y: 540, r: 1.6, dur: 4.7, delay: 2.2, anim: 'firefly-drift-2' },
+                { x: 1272, y: 530, r: 1.6, dur: 4.4, delay: 0.9, anim: 'firefly-drift-1' },
+                { x: 1300, y: 545, r: 1.6, dur: 5.1, delay: 1.6, anim: 'firefly-drift-2' },
+                { x: 1334, y: 532, r: 1.6, dur: 6.0, delay: 2.5, anim: 'firefly-drift-1' },
+                { x: 1360, y: 548, r: 1.6, dur: 4.8, delay: 0.7, anim: 'firefly-drift-2' },
+                { x: 1392, y: 538, r: 1.6, dur: 4.6, delay: 1.1, anim: 'firefly-drift-1' },
+                { x: 1415, y: 546, r: 1.6, dur: 5.5, delay: 1.9, anim: 'firefly-drift-2' },
+                { x: 1436, y: 535, r: 1.6, dur: 5.3, delay: 0.4, anim: 'firefly-drift-1' },
+                { x: 1450, y: 542, r: 1.6, dur: 4.9, delay: 1.3, anim: 'firefly-drift-2' },
               ].map((ff, i) => (
                 <circle
                   key={`fg-ff-${i}`}
