@@ -523,10 +523,21 @@ const Scene = memo(function Scene({
               ))}
               {/* Fireflies reflection in water */}
               {starFade > 0.05 && [
-                { left: '3%', top: '60%', dur: 4.8 },
-                { left: '12%', top: '58%', dur: 5.2 },
-                { left: '82%', top: '60%', dur: 4.9 },
-                { left: '90%', top: '57%', dur: 5.5 },
+                { left: '4%',  top: '62%', dur: 4.8 },
+                { left: '10%', top: '68%', dur: 5.2 },
+                { left: '17%', top: '64%', dur: 5.8 },
+                { left: '22%', top: '72%', dur: 4.5 },
+                { left: '30%', top: '66%', dur: 5.0 },
+                { left: '36%', top: '76%', dur: 6.2 },
+                { left: '42%', top: '70%', dur: 4.2 },
+                { left: '48%', top: '63%', dur: 5.5 },
+                { left: '55%', top: '74%', dur: 4.9 },
+                { left: '62%', top: '68%', dur: 5.3 },
+                { left: '70%', top: '61%', dur: 6.0 },
+                { left: '76%', top: '72%', dur: 4.6 },
+                { left: '82%', top: '65%', dur: 5.1 },
+                { left: '88%', top: '70%', dur: 4.7 },
+                { left: '94%', top: '64%', dur: 5.6 },
               ].map((ff, i) => (
                 <div key={`refl-ff-${i}`} className="rounded-full" style={{
                   position: 'absolute', left: ff.left, top: ff.top,
