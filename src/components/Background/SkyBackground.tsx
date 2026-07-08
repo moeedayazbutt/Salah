@@ -212,10 +212,10 @@ function Mountains({ pal }: { pal:Palette }) {
       {/* Moose/deer herd using the stock animation — WebP faces LEFT by default */}
       {/* Herd group 1: walks left-to-right, 4 animals — scaleX(-1) flips both direction and sprite */}
       {[
-        { xOff: 0,  yBase: 532, size: 26, speed: 120, delay: 0 },
-        { xOff: 28, yBase: 534, size: 22, speed: 120, delay: 0 },
-        { xOff: 52, yBase: 531, size: 28, speed: 120, delay: 0 },
-        { xOff: 72, yBase: 535, size: 20, speed: 120, delay: 0 },
+        { xOff: 0,  yBase: 532, size: 26, speed: 180, delay: 0 },
+        { xOff: 28, yBase: 534, size: 22, speed: 180, delay: 0 },
+        { xOff: 52, yBase: 531, size: 28, speed: 180, delay: 0 },
+        { xOff: 72, yBase: 535, size: 20, speed: 180, delay: 0 },
       ].map((m, i) => (
         <g key={`moose-ltr-${i}`} style={{
           animation: `moose-walk-rtl ${m.speed}s linear ${m.delay}s infinite`,
@@ -227,9 +227,9 @@ function Mountains({ pal }: { pal:Palette }) {
 
       {/* Herd group 2: walks right-to-left, 3 animals — no flip needed (faces left by default) */}
       {[
-        { xOff: 0,  yBase: 534, size: 24, speed: 140, delay: 40 },
-        { xOff: 26, yBase: 532, size: 26, speed: 140, delay: 40 },
-        { xOff: 50, yBase: 536, size: 20, speed: 140, delay: 40 },
+        { xOff: 0,  yBase: 534, size: 24, speed: 210, delay: 40 },
+        { xOff: 26, yBase: 532, size: 26, speed: 210, delay: 40 },
+        { xOff: 50, yBase: 536, size: 20, speed: 210, delay: 40 },
       ].map((m, i) => (
         <g key={`moose-rtl-${i}`} style={{
           animation: `moose-walk-rtl ${m.speed}s linear ${m.delay}s infinite`,
@@ -510,7 +510,7 @@ const Scene = memo(function Scene({
               ))}
               {/* Birds reflection in water */}
               {starFade < 0.95 && [
-                { top: '14%', speed: 80, delay: 0, size: 24 },
+                { top: '14%', speed: 120, delay: 0, size: 24 },
               ].map((b, i) => (
                 <img key={`refl-bird-${i}`} src={birdGif} alt="" style={{
                   position: 'absolute', top: b.top,
@@ -983,7 +983,7 @@ function SkyBackground() {
               {/* Layer 2: In front of sun but behind clouds (z3) — LTR */}
               <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 3, pointerEvents: 'none' }}>
                 {[
-                  { top: '14%', scale: 0.26, speed: 80, delay: 0 },
+                  { top: '14%', scale: 0.26, speed: 120, delay: 0 },
                 ].map((b, i) => (
                   <img key={`bird-mid-${i}`} src={birdGif} alt="" style={{
                     position: 'absolute', top: b.top,
@@ -999,7 +999,7 @@ function SkyBackground() {
               {/* Layer 3: In front of clouds (z5) — closer, larger — RTL */}
               <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 5, pointerEvents: 'none' }}>
                 {[
-                  { top: '12%', scale: 0.32, speed: 64, delay: 3.5 },
+                  { top: '12%', scale: 0.32, speed: 96, delay: 3.5 },
                 ].map((b, i) => (
                   <img key={`bird-fg-${i}`} src={birdGif} alt="" style={{
                     position: 'absolute', top: b.top,
@@ -1015,7 +1015,7 @@ function SkyBackground() {
               {/* Distant tight flock of 10 birds moving together (z2, very far) — RTL */}
               <div style={{
                 position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 2, pointerEvents: 'none',
-                animation: 'flock-distant-rtl 180s linear 20s infinite',
+                animation: 'flock-distant-rtl 270s linear 20s infinite',
               }}>
                 {[
                   { top: 120, left: 0 }, { top: 128, left: 14 }, { top: 118, left: 28 },
