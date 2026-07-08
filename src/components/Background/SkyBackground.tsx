@@ -383,23 +383,26 @@ const SMALL_FLOCK = makeFlock(7,    12, 15, 7);
 const Goose = memo(({ b }: { b:Bird }) => (
   <svg width={b.size * 1.5} height={b.size * 1.5} viewBox="0 0 32 32"
     style={{ position:'absolute', left:b.x, top:b.y, overflow:'visible' }} aria-hidden="true">
+    {/* Bottom Wing */}
     <path
-      d="M 13,16 C 12,22 10,27 7,31 C 9,28 14,22 15,16 Z"
+      d="M 12,16 C 11,22 7,29 2,32 C 7,30 14,24 15,16 Z"
       fill="currentColor"
       style={{
-        transformOrigin: '14px 16px',
+        transformOrigin: '12px 16px',
         animation: `flap-bottom ${b.flapDur}s ease-in-out ${b.flapDelay}s infinite`
       }}
     />
+    {/* Stout Body + Neck + Head */}
     <path
-      d="M 0,16 C 2,15 4,15.5 6,16.5 C 10,16 15,15.5 20,14.5 C 25,13.5 29,14 31,14.5 C 32,14.7 32,15.2 31,15.5 C 28,16.5 24,17.5 20,18 C 15,18 10,18.5 6,18.5 C 3,18.5 1,18 0,16 Z"
+      d="M 3,18 C 5,16 9,15 13,15 C 17,15 21,15.5 24,16.5 C 26,16 28,15.5 30,15.5 C 31,16 31.5,16.5 31,17 C 30,17.5 28,18 26,18 C 24,19 20,20.5 16,20.5 C 11,20.5 7,19.5 3,18 Z"
       fill="currentColor"
     />
+    {/* Top Wing */}
     <path
-      d="M 13,16 C 12,10 9,5 6,1 C 9,4 14,10 15,16 Z"
+      d="M 12,16 C 11,10 7,3 2,0 C 7,2 14,8 15,16 Z"
       fill="currentColor"
       style={{
-        transformOrigin: '14px 16px',
+        transformOrigin: '12px 16px',
         animation: `flap-top ${b.flapDur}s ease-in-out ${b.flapDelay}s infinite`
       }}
     />
@@ -447,24 +450,30 @@ function Sun({ topPct, leftPct, size, opacity, pal }:
       transform:'translate(-50%,-50%)', zIndex:2, pointerEvents:'none',
       opacity, transition:'opacity 2.5s ease-in-out, top 1.5s ease, left 1.5s ease',
     }}>
-      {/* Subtle Sunrays */}
+      {/* Subtle non-overlapping Sunrays */}
       <div style={{
-        position: 'absolute', top: '-100%', left: '-100%', width: '300%', height: '300%',
-        background: `repeating-conic-gradient(from 0deg, ${pal.sunGlow} 0deg 15deg, transparent 15deg 30deg)`,
+        position: 'absolute', top: '-60%', left: '-60%', width: '220%', height: '220%',
+        background: `repeating-conic-gradient(from 0deg, ${pal.sunGlow} 0deg 8deg, transparent 8deg 20deg)`,
         borderRadius: '50%',
-        opacity: 0.15,
-        animation: 'rotateRays 120s linear infinite, celestial-glow 8s ease-in-out infinite',
+        opacity: 0.12,
+        animation: 'rotateRays 180s linear infinite',
         mixBlendMode: 'screen',
+        WebkitMaskImage: 'radial-gradient(circle, transparent 42%, black 48%)',
+        maskImage: 'radial-gradient(circle, transparent 42%, black 48%)',
+        zIndex: -1,
       }} />
+      {/* Sun glow halo */}
       <div style={{
         position:'absolute', top:'-70%', left:'-70%', width:'240%', height:'240%', borderRadius:'50%',
         background:`radial-gradient(circle, ${pal.sunGlow} 0%, transparent 68%)`,
         animation:'celestial-glow 7s ease-in-out infinite',
       }} />
+      {/* Boiling Sun Core */}
       <div style={{
         width:'100%', height:'100%', borderRadius:'50%',
         background:`radial-gradient(circle at 44% 42%, ${pal.sunCore} 0%, ${pal.sunCore} 14%, ${pal.sunEdge} 66%, ${pal.sunEdge} 100%)`,
         boxShadow:`0 0 ${size*0.6}px ${pal.sunGlow}`,
+        animation: 'sun-boiling 6s ease-in-out infinite',
       }} />
     </div>
   );

@@ -66,17 +66,17 @@ interface AppState {
 const DEFAULT_SETTINGS: PrayerSettings = {
   coordinates: { latitude: 0, longitude: 0 },
   timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  calculationMethod: 'muslimWorldLeague',
-  madhab: 'shafi',
+  calculationMethod: 'moonsightingCommittee',
+  madhab: 'hanafi',
   highLatitudeRule: 'middleOfNight',
   timeFormat: '12h',
   theme: 'auto',
   hijriAdjustment: 0,
   adjustments: { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 },
-  autoNightMode: { enabled: false, mode: 'fixed', start: '22:00', end: '06:00' },
+  autoNightMode: { enabled: true, mode: 'sunsetSunrise', start: '22:00', end: '06:00' },
   azaan: {
     enabled: true,
-    selectedMuazzin: 'makkah',
+    selectedMuazzin: 'istanbul',
     exitAodOnPlay: true,
   },
   selectedCityName: '',
@@ -159,10 +159,26 @@ export const useStore = create<AppState>()(
       // fall back to their defaults for users with older saved settings.
       merge: (persisted, current) => {
         const p = (persisted ?? {}) as Partial<AppState>;
+        const pSettings = (p.settings ?? {}) as any;
         return {
           ...current,
           ...p,
-          settings: { ...current.settings, ...(p.settings ?? {}) },
+          settings: {
+            ...current.settings,
+            ...pSettings,
+            adjustments: {
+              ...current.settings.adjustments,
+              ...(pSettings.adjustments ?? {}),
+            },
+            autoNightMode: {
+              ...current.settings.autoNightMode,
+              ...(pSettings.autoNightMode ?? {}),
+            },
+            azaan: {
+              ...current.settings.azaan,
+              ...(pSettings.azaan ?? {}),
+            },
+          },
         };
       },
     }

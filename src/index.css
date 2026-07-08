@@ -15,6 +15,12 @@
   @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
   @keyframes inkFlow { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes rotateRays { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes sun-boiling {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    25% { transform: scale(1.015) rotate(2deg); filter: brightness(1.03); }
+    50% { transform: scale(0.985) rotate(-1deg); filter: brightness(1.01); }
+    75% { transform: scale(1.01) rotate(1deg); filter: brightness(1.04); }
+  }
 }
 
 /* ─── Scenery animations (must be outside @theme) ─── */
@@ -75,20 +81,22 @@
   50%      { opacity: 1;    transform: scale(1.4); }
 }
 
-@keyframes borderGlowPulse {
-  0%, 100% { opacity: 0.45; }
-  50%      { opacity: 0.95; }
+@keyframes rainbowGlow {
+  0% { box-shadow: inset 0 0 50px rgba(255, 0, 0, 0.55), inset 0 0 100px rgba(255, 0, 0, 0.35); }
+  17% { box-shadow: inset 0 0 50px rgba(255, 127, 0, 0.55), inset 0 0 100px rgba(255, 127, 0, 0.35); }
+  33% { box-shadow: inset 0 0 50px rgba(255, 255, 0, 0.55), inset 0 0 100px rgba(255, 255, 0, 0.35); }
+  50% { box-shadow: inset 0 0 50px rgba(0, 255, 0, 0.55), inset 0 0 100px rgba(0, 255, 0, 0.35); }
+  66% { box-shadow: inset 0 0 50px rgba(0, 0, 255, 0.55), inset 0 0 100px rgba(0, 0, 255, 0.35); }
+  83% { box-shadow: inset 0 0 50px rgba(75, 0, 130, 0.55), inset 0 0 100px rgba(75, 0, 130, 0.35); }
+  100% { box-shadow: inset 0 0 50px rgba(148, 0, 211, 0.55), inset 0 0 100px rgba(148, 0, 211, 0.35); }
 }
 
 .azaan-glow-border {
-  border: 4px solid transparent;
-  border-image: linear-gradient(135deg, #FFD600, #F59E0B, #14B8A6, #0D9488) 1;
-  animation: borderGlowPulse 2.5s ease-in-out infinite;
-  box-shadow: inset 0 0 40px rgba(245, 158, 11, 0.6), inset 0 0 80px rgba(20, 184, 166, 0.4);
+  animation: rainbowGlow 8s linear infinite;
   pointer-events: none;
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: 9999;
 }
 
 /* ─── Base ─────────────────────────────────────────── */
@@ -114,7 +122,7 @@ body {
 /* ─── True AOD mode: pure black + white ─────────────── */
 .aod-mode { background: #000000 !important; }
 .aod-mode .sky-bg { background: #000000 !important; transition: none !important; }
-.aod-mode * {
+.aod-mode *:not(.settings-dialog-backdrop):not(.settings-dialog-backdrop *):not(.settings-dialog-panel):not(.settings-dialog-panel *) {
   background: transparent !important;
   background-image: none !important;
   -webkit-background-clip: unset !important;

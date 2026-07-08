@@ -190,9 +190,7 @@ export default function NextPrayerTimer() {
   return (
     <div className="flex-1 relative overflow-hidden flex flex-col">
       {isAzaanPlaying && (
-        <div className="absolute inset-0 z-50 pointer-events-none azaan-glow-border" style={{
-          boxShadow: 'inset 0 0 40px rgba(245, 158, 11, 0.6), inset 0 0 80px rgba(20, 184, 166, 0.4)',
-        }} />
+        <div className="fixed inset-0 z-[9999] pointer-events-none azaan-glow-border" />
       )}
 
       {/* ── CONTENT (floats over the layered SkyBackground) ── */}
@@ -283,6 +281,12 @@ export default function NextPrayerTimer() {
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)',
               gap: 3,
+              boxShadow: (prayer.isCurrent && isAzaanPlaying)
+                ? '0 0 20px rgba(245, 158, 11, 0.45), inset 0 0 15px rgba(245, 158, 11, 0.25)'
+                : undefined,
+              animation: (prayer.isCurrent && isAzaanPlaying)
+                ? 'pulseSoft 2s ease-in-out infinite'
+                : undefined,
             }}>
               <PrayerIcon
                 prayerKey={prayer.key}

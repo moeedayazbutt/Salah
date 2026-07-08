@@ -105,7 +105,7 @@ export default function SettingsPage() {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-50 flex items-center justify-center p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center p-6 settings-dialog-backdrop"
       style={{
         background: 'rgba(8, 10, 26, 0.85)',
         backdropFilter: 'blur(12px)',
@@ -113,7 +113,7 @@ export default function SettingsPage() {
       }}
     >
       <div
-        className="w-full max-w-[700px] max-h-[85vh] overflow-y-auto rounded-2xl p-8 settings-scroll relative font-ui"
+        className="w-full max-w-[700px] max-h-[85vh] overflow-y-auto rounded-2xl p-8 settings-scroll relative font-ui settings-dialog-panel"
         style={{
           background: 'rgba(21, 26, 58, 0.95)',
           border: '1px solid rgba(255, 255, 255, 0.08)',
