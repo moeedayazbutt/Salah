@@ -242,7 +242,9 @@ const Scene = memo(function Scene({
             <stop offset="100%" stopColor={pal.hazeWarm.replace(/[\d.]+\)$/,'0)')} />
           </radialGradient>
           <filter id="water-waves" x="0" y="0" width="100%" height="100%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.015 0.08" numOctaves="3" result="noise" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.015 0.08" numOctaves="3" result="noise">
+              <animate attributeName="baseFrequency" dur="25s" values="0.012 0.06;0.018 0.10;0.012 0.06" repeatCount="indefinite" />
+            </feTurbulence>
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
           </filter>
         </defs>
@@ -624,6 +626,64 @@ function SkyBackground() {
   const moonLeft    = 81;
   const moonOpacity = Math.max(0, Math.min(1, (moonElev - 4) / 10));
 
+  const activeTime = useMemo(() => {
+    if (!skySliderAuto && skyDisplayHours !== null) {
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      d.setHours(Math.floor(skyDisplayHours), Math.round((skyDisplayHours % 1) * 60), 0, 0);
+      return d;
+    }
+    return now;
+  }, [skySliderAuto, skyDisplayHours, now]);
+
+  let finalSunOpacity = sunOpacity;
+  let finalMoonOpacity = moonOpacity;
+  let finalMoonTop = moonTop;
+
+  if (prayerTimes) {
+    const t = activeTime.getTime();
+    
+    // Fajr to Sunrise (Shuruq)
+    const fajrMs = prayerTimes.fajr.getTime();
+    const sunriseMs = prayerTimes.sunrise.getTime();
+    if (t >= fajrMs && t <= sunriseMs) {
+      const p = (t - fajrMs) / (sunriseMs - fajrMs);
+      
+      // Moon goes down within the first 20% time
+      if (p <= 0.20) {
+        finalMoonOpacity = Math.max(0, 1 - (p / 0.20));
+        finalMoonTop = 20 + (p / 0.20) * (75 - 20);
+      } else {
+        finalMoonOpacity = 0;
+        finalMoonTop = 75;
+      }
+      
+      // Sunrise brightness starts from 15% and continues up to 100%
+      if (p >= 0.15) {
+        finalSunOpacity = (p - 0.15) / (1 - 0.15);
+      } else {
+        finalSunOpacity = 0;
+      }
+    }
+
+    // Maghrib to Isha
+    const maghribMs = prayerTimes.maghrib.getTime();
+    const ishaMs = prayerTimes.isha.getTime();
+    if (t >= maghribMs && t <= ishaMs) {
+      const p = (t - maghribMs) / (ishaMs - maghribMs);
+      
+      // Moon comes up from 70% to 100% time
+      if (p >= 0.70) {
+        const moonProgress = (p - 0.70) / (1 - 0.70);
+        finalMoonOpacity = moonProgress;
+        finalMoonTop = 75 - moonProgress * (75 - 20);
+      } else {
+        finalMoonOpacity = 0;
+        finalMoonTop = 75;
+      }
+      finalSunOpacity = 0;
+    }
+  }
+
   const starFade  = elevation >= 3 ? 0 : elevation <= -15 ? 1 : (-elevation + 3) / 18;
   const showBirds = ['morning','midday','afternoon'].includes(phaseId);
 
@@ -674,9 +734,9 @@ function SkyBackground() {
           )}
 
           {/* Moon (z2) */}
-          {moonOpacity > 0.01 && <Moon topPct={moonTop} leftPct={moonLeft} size={moonSize} opacity={moonOpacity} />}
+          {finalMoonOpacity > 0.01 && <Moon topPct={finalMoonTop} leftPct={moonLeft} size={moonSize} opacity={finalMoonOpacity} />}
           {/* Sun (z2) */}
-          {sunOpacity > 0.01 && <Sun topPct={sunTop} leftPct={sunLeft} size={sunSize} opacity={sunOpacity} pal={pal} />}
+          {finalSunOpacity > 0.01 && <Sun topPct={sunTop} leftPct={sunLeft} size={sunSize} opacity={finalSunOpacity} pal={pal} />}
 
           {/* Clouds (z3, behind mountains) */}
           <CloudLayer pal={pal} speed={speed} />
@@ -684,16 +744,16 @@ function SkyBackground() {
           {/* Landscape crossfade (z4) */}
           <div style={{ position:'absolute', inset:0, zIndex:4, pointerEvents:'none', opacity:active==='a'?1:0, transition:'opacity 2.5s cubic-bezier(0.4,0,0.2,1)' }}>
             <Scene
-              pal={layerA.pal} speed={speed} sunLeftPct={sunLeft} sunGlowOpacity={sunOpacity}
-              starFade={starFade} moonOpacity={moonOpacity} moonTop={moonTop} moonLeft={moonLeft} moonSize={moonSize}
-              sunOpacity={sunOpacity} sunTop={sunTop} sunSize={sunSize} showBirds={showBirds}
+              pal={layerA.pal} speed={speed} sunLeftPct={sunLeft} sunGlowOpacity={finalSunOpacity}
+              starFade={starFade} moonOpacity={finalMoonOpacity} moonTop={finalMoonTop} moonLeft={moonLeft} moonSize={moonSize}
+              sunOpacity={finalSunOpacity} sunTop={sunTop} sunSize={sunSize} showBirds={showBirds}
             />
           </div>
           <div style={{ position:'absolute', inset:0, zIndex:4, pointerEvents:'none', opacity:active==='b'?1:0, transition:'opacity 2.5s cubic-bezier(0.4,0,0.2,1)' }}>
             <Scene
-              pal={layerB.pal} speed={speed} sunLeftPct={sunLeft} sunGlowOpacity={sunOpacity}
-              starFade={starFade} moonOpacity={moonOpacity} moonTop={moonTop} moonLeft={moonLeft} moonSize={moonSize}
-              sunOpacity={sunOpacity} sunTop={sunTop} sunSize={sunSize} showBirds={showBirds}
+              pal={layerB.pal} speed={speed} sunLeftPct={sunLeft} sunGlowOpacity={finalSunOpacity}
+              starFade={starFade} moonOpacity={finalMoonOpacity} moonTop={finalMoonTop} moonLeft={moonLeft} moonSize={moonSize}
+              sunOpacity={finalSunOpacity} sunTop={sunTop} sunSize={sunSize} showBirds={showBirds}
             />
           </div>
 

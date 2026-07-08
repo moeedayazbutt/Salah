@@ -133,7 +133,7 @@ export default function NextPrayerTimer() {
         background: 'linear-gradient(135deg, #050818 0%, #151F3A 60%, #202D5A 100%)',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
-        backgroundClip: 'text',
+        color: 'transparent',
         filter: 'drop-shadow(0 1px 2px rgba(255,255,255,0.45))',
       };
     } else {
@@ -141,7 +141,7 @@ export default function NextPrayerTimer() {
         background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF59D 40%, #FFB300 100%)',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
-        backgroundClip: 'text',
+        color: 'transparent',
         filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.85))',
       };
     }
