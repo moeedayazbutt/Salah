@@ -295,6 +295,7 @@ export default function NextPrayerTimer() {
               letterSpacing: 'clamp(2px, 0.5vw, 8px)',
               fontVariantNumeric: 'tabular-nums',
               zIndex: 1,
+              marginTop: '-0.15em',
               ...prayerNameStyle,
             }}
           >
