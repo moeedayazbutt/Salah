@@ -402,7 +402,7 @@ function Moon({ topPct, leftPct, size, opacity }:
   return (
     <div style={{
       position:'absolute', top:`${topPct}%`, left:`${leftPct}%`, width:size, height:size,
-      transform:'translate(-50%,-50%)', zIndex:6, pointerEvents:'none',
+      transform:'translate(-50%,-50%)', zIndex:2, pointerEvents:'none',
       opacity, transition:'opacity 2.5s ease-in-out, top 1.5s ease, left 1.5s ease',
     }}>
       {/* soft outer glow */}
@@ -487,12 +487,11 @@ function SkyBackground() {
   const sunLeft    = Math.min(95, Math.max(5, ((azimuth - 60) / 240) * 90 + 5));
   const sunOpacity = Math.max(0, Math.min(1, (elevation + 6) / 7));
 
-  // Moon rides high in the open sky (in front of the peaks) so it is never
-  // occluded by the mountains — visible whenever the sun is down.
+  // Moon sits behind the mountains on the right: it rises up from behind the
+  // small right-hand peaks as night deepens, then sinks back down (no arc).
   const moonElev    = -elevation;
-  const moonAz      = (azimuth + 180) % 360;
-  const moonTop     = Math.min(40, Math.max(6, 42 - moonElev * 0.55));
-  const moonLeft    = Math.min(92, Math.max(8, ((moonAz - 60) / 240) * 84 + 8));
+  const moonTop     = Math.min(56, Math.max(13, 55 - moonElev * 0.95));
+  const moonLeft    = 81;
   const moonOpacity = Math.max(0, Math.min(1, (moonElev + 6) / 9));
 
   const starFade  = elevation >= 3 ? 0 : elevation <= -15 ? 1 : (-elevation + 3) / 18;

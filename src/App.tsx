@@ -2,6 +2,7 @@ import { usePrayerTimeEngine } from './hooks/usePrayerTimes';
 import { useGeolocation, useRequestGeolocation } from './hooks/useGeolocation';
 import { useAdhanNotifications } from './hooks/useNotifications';
 import { useFullscreen } from './hooks/useFullscreen';
+import { useAutoNightMode } from './hooks/useNightMode';
 import { useStore } from './store';
 import SkyBackground from './components/Background/SkyBackground';
 import NextPrayerTimer from './components/MainView/NextPrayerTimer';
@@ -45,6 +46,7 @@ function App() {
   usePrayerTimeEngine();
   useGeolocation();
   useAdhanNotifications();
+  useAutoNightMode();
 
   const { isFullscreen, enter: enterFullscreen, exit: exitFullscreen } = useFullscreen();
   const settings      = useStore((s) => s.settings);

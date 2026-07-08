@@ -58,6 +58,8 @@ export default function SettingsPage() {
     citySearch.clear();
   }, [updateSettings, citySearch]);
 
+  const anm = settings.autoNightMode ?? { enabled: false, mode: 'fixed' as const, start: '22:00', end: '06:00' };
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -451,6 +453,85 @@ export default function SettingsPage() {
                 <span className="font-ui text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>minutes</span>
               </div>
             </div>
+          </Section>
+
+          {/* Auto Night Mode */}
+          <Section title="🌙 Auto Night Mode · الوضع الليلي التلقائي">
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col">
+                <span className="font-ui text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                  Auto-dim display · تعتيم تلقائي
+                </span>
+                <span className="font-ui text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                  Switches to the dark always-on display automatically
+                </span>
+              </div>
+              <button
+                role="switch"
+                aria-checked={anm.enabled}
+                onClick={() => updateSettings({ autoNightMode: { ...anm, enabled: !anm.enabled } })}
+                className="w-11 h-6 rounded-full relative cursor-pointer border-none transition-all duration-200 flex-shrink-0"
+                style={{ background: anm.enabled ? 'rgba(245, 158, 11, 0.5)' : 'rgba(255,255,255,0.1)' }}
+              >
+                <div className="w-5 h-5 rounded-full absolute top-0.5 transition-all duration-200"
+                  style={{ background: '#FAFAFA', left: anm.enabled ? 22 : 2 }} />
+              </button>
+            </div>
+
+            {anm.enabled && (
+              <>
+                <div className="mt-4">
+                  <Label text="Schedule · الجدول" />
+                  <div className="flex gap-1 mt-1.5 p-[3px] rounded-[10px]" style={{ background: 'rgba(0,0,0,0.3)' }}>
+                    {([
+                      { value: 'fixed', label: 'Fixed times' },
+                      { value: 'sunsetSunrise', label: 'Sunset → Sunrise' },
+                    ] as const).map((opt) => (
+                      <button
+                        key={opt.value}
+                        onClick={() => updateSettings({ autoNightMode: { ...anm, mode: opt.value } })}
+                        className="flex-1 px-3 py-1.5 rounded-lg text-xs font-ui cursor-pointer border-none transition-all duration-200"
+                        style={{
+                          background: anm.mode === opt.value ? 'rgba(245, 158, 11, 0.15)' : 'transparent',
+                          color: anm.mode === opt.value ? '#F59E0B' : 'rgba(255,255,255,0.4)',
+                        }}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {anm.mode === 'fixed' ? (
+                  <div className="grid grid-cols-2 gap-4 mt-3">
+                    <div>
+                      <Label text="Start · البداية" />
+                      <input
+                        type="time"
+                        value={anm.start}
+                        onChange={(e) => updateSettings({ autoNightMode: { ...anm, start: e.target.value } })}
+                        className="w-full px-3 py-2 mt-1.5 rounded-xl text-sm font-mono transition-all duration-200"
+                        style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', color: '#FAFAFA', outline: 'none', colorScheme: 'dark' }}
+                      />
+                    </div>
+                    <div>
+                      <Label text="End · النهاية" />
+                      <input
+                        type="time"
+                        value={anm.end}
+                        onChange={(e) => updateSettings({ autoNightMode: { ...anm, end: e.target.value } })}
+                        className="w-full px-3 py-2 mt-1.5 rounded-xl text-sm font-mono transition-all duration-200"
+                        style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', color: '#FAFAFA', outline: 'none', colorScheme: 'dark' }}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <p className="font-ui text-xs mt-3" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                    Night mode follows your location: it turns on at sunset and off at sunrise.
+                  </p>
+                )}
+              </>
+            )}
           </Section>
 
           {/* Save & Reset buttons */}

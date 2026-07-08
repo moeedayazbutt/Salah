@@ -50,6 +50,12 @@ export interface PrayerSettings {
     silent: boolean;
     customSound: boolean;
   };
+  autoNightMode: {
+    enabled: boolean;
+    mode: 'fixed' | 'sunsetSunrise';
+    start: string; // 'HH:MM' — used when mode === 'fixed'
+    end: string;   // 'HH:MM'
+  };
 }
 
 export interface PrayerInfo {
@@ -258,4 +264,5 @@ export const DEFAULT_SETTINGS: PrayerSettings = {
   hijriAdjustment: 0,
   adjustments: { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 },
   notifications: { enabled: false, beforeMinutes: 5, silent: false, customSound: false },
+  autoNightMode: { enabled: false, mode: 'fixed', start: '22:00', end: '06:00' },
 };

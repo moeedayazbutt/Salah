@@ -185,8 +185,15 @@ export default function NextPrayerTimer() {
         </div>
 
         {/* MIDDLE GROUP — vertically centred between top bar and strip */}
-        <div className="flex-1 flex flex-col items-center justify-center" style={{ minHeight: 0, gap: 'clamp(4px, 1vh, 14px)' }}>
-          <div className="flex flex-col items-center" style={{ gap: 6 }}>
+        <div className="flex-1 flex flex-col items-center justify-center relative" style={{ minHeight: 0, gap: 'clamp(4px, 1vh, 14px)' }}>
+          {/* Soft scrim so the prayer name + countdown never merge into the scenery */}
+          <div aria-hidden="true" style={{
+            position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+            width: '96%', height: '118%', zIndex: 0, pointerEvents: 'none',
+            background: 'radial-gradient(ellipse 62% 54% at 50% 48%, rgba(6,9,22,0.5) 0%, rgba(6,9,22,0.32) 46%, rgba(6,9,22,0.12) 68%, transparent 82%)',
+            filter: 'blur(6px)',
+          }} />
+          <div className="flex flex-col items-center relative" style={{ gap: 6, zIndex: 1 }}>
             <span className="font-ui tracking-widest uppercase" style={{ fontSize: 'clamp(0.75rem, 1.3vw, 1.4rem)', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.22em', textShadow: shadow }}>
               NEXT PRAYER
             </span>
@@ -215,7 +222,7 @@ export default function NextPrayerTimer() {
 
           {/* COUNTDOWN */}
           <span
-            className="leading-none hero-countdown"
+            className="leading-none hero-countdown relative"
             style={{
               fontFamily: "'Oswald', sans-serif",
               fontSize: 'clamp(5rem, 18vw, 16rem)',
@@ -224,6 +231,7 @@ export default function NextPrayerTimer() {
               color: '#FBBF24',
               textShadow: '0 2px 24px rgba(0,0,0,0.5), 0 0 40px rgba(251,191,36,0.25)',
               fontVariantNumeric: 'tabular-nums',
+              zIndex: 1,
             }}
           >
             {countdown}

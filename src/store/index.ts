@@ -70,6 +70,7 @@ const DEFAULT_SETTINGS: PrayerSettings = {
   hijriAdjustment: 0,
   adjustments: { fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 },
   notifications: { enabled: false, beforeMinutes: 5, silent: false, customSound: false },
+  autoNightMode: { enabled: false, mode: 'fixed', start: '22:00', end: '06:00' },
 };
 
 export const useStore = create<AppState>()(
@@ -141,6 +142,16 @@ export const useStore = create<AppState>()(
         lastKnownLocation: state.lastKnownLocation,
         aodMode: state.aodMode,
       }),
+      // Deep-merge persisted state so newly-added settings (e.g. autoNightMode)
+      // fall back to their defaults for users with older saved settings.
+      merge: (persisted, current) => {
+        const p = (persisted ?? {}) as Partial<AppState>;
+        return {
+          ...current,
+          ...p,
+          settings: { ...current.settings, ...(p.settings ?? {}) },
+        };
+      },
     }
   )
 );
