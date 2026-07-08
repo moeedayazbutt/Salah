@@ -16,6 +16,7 @@ export default defineConfig({
         theme_color: '#080A1A',
         background_color: '#080A1A',
         display: 'fullscreen',
+        display_override: ['fullscreen', 'standalone', 'minimal-ui'],
         orientation: 'any',
         start_url: '/Salah/',
         scope: '/Salah/',

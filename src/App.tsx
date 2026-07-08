@@ -66,7 +66,7 @@ function App() {
   });
 
   return (
-    <div className={`w-full h-screen overflow-hidden relative bg-[#080A1A]${aodMode ? ' aod-mode' : ''}`}>
+    <div className={`w-full overflow-hidden relative bg-[#080A1A]${aodMode ? ' aod-mode' : ''}`} style={{ height: '100dvh' }}>
       <SkyBackground />
 
       {!hasLocation ? (
