@@ -299,6 +299,38 @@ body {
     opacity: 0;
   }
 }
+@keyframes flock-fly-ltr {
+  0% {
+    transform: translate3d(-30vw, 0, 0) scale(0.35);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.85;
+  }
+  95% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(100vw, 0, 0) scale(0.55);
+    opacity: 0;
+  }
+}
+@keyframes flock-distant-ltr {
+  0% {
+    transform: translate3d(-20vw, 0, 0);
+    opacity: 0;
+  }
+  3% {
+    opacity: 0.6;
+  }
+  97% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate3d(110vw, 0, 0);
+    opacity: 0;
+  }
+}
 
 @keyframes bird-tree-to-tree {
   0%, 25% { transform: translate(0, 0) scale(1); }
