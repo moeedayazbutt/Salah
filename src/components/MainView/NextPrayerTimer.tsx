@@ -191,37 +191,37 @@ export default function NextPrayerTimer() {
     <div className="flex-1 relative overflow-hidden flex flex-col">
       {isAzaanPlaying && (
         <div className="azaan-glow-container">
-          {/* Red/Orange Blob */}
+          {/* Top Side - Red/Magenta Blob */}
           <div className="absolute rounded-full pointer-events-none" style={{
-            bottom: '-25%', left: '-15%', width: '55vw', height: '55vh',
-            background: 'radial-gradient(circle, rgba(239, 68, 68, 0.95) 0%, rgba(245, 158, 11, 0.4) 40%, rgba(245, 158, 11, 0) 70%)',
-            filter: 'blur(70px)',
+            top: '-20%', left: '20%', width: '60vw', height: '28vh',
+            background: 'radial-gradient(circle, rgba(239, 68, 68, 0.98) 0%, rgba(236, 72, 153, 0.5) 45%, rgba(236, 72, 153, 0) 70%)',
+            filter: 'blur(50px)',
             mixBlendMode: 'screen',
-            animation: 'gemini-blob-1 8s ease-in-out infinite alternate',
+            animation: 'gemini-blob-1 3.2s ease-in-out infinite alternate',
           }} />
-          {/* Cyan/Blue Blob */}
+          {/* Bottom Side - Cyan/Blue Blob */}
           <div className="absolute rounded-full pointer-events-none" style={{
-            bottom: '-20%', right: '-10%', width: '65vw', height: '55vh',
-            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.95) 0%, rgba(59, 130, 246, 0.5) 45%, rgba(59, 130, 246, 0) 75%)',
-            filter: 'blur(80px)',
+            bottom: '-20%', left: '15%', width: '70vw', height: '28vh',
+            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.98) 0%, rgba(59, 130, 246, 0.5) 45%, rgba(59, 130, 246, 0) 70%)',
+            filter: 'blur(50px)',
             mixBlendMode: 'screen',
-            animation: 'gemini-blob-2 10s ease-in-out infinite alternate',
+            animation: 'gemini-blob-2 3.8s ease-in-out infinite alternate',
           }} />
-          {/* Yellow/Green Blob */}
+          {/* Left Side - Yellow/Orange Blob */}
           <div className="absolute rounded-full pointer-events-none" style={{
-            bottom: '-30%', left: '25%', width: '50vw', height: '50vh',
-            background: 'radial-gradient(circle, rgba(234, 179, 8, 0.9) 0%, rgba(34, 197, 94, 0.4) 40%, rgba(34, 197, 94, 0) 70%)',
-            filter: 'blur(70px)',
+            top: '15%', left: '-15%', width: '22vw', height: '70vh',
+            background: 'radial-gradient(circle, rgba(234, 179, 8, 0.98) 0%, rgba(245, 158, 11, 0.5) 45%, rgba(245, 158, 11, 0) 70%)',
+            filter: 'blur(55px)',
             mixBlendMode: 'screen',
-            animation: 'gemini-blob-3 9s ease-in-out infinite alternate',
+            animation: 'gemini-blob-3 3.5s ease-in-out infinite alternate',
           }} />
-          {/* Purple/Pink Blob */}
+          {/* Right Side - Purple/Blue Blob */}
           <div className="absolute rounded-full pointer-events-none" style={{
-            bottom: '10%', right: '-20%', width: '45vw', height: '65vh',
-            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.85) 0%, rgba(236, 72, 153, 0.4) 40%, rgba(236, 72, 153, 0) 70%)',
-            filter: 'blur(90px)',
+            top: '15%', right: '-15%', width: '22vw', height: '70vh',
+            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.98) 0%, rgba(59, 130, 246, 0.5) 45%, rgba(59, 130, 246, 0) 70%)',
+            filter: 'blur(55px)',
             mixBlendMode: 'screen',
-            animation: 'gemini-blob-4 12s ease-in-out infinite alternate',
+            animation: 'gemini-blob-4 4.2s ease-in-out infinite alternate',
           }} />
         </div>
       )}
