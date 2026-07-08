@@ -250,7 +250,7 @@ export default function NextPrayerTimer() {
         </div>
 
         {/* MIDDLE GROUP — vertically centred between top bar and strip */}
-        <div className="flex-1 flex flex-col items-center justify-center relative" style={{ minHeight: 0, gap: 'clamp(0.45px, 0.11vh, 1.55px)' }}>
+        <div className="flex-1 flex flex-col items-center justify-center relative" style={{ minHeight: 0, gap: 0 }}>
           {/* Soft scrim so the prayer name + countdown never merge into the scenery */}
           <div aria-hidden="true" style={{
             position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
