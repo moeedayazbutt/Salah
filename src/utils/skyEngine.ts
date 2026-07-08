@@ -112,11 +112,11 @@ export function determineSkyPhase(elevation: number, azimuth = 90): SkyPhase {
   let id: string;
   if (elevation <= -18) {
     id = 'night';
-  } else if (elevation <= -8) {
+  } else if (elevation <= -11) {
     id = isPM ? 'isha' : 'fajr';
-  } else if (elevation <= 0) {
+  } else if (elevation <= 2) {
     id = isPM ? 'maghrib' : 'sunrise';
-  } else if (elevation <= 30) {
+  } else if (elevation <= 35) {
     id = isPM ? 'sunset' : 'morning';
   } else if (elevation <= 60) {
     id = isPM ? 'afternoon' : 'midday';

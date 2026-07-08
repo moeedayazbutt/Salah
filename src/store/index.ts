@@ -63,6 +63,8 @@ interface AppState {
   // Azaan playing state
   isAzaanPlaying: boolean;
   setAzaanPlaying: (v: boolean) => void;
+  isAzaanProtectionActive: boolean;
+  setAzaanProtectionActive: (v: boolean) => void;
 }
 
 const DEFAULT_SETTINGS: PrayerSettings = {
@@ -150,6 +152,8 @@ export const useStore = create<AppState>()(
       // Azaan playing
       isAzaanPlaying: false,
       setAzaanPlaying: (isAzaanPlaying) => set({ isAzaanPlaying }),
+      isAzaanProtectionActive: false,
+      setAzaanProtectionActive: (isAzaanProtectionActive) => set({ isAzaanProtectionActive }),
     }),
     {
       name: 'salah-settings',
@@ -206,3 +210,4 @@ export const useIsInitialized = () => useStore((state) => state.isInitialized);
 export const useIsAzaanPlaying = () => useStore((state) => state.isAzaanPlaying);
 export const useMoonManualPhase = () => useStore((state) => state.moonManualPhase);
 export const useSetMoonManualPhase = () => useStore((state) => state.setMoonManualPhase);
+export const useIsAzaanProtectionActive = () => useStore((state) => state.isAzaanProtectionActive);

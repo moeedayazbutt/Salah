@@ -27,6 +27,10 @@ export function useAutoNightMode() {
 
     const evaluate = () => {
       const st = useStore.getState();
+      if (st.isAzaanProtectionActive) {
+        if (st.aodMode) st.setAodMode(false);
+        return;
+      }
       const night =
         autoNightMode.mode === 'sunsetSunrise'
           ? (st.solarPosition?.elevation ?? 0) < 0

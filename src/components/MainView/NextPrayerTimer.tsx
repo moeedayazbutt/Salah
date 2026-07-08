@@ -122,38 +122,30 @@ export default function NextPrayerTimer() {
     return phase;
   }, [skySliderAuto, skyDisplayHours, solarPos, settings.coordinates, phase, now]);
 
-  const prayerNameStyle = useMemo((): React.CSSProperties => {
-    const name = displayPhase?.name as string | undefined;
-    switch (name) {
-      case 'morning':
-      case 'midday':
-      case 'afternoon':
-        return {
-          background: 'linear-gradient(135deg, #ffffff 0%, #FFF9C4 50%, #FFE082 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.7))',
-        };
-      case 'sunrise':
-        return {
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FFE0B2 45%, #FF8F00 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.5))',
-        };
-      case 'sunset':
-      case 'maghrib':
-        return {
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FCE4EC 45%, #E91E63 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.5))',
-        };
-      default: // night, fajr, isha
-        return {
-          background: 'linear-gradient(135deg, #FFD600 0%, #F59E0B 30%, #14B8A6 70%, #0D9488 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: 'drop-shadow(0 0 40px rgba(245,158,11,0.3))',
-        };
-    }
+  const isLightBg = useMemo(() => {
+    const id = displayPhase?.id;
+    return id === 'morning' || id === 'midday' || id === 'afternoon';
   }, [displayPhase]);
+
+  const contrastTextStyle = useMemo((): React.CSSProperties => {
+    if (isLightBg) {
+      return {
+        background: 'linear-gradient(135deg, #050818 0%, #151F3A 60%, #202D5A 100%)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text',
+        filter: 'drop-shadow(0 1px 2px rgba(255,255,255,0.45))',
+      };
+    } else {
+      return {
+        background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF59D 40%, #FFB300 100%)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text',
+        filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.85))',
+      };
+    }
+  }, [isLightBg]);
 
   const displayPrayer = currentPrayer || nextPrayer;
 
@@ -191,45 +183,41 @@ export default function NextPrayerTimer() {
     <div className="flex-1 relative overflow-hidden flex flex-col">
       {isAzaanPlaying && (
         <div className="azaan-glow-container">
-          {/* Top Side - Swirling Conic Gradient */}
-          <div className="absolute pointer-events-none" style={{
-            top: '-12%', left: '15%', width: '70vw', height: '24vh',
-            background: 'conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000)',
-            filter: 'blur(35px)',
+          {/* Top Side - Red/Magenta Blob */}
+          <div className="absolute rounded-full pointer-events-none" style={{
+            top: '-20%', left: '20%', width: '60vw', height: '28vh',
+            background: 'radial-gradient(circle, rgba(239, 68, 68, 0.98) 0%, rgba(236, 72, 153, 0.88) 45%, rgba(236, 72, 153, 0.15) 75%, transparent 95%)',
+            filter: 'blur(50px)',
             mixBlendMode: 'screen',
             opacity: 0.98,
-            animation: 'spin-fast 2.2s linear infinite',
-            borderRadius: '50%',
+            animation: 'gemini-blob-1 3.2s ease-in-out infinite alternate',
           }} />
-          {/* Bottom Side - Swirling Conic Gradient */}
-          <div className="absolute pointer-events-none" style={{
-            bottom: '-12%', left: '15%', width: '70vw', height: '24vh',
-            background: 'conic-gradient(from 180deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000)',
-            filter: 'blur(35px)',
+          {/* Bottom Side - Cyan/Blue Blob */}
+          <div className="absolute rounded-full pointer-events-none" style={{
+            bottom: '-20%', left: '15%', width: '70vw', height: '28vh',
+            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.98) 0%, rgba(59, 130, 246, 0.88) 45%, rgba(59, 130, 246, 0.15) 75%, transparent 95%)',
+            filter: 'blur(50px)',
             mixBlendMode: 'screen',
             opacity: 0.98,
-            animation: 'spin-fast 2.5s linear infinite reverse',
-            borderRadius: '50%',
+            animation: 'gemini-blob-2 3.8s ease-in-out infinite alternate',
           }} />
-          {/* Left Side - Swirling Conic Gradient */}
-          <div className="absolute pointer-events-none" style={{
-            top: '15%', left: '-10%', width: '20vw', height: '70vh',
-            background: 'conic-gradient(from 90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000)',
-            filter: 'blur(35px)',
+          {/* Left Side - Yellow/Orange Blob */}
+          <div className="absolute rounded-full pointer-events-none" style={{
+            top: '15%', left: '-15%', width: '22vw', height: '70vh',
+            background: 'radial-gradient(circle, rgba(234, 179, 8, 0.98) 0%, rgba(245, 158, 11, 0.88) 45%, rgba(245, 158, 11, 0.15) 75%, transparent 95%)',
+            filter: 'blur(55px)',
             mixBlendMode: 'screen',
             opacity: 0.98,
-            animation: 'spin-fast 2.8s linear infinite',
-            borderRadius: '50%',
+            animation: 'gemini-blob-3 3.5s ease-in-out infinite alternate',
           }} />
-          {/* Right Side - Swirling Conic Gradient */}
-          <div className="absolute pointer-events-none" style={{
-            top: '15%', right: '-10%', width: '20vw', height: '70vh',
-            background: 'conic-gradient(from 270deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000)',
-            filter: 'blur(35px)',
+          {/* Right Side - Purple/Blue Blob */}
+          <div className="absolute rounded-full pointer-events-none" style={{
+            top: '15%', right: '-15%', width: '22vw', height: '70vh',
+            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.98) 0%, rgba(59, 130, 246, 0.88) 45%, rgba(59, 130, 246, 0.15) 75%, transparent 95%)',
+            filter: 'blur(55px)',
             mixBlendMode: 'screen',
             opacity: 0.98,
-            animation: 'spin-fast 2.4s linear infinite reverse',
-            borderRadius: '50%',
+            animation: 'gemini-blob-4 4.2s ease-in-out infinite alternate',
           }} />
         </div>
       )}
@@ -239,17 +227,39 @@ export default function NextPrayerTimer() {
 
         {/* TOP: Date + Clock */}
         <div className="flex items-start justify-between flex-shrink-0" style={{ marginBottom: 0 }}>
-          <div className="flex flex-col" style={{ gap: 1 }}>
-            <span className="font-ui" style={{ fontSize: 'clamp(0.9rem, 1.8vw, 1.9rem)', color: 'rgba(255,255,255,0.92)', fontWeight: 400, lineHeight: 1.2, textShadow: shadow }}>
+          <div className="flex flex-col" style={{ gap: 2 }}>
+            <span style={{
+              fontFamily: "'Oswald', sans-serif",
+              fontWeight: 400,
+              fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)',
+              letterSpacing: '0.04em',
+              lineHeight: 1.1,
+              ...contrastTextStyle,
+            }}>
               {dateStr}
             </span>
             {hijriStr && (
-              <span className="font-ui" style={{ fontSize: 'clamp(0.9rem, 1.8vw, 1.9rem)', color: 'rgba(255,255,255,0.92)', lineHeight: 1.2, textShadow: shadow }}>
+              <span style={{
+                fontFamily: "'Oswald', sans-serif",
+                fontWeight: 400,
+                fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)',
+                letterSpacing: '0.04em',
+                lineHeight: 1.1,
+                ...contrastTextStyle,
+              }}>
                 {hijriStr}
               </span>
             )}
           </div>
-          <span style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 400, fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)', color: '#FFFFFF', letterSpacing: '0.04em', lineHeight: 1, marginTop: 2, fontVariantNumeric: 'tabular-nums', textShadow: shadow }}>
+          <span style={{
+            fontFamily: "'Oswald', sans-serif",
+            fontWeight: 400,
+            fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)',
+            letterSpacing: '0.04em',
+            lineHeight: 1.1,
+            fontVariantNumeric: 'tabular-nums',
+            ...contrastTextStyle,
+          }}>
             {formattedTime}
           </span>
         </div>
@@ -264,7 +274,11 @@ export default function NextPrayerTimer() {
             filter: 'blur(6px)',
           }} />
           <div className="flex flex-col items-center relative" style={{ gap: 6, zIndex: 1 }}>
-            <span className="font-ui tracking-widest uppercase" style={{ fontSize: 'clamp(0.75rem, 1.3vw, 1.4rem)', color: 'rgba(255,255,255,0.55)', letterSpacing: '0.22em', textShadow: shadow }}>
+            <span className="font-ui tracking-widest uppercase" style={{
+              fontSize: 'clamp(0.75rem, 1.3vw, 1.4rem)',
+              letterSpacing: '0.22em',
+              ...contrastTextStyle,
+            }}>
               CURRENT PRAYER
             </span>
             <div className="flex items-baseline justify-center gap-4 flex-wrap">
@@ -279,12 +293,15 @@ export default function NextPrayerTimer() {
                   whiteSpace: 'nowrap',
                   overflow: 'visible',
                   transition: 'filter 2s ease, background 2s ease',
-                  ...prayerNameStyle,
+                  ...contrastTextStyle,
                 }}
               >
                 {displayPrayer?.nameAr || '—'}
               </span>
-              <span className="font-ui font-light uppercase flex-shrink-0" style={{ fontSize: 'clamp(1rem, 2vw, 2.2rem)', color: 'rgba(255,255,255,0.6)', textShadow: shadow }}>
+              <span className="font-ui font-light uppercase flex-shrink-0" style={{
+                fontSize: 'clamp(1rem, 2vw, 2.2rem)',
+                ...contrastTextStyle,
+              }}>
                 {displayPrayer?.nameEn || '—'}
               </span>
             </div>
@@ -300,7 +317,7 @@ export default function NextPrayerTimer() {
               letterSpacing: 'clamp(2px, 0.5vw, 8px)',
               fontVariantNumeric: 'tabular-nums',
               zIndex: 1,
-              ...prayerNameStyle,
+              ...contrastTextStyle,
             }}
           >
             {formattedCountdown}

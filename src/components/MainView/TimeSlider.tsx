@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { useStore, useMoonManualPhase, useSetMoonManualPhase } from '../../store';
-import { calculateSunPosition, determineSkyPhase, getMoonPhaseInfo } from '../../utils/skyEngine';
+import { useStore } from '../../store';
+import { calculateSunPosition, determineSkyPhase } from '../../utils/skyEngine';
 
 export default function TimeSlider() {
   const skyDisplayHours = useStore((s) => s.skyDisplayHours);
@@ -11,17 +11,9 @@ export default function TimeSlider() {
   const aodMode = useStore((s) => s.aodMode);
   const settings = useStore((s) => s.settings);
 
-  const moonPosition = useStore((s) => s.moonPosition);
-  const moonManualPhase = useMoonManualPhase();
-  const setMoonManualPhase = useSetMoonManualPhase();
-
   const now = new Date();
   const realHours = now.getHours() + now.getMinutes() / 60;
   const currentValue = skySliderAuto ? realHours : (skyDisplayHours ?? realHours);
-
-  // Determine current moon phase value + metadata
-  const currentMoonPhase = moonManualPhase !== null ? moonManualPhase : (moonPosition?.phase ?? 0.5);
-  const moonInfo = getMoonPhaseInfo(currentMoonPhase);
 
   const trackGradient = useMemo(() => {
     const lat = settings.coordinates.latitude || 25;
@@ -49,14 +41,6 @@ export default function TimeSlider() {
     setSkyDisplayHours(null);
   };
 
-  const handleMoonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMoonManualPhase(parseFloat(e.target.value));
-  };
-
-  const handleMoonAuto = () => {
-    setMoonManualPhase(null);
-  };
-
   const h = Math.floor(currentValue);
   const m = Math.round((currentValue - h) * 60);
   const h12 = h % 12 || 12;
@@ -67,11 +51,10 @@ export default function TimeSlider() {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-10 flex flex-col justify-center"
+      className="fixed bottom-0 left-0 right-0 z-10 flex items-center"
       style={{
-        height: 86,
-        padding: '6px 14px',
-        gap: 6,
+        height: 48,
+        padding: '0 14px',
         background: 'rgba(8,10,26,0.72)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
@@ -129,53 +112,6 @@ export default function TimeSlider() {
           }}
           aria-label="Auto-sync slider to current time"
           aria-pressed={skySliderAuto}
-        >
-          AUTO
-        </button>
-      </div>
-
-      {/* ROW 2: MOON PHASE SLIDER */}
-      <div className="flex items-center w-full gap-2.5">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-        </svg>
-        <span
-          className="font-ui text-left truncate"
-          style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.5)', minWidth: 62, letterSpacing: '0.02em' }}
-          title={moonInfo.name}
-        >
-          {moonInfo.name.replace('Moon', '').trim() || 'New'}
-        </span>
-        <input
-          type="range"
-          min={0}
-          max={1}
-          step={0.01}
-          value={currentMoonPhase}
-          onChange={handleMoonChange}
-          className="time-slider flex-1"
-          style={{
-            background: 'linear-gradient(90deg, #0d0f1b 0%, #c8cddc 48%, #ffffff 50%, #c8cddc 52%, #0d0f1b 100%)',
-            height: 6
-          }}
-          aria-label="Moon phase preview"
-        />
-        <button
-          onClick={handleMoonAuto}
-          className="font-ui border-none cursor-pointer transition-all duration-200"
-          style={{
-            fontSize: '0.65rem',
-            padding: '4px 10px',
-            borderRadius: 20,
-            background: moonManualPhase === null ? 'rgba(245,158,11,0.18)' : 'rgba(255,255,255,0.06)',
-            color: moonManualPhase === null ? '#F59E0B' : 'rgba(255,255,255,0.4)',
-            border: `1px solid ${moonManualPhase === null ? 'rgba(245,158,11,0.35)' : 'rgba(255,255,255,0.1)'}`,
-            letterSpacing: '0.08em',
-            minWidth: 48,
-            fontWeight: 500,
-          }}
-          aria-label="Auto-sync moon phase to calendar"
-          aria-pressed={moonManualPhase === null}
         >
           AUTO
         </button>

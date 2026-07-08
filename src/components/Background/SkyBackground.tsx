@@ -241,6 +241,10 @@ const Scene = memo(function Scene({
             <stop offset="0%"  stopColor={pal.hazeWarm} />
             <stop offset="100%" stopColor={pal.hazeWarm.replace(/[\d.]+\)$/,'0)')} />
           </radialGradient>
+          <filter id="water-waves" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.015 0.08" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
         </defs>
 
         {/* Warm horizon glow behind the mountains */}
@@ -251,7 +255,9 @@ const Scene = memo(function Scene({
         <path d="M600,120 Q980,96 1360,140" stroke={pal.cloud} strokeWidth="4" strokeOpacity="0.12" fill="none" strokeLinecap="round" />
 
         {/* Mountains + trees */}
-        <Mountains pal={pal} />
+        <g className="portrait-scale-landscape">
+          <Mountains pal={pal} />
+        </g>
 
         {/* Water */}
         <rect x="0" y={HORIZON} width="1440" height={900-HORIZON} fill={pal.water} />
@@ -262,9 +268,9 @@ const Scene = memo(function Scene({
         {/* Water reflections of celestial elements */}
         <foreignObject x="0" y={HORIZON} width="1440" height={900-HORIZON}>
           <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
-            <div style={{
+            <div className="portrait-scale-landscape" style={{
               position: 'absolute', bottom: '100%', left: 0, right: 0, height: '900px',
-              transform: 'scaleY(-1)', transformOrigin: 'bottom', filter: 'blur(3px)', opacity: 0.75
+              transform: 'scaleY(-1)', transformOrigin: 'bottom', filter: 'blur(3.5px) url(#water-waves)', opacity: 0.75
             }}>
               {/* Stars reflection */}
               {starFade > 0 && STARS.map((st,i) => (
@@ -299,7 +305,7 @@ const Scene = memo(function Scene({
         </foreignObject>
 
         {/* Mirror reflection */}
-        <g transform={`translate(0,${HORIZON*2}) scale(1,-1)`} opacity={pal.reflOpacity}>
+        <g transform={`translate(0,${HORIZON*2}) scale(1,-1)`} opacity={pal.reflOpacity} filter="url(#water-waves)" className="portrait-scale-landscape">
           <Mountains pal={pal} />
         </g>
         <rect x="0" y={HORIZON} width="1440" height={900-HORIZON} fill={`url(#${reflId})`} />
@@ -346,11 +352,12 @@ const CLOUD_CFG: CloudCfg[] = [
   { top:3,  width:360, dir:'rtl', duration:185, delay:-48, opa:0.8 },
   { top:14, width:240, dir:'ltr', duration:115, delay:-12, opa:0.85 },
 ];
-function CloudLayer({ pal, speed }: { pal:Palette; speed:number }) {
+function CloudLayer({ pal, speed, foreground = false }: { pal:Palette; speed:number; foreground?: boolean }) {
   if (pal.cloudOpacity <= 0.05) return null;
+  const clouds = CLOUD_CFG.filter((_, i) => foreground ? (i % 2 === 1) : (i % 2 === 0));
   return (
-    <div style={{ position:'absolute', top:0, left:0, right:0, height:'44%', overflow:'hidden', pointerEvents:'none', zIndex:3 }}>
-      {CLOUD_CFG.map((c,i) => (
+    <div style={{ position:'absolute', top:0, left:0, right:0, height:'44%', overflow:'hidden', pointerEvents:'none', zIndex: foreground ? 5 : 3 }}>
+      {clouds.map((c,i) => (
         <div key={i} style={{
           position:'absolute', top:`${c.top}%`, left:0,
           animation:`${c.dir==='rtl'?'cloud-drift':'cloud-drift-rev'} ${c.duration/speed}s linear ${c.delay/speed}s infinite`,
@@ -495,7 +502,7 @@ function Moon({ topPct, leftPct, size, opacity }:
   return (
     <div style={{
       position:'absolute', top:`${topPct}%`, left:`${leftPct}%`, width:size, height:size,
-      transform:'translate(-50%,-50%)', zIndex:2, pointerEvents:'none',
+      transform:'translate(-50%,-50%)', zIndex:3, pointerEvents:'none',
       opacity, transition:'opacity 2.5s ease-in-out, top 1.5s ease, left 1.5s ease',
     }}>
       {/* soft outer glow */}
@@ -609,13 +616,13 @@ function SkyBackground() {
 
   const sunTop     = Math.min(66, Math.max(5, 60 - elevation * 0.85));
   const sunLeft    = Math.min(95, Math.max(5, ((azimuth - 60) / 240) * 90 + 5));
-  const sunOpacity = Math.max(0, Math.min(1, (elevation + 6) / 7));
+  const sunOpacity = Math.max(0, Math.min(1, (elevation + 1) / 11));
 
   // Moon trajectory: goes high up (8%) at night, under mountains (75%) in day
   const moonElev    = -elevation;
   const moonTop     = Math.min(75, Math.max(8, 48 - moonElev * 1.1));
   const moonLeft    = 81;
-  const moonOpacity = Math.max(0, Math.min(1, (moonElev + 6) / 9));
+  const moonOpacity = Math.max(0, Math.min(1, (moonElev - 4) / 10));
 
   const starFade  = elevation >= 3 ? 0 : elevation <= -15 ? 1 : (-elevation + 3) / 18;
   const showBirds = ['morning','midday','afternoon'].includes(phaseId);

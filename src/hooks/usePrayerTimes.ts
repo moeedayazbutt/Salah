@@ -23,6 +23,7 @@ export function usePrayerTimeEngine() {
   const setAzaanPlaying = useStore((s) => s.setAzaanPlaying);
   const lastAzaanPlayedRef = useRef<string | null>(null);
   const tempDisabledAodRef = useRef<boolean>(false);
+  const azaanEndTimestampRef = useRef<number | null>(null);
 
   const tick = useCallback(() => {
     const now = new Date();
@@ -64,6 +65,36 @@ export function usePrayerTimeEngine() {
         setCurrentPrayer(current);
         setNextPrayer(next);
 
+        // Evaluate Azaan protection state (5s before start, during play, 5s after play)
+        let isProtected = false;
+        if (next && next.key !== 'sunrise' && settings.azaan.enabled) {
+          const timeToStart = next.time.getTime() - now.getTime();
+          if (timeToStart > 0 && timeToStart <= 5000) {
+            isProtected = true;
+          }
+        }
+        if (useStore.getState().isAzaanPlaying) {
+          isProtected = true;
+        }
+        if (azaanEndTimestampRef.current && (Date.now() - azaanEndTimestampRef.current < 5000)) {
+          isProtected = true;
+        }
+
+        const st = useStore.getState();
+        if (isProtected) {
+          if (!st.isAzaanProtectionActive) {
+            useStore.setState({ isAzaanProtectionActive: true });
+            if (st.aodMode) {
+              setAodMode(false);
+              tempDisabledAodRef.current = true;
+            }
+          }
+        } else {
+          if (st.isAzaanProtectionActive) {
+            useStore.setState({ isAzaanProtectionActive: false });
+          }
+        }
+
         // Auto play azaan
         if (current && current.key !== 'sunrise' && settings.azaan.enabled) {
           const key = `${current.key}-${current.time.getTime()}`;
@@ -82,11 +113,17 @@ export function usePrayerTimeEngine() {
                 }
               },
               () => {
+                azaanEndTimestampRef.current = Date.now();
                 setAzaanPlaying(false);
-                if (tempDisabledAodRef.current) {
-                  setAodMode(true);
-                  tempDisabledAodRef.current = false;
-                }
+                setTimeout(() => {
+                  const isPlaying = useStore.getState().isAzaanPlaying;
+                  if (!isPlaying) {
+                    if (tempDisabledAodRef.current) {
+                      setAodMode(true);
+                      tempDisabledAodRef.current = false;
+                    }
+                  }
+                }, 5000);
               }
             );
           }

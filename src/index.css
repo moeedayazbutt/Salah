@@ -86,6 +86,27 @@
   to { transform: rotate(360deg); }
 }
 
+@keyframes gemini-blob-1 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.85; }
+  50% { transform: translate(1.5vw, -1vh) scale(1.08); opacity: 0.98; }
+  100% { transform: translate(-1vw, 1vh) scale(0.95); opacity: 0.85; }
+}
+@keyframes gemini-blob-2 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.88; }
+  50% { transform: translate(-1.2vw, -1.2vh) scale(0.92); opacity: 0.82; }
+  100% { transform: translate(1.2vw, -0.8vh) scale(1.1); opacity: 0.98; }
+}
+@keyframes gemini-blob-3 {
+  0% { transform: translate(0, 0) scale(1.05); opacity: 0.85; }
+  50% { transform: translate(-0.8vw, 1vh) scale(0.95); opacity: 0.98; }
+  100% { transform: translate(1.5vw, -0.8vh) scale(1.08); opacity: 0.85; }
+}
+@keyframes gemini-blob-4 {
+  0% { transform: translate(0, 0) scale(0.98); opacity: 0.82; }
+  50% { transform: translate(-1.5vw, -1.5vh) scale(1.1); opacity: 0.98; }
+  100% { transform: translate(1vw, 1vh) scale(1.02); opacity: 0.85; }
+}
+
 .azaan-glow-container {
   pointer-events: none;
   position: fixed;
@@ -182,4 +203,11 @@ body {
 /* ─── Reduced motion ───────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+@media (max-aspect-ratio: 1/1) {
+  .portrait-scale-landscape {
+    transform: scaleX(0.58) scaleY(0.9);
+    transform-origin: 720px 520px;
+  }
 }

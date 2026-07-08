@@ -240,7 +240,7 @@ export default function SettingsPage() {
 
           {/* Calculation Method */}
           <Section title="🕌 Calculation Method">
-            <div className="flex gap-2 flex-col max-h-[200px] overflow-y-auto">
+            <div className="flex gap-2 flex-col">
               {CALCULATION_METHODS.map((method) => (
                 <button
                   key={method.id}
