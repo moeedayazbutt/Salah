@@ -189,46 +189,44 @@ export default function NextPrayerTimer() {
 
   return (
     <div className="flex-1 relative overflow-hidden flex flex-col">
-      {isAzaanPlaying && (
-        <div className="azaan-glow-container">
-          {/* Top Side - Red/Magenta Blob */}
-          <div className="absolute rounded-full pointer-events-none" style={{
-            top: '-20%', left: '20%', width: '60vw', height: '28vh',
-            background: 'radial-gradient(circle, rgba(239, 68, 68, 0.98) 0%, rgba(236, 72, 153, 0.88) 45%, rgba(236, 72, 153, 0.15) 75%, transparent 95%)',
-            filter: 'blur(50px)',
-            mixBlendMode: 'screen',
-            opacity: 0.98,
-            animation: 'gemini-blob-1 3.2s ease-in-out infinite alternate',
-          }} />
-          {/* Bottom Side - Cyan/Blue Blob */}
-          <div className="absolute rounded-full pointer-events-none" style={{
-            bottom: '-20%', left: '15%', width: '70vw', height: '28vh',
-            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.98) 0%, rgba(59, 130, 246, 0.88) 45%, rgba(59, 130, 246, 0.15) 75%, transparent 95%)',
-            filter: 'blur(50px)',
-            mixBlendMode: 'screen',
-            opacity: 0.98,
-            animation: 'gemini-blob-2 3.8s ease-in-out infinite alternate',
-          }} />
-          {/* Left Side - Yellow/Orange Blob */}
-          <div className="absolute rounded-full pointer-events-none" style={{
-            top: '15%', left: '-15%', width: '22vw', height: '70vh',
-            background: 'radial-gradient(circle, rgba(234, 179, 8, 0.98) 0%, rgba(245, 158, 11, 0.88) 45%, rgba(245, 158, 11, 0.15) 75%, transparent 95%)',
-            filter: 'blur(55px)',
-            mixBlendMode: 'screen',
-            opacity: 0.98,
-            animation: 'gemini-blob-3 3.5s ease-in-out infinite alternate',
-          }} />
-          {/* Right Side - Purple/Blue Blob */}
-          <div className="absolute rounded-full pointer-events-none" style={{
-            top: '15%', right: '-15%', width: '22vw', height: '70vh',
-            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.98) 0%, rgba(59, 130, 246, 0.88) 45%, rgba(59, 130, 246, 0.15) 75%, transparent 95%)',
-            filter: 'blur(55px)',
-            mixBlendMode: 'screen',
-            opacity: 0.98,
-            animation: 'gemini-blob-4 4.2s ease-in-out infinite alternate',
-          }} />
-        </div>
-      )}
+      <div className={`azaan-glow-container ${isAzaanPlaying ? 'active' : ''}`}>
+        {/* Top Side - Red/Magenta Blob */}
+        <div className="absolute rounded-full pointer-events-none" style={{
+          top: '-20%', left: '20%', width: '60vw', height: '28vh',
+          background: 'radial-gradient(circle, rgba(239, 68, 68, 0.98) 0%, rgba(236, 72, 153, 0.88) 45%, rgba(236, 72, 153, 0.15) 75%, transparent 95%)',
+          filter: 'blur(50px)',
+          mixBlendMode: 'screen',
+          opacity: 0.98,
+          animation: 'gemini-blob-1 3.2s ease-in-out infinite alternate',
+        }} />
+        {/* Bottom Side - Cyan/Blue Blob */}
+        <div className="absolute rounded-full pointer-events-none" style={{
+          bottom: '-20%', left: '15%', width: '70vw', height: '28vh',
+          background: 'radial-gradient(circle, rgba(6, 182, 212, 0.98) 0%, rgba(59, 130, 246, 0.88) 45%, rgba(59, 130, 246, 0.15) 75%, transparent 95%)',
+          filter: 'blur(50px)',
+          mixBlendMode: 'screen',
+          opacity: 0.98,
+          animation: 'gemini-blob-2 3.8s ease-in-out infinite alternate',
+        }} />
+        {/* Left Side - Yellow/Orange Blob */}
+        <div className="absolute rounded-full pointer-events-none" style={{
+          top: '15%', left: '-15%', width: '22vw', height: '70vh',
+          background: 'radial-gradient(circle, rgba(234, 179, 8, 0.98) 0%, rgba(245, 158, 11, 0.88) 45%, rgba(245, 158, 11, 0.15) 75%, transparent 95%)',
+          filter: 'blur(55px)',
+          mixBlendMode: 'screen',
+          opacity: 0.98,
+          animation: 'gemini-blob-3 3.5s ease-in-out infinite alternate',
+        }} />
+        {/* Right Side - Purple/Blue Blob */}
+        <div className="absolute rounded-full pointer-events-none" style={{
+          top: '15%', right: '-15%', width: '22vw', height: '70vh',
+          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.98) 0%, rgba(59, 130, 246, 0.88) 45%, rgba(59, 130, 246, 0.15) 75%, transparent 95%)',
+          filter: 'blur(55px)',
+          mixBlendMode: 'screen',
+          opacity: 0.98,
+          animation: 'gemini-blob-4 4.2s ease-in-out infinite alternate',
+        }} />
+      </div>
 
       {/* ── CONTENT (floats over the layered SkyBackground) ── */}
       <div className="relative flex flex-col h-full z-10" style={{ padding: '18px 36px 10px' }}>

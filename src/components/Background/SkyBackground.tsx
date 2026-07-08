@@ -297,7 +297,42 @@ const Scene = memo(function Scene({
         <path d="M600,120 Q980,96 1360,140" stroke={pal.cloud} strokeWidth="4" strokeOpacity="0.12" fill="none" strokeLinecap="round" />
 
         {/* Mountains + trees */}
+        {/* Mountains + trees */}
         <g className="portrait-scale-landscape">
+          {/* BACKGROUND FIREFLIES: Rendered behind mountains and trees (appear/disappear behind them) */}
+          {starFade > 0.05 && (
+            <g style={{ opacity: starFade }}>
+              {[
+                // Mid pines (further away, smaller fireflies radius 0.8)
+                { x: 260, y: 490, r: 0.8, dur: 5.2, delay: 0.5, drift: 'firefly-drift-1' },
+                { x: 298, y: 495, r: 0.8, dur: 4.8, delay: 1.1, drift: 'firefly-drift-2' },
+                { x: 344, y: 480, r: 0.8, dur: 5.5, delay: 2.3, drift: 'firefly-drift-1' },
+                { x: 392, y: 490, r: 0.8, dur: 4.2, delay: 0.1, drift: 'firefly-drift-2' },
+                { x: 440, y: 480, r: 0.8, dur: 6.0, delay: 1.8, drift: 'firefly-drift-1' },
+                { x: 520, y: 485, r: 0.8, dur: 5.0, delay: 0.9, drift: 'firefly-drift-2' },
+                { x: 250, y: 440, r: 0.8, dur: 4.5, delay: 1.4, drift: 'firefly-drift-1' },
+                // Background of foreground trees (radius 1.1, clips behind trunks/foliage)
+                { x: 90, y: 440, r: 1.1, dur: 5.8, delay: 0.3, drift: 'firefly-drift-2' },
+                { x: 160, y: 430, r: 1.1, dur: 4.6, delay: 1.7, drift: 'firefly-drift-1' },
+                { x: 1190, y: 430, r: 1.1, dur: 5.3, delay: 0.8, drift: 'firefly-drift-2' },
+                { x: 1300, y: 420, r: 1.1, dur: 4.9, delay: 2.0, drift: 'firefly-drift-1' },
+              ].map((ff, i) => (
+                <circle
+                  key={`bg-ff-${i}`}
+                  cx={ff.x}
+                  cy={ff.y}
+                  r={ff.r}
+                  fill="#bfff00"
+                  filter="drop-shadow(0 0 3px #bfff00)"
+                  style={{
+                    animation: `firefly-glow ${ff.dur}s ease-in-out ${ff.delay}s infinite, ${ff.drift} ${ff.dur + 2}s ease-in-out ${ff.delay}s infinite`,
+                    transformOrigin: `${ff.x}px ${ff.y}px`,
+                  }}
+                />
+              ))}
+            </g>
+          )}
+
           <Mountains pal={pal} />
           
           {/* Day-time: sitting and flying birds */}
@@ -326,34 +361,32 @@ const Scene = memo(function Scene({
             </g>
           )}
 
-          {/* Night-time: Fireflies next to the foreground trees */}
+          {/* FOREGROUND FIREFLIES: Rendered in front of trees, contains larger and traveling particles */}
           {starFade > 0.05 && (
             <g style={{ opacity: starFade }}>
               {[
-                // Left tree fireflies
-                { x: 44, y: 460, dur: 4.8, delay: 0 },
-                { x: 80, y: 410, dur: 5.2, delay: 1.2 },
-                { x: 112, y: 360, dur: 4.2, delay: 0.5 },
-                { x: 150, y: 490, dur: 5.8, delay: 2.1 },
-                { x: 178, y: 440, dur: 4.6, delay: 1.5 },
-                { x: 228, y: 500, dur: 5.0, delay: 0.8 },
-                // Right tree fireflies
-                { x: 1150, y: 490, dur: 4.9, delay: 0.2 },
-                { x: 1212, y: 420, dur: 5.5, delay: 1.7 },
-                { x: 1272, y: 460, dur: 4.4, delay: 0.9 },
-                { x: 1334, y: 410, dur: 6.0, delay: 2.5 },
-                { x: 1392, y: 480, dur: 4.7, delay: 1.1 },
-                { x: 1436, y: 430, dur: 5.3, delay: 0.4 },
+                // Left tree foreground cluster (radius 1.6)
+                { x: 44, y: 480, r: 1.6, dur: 4.8, delay: 0, anim: 'firefly-drift-1' },
+                { x: 112, y: 390, r: 1.6, dur: 7.5, delay: 0.5, anim: 'firefly-travel-left' }, // travels from one tree to another!
+                { x: 178, y: 460, r: 1.6, dur: 5.0, delay: 1.5, anim: 'firefly-drift-2' },
+                { x: 228, y: 510, r: 1.6, dur: 4.7, delay: 0.8, anim: 'firefly-drift-1' },
+                // Right tree foreground cluster
+                { x: 1150, y: 500, r: 1.6, dur: 4.9, delay: 0.2, anim: 'firefly-drift-2' },
+                { x: 1212, y: 400, r: 1.6, dur: 8.0, delay: 1.7, anim: 'firefly-travel-right' }, // travels!
+                { x: 1272, y: 470, r: 1.6, dur: 4.4, delay: 0.9, anim: 'firefly-drift-1' },
+                { x: 1334, y: 430, r: 1.6, dur: 6.0, delay: 2.5, anim: 'firefly-drift-2' },
+                { x: 1392, y: 495, r: 1.6, dur: 4.6, delay: 1.1, anim: 'firefly-drift-1' },
+                { x: 1436, y: 440, r: 1.6, dur: 5.3, delay: 0.4, anim: 'firefly-drift-2' },
               ].map((ff, i) => (
                 <circle
-                  key={`ff-${i}`}
+                  key={`fg-ff-${i}`}
                   cx={ff.x}
                   cy={ff.y}
-                  r="2"
+                  r={ff.r}
                   fill="#bfff00"
                   filter="drop-shadow(0 0 3px #bfff00) drop-shadow(0 0 6px #bfff00)"
                   style={{
-                    animation: `firefly-glow ${ff.dur}s ease-in-out ${ff.delay}s infinite, ${i % 2 === 0 ? 'firefly-drift-1' : 'firefly-drift-2'} ${ff.dur + 2}s ease-in-out ${ff.delay}s infinite`,
+                    animation: `firefly-glow ${ff.dur}s ease-in-out ${ff.delay}s infinite, ${ff.anim} ${ff.dur + 2}s ease-in-out ${ff.delay}s infinite`,
                     transformOrigin: `${ff.x}px ${ff.y}px`,
                   }}
                 />
