@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo, useId, memo } from 'react';
 import { useSkyPhase, useMoonPosition } from '../../hooks/usePrayerTimes';
 import { useStore } from '../../store';
 import { calculateSunPosition, calculateSunPositionFromPrayers, determineSkyPhase, getMoonPath } from '../../utils/skyEngine';
+import birdGif from '../../assets/bird1.gif';
 
 const DEFAULT_GRADIENT = 'linear-gradient(180deg, #080A1A 0%, #0E1230 25%, #151A3A 60%, #1A1F3E 100%)';
 
@@ -918,13 +919,19 @@ function SkyBackground() {
                 { top: '20%', scale: 0.42, speed: 9.5, delay: 6.0 },
                 { top: '16%', scale: 0.37, speed: 11.2, delay: 7.4 },
               ].map((b, i) => (
-                <div
+                <img
                   key={`flock-bird-${i}`}
-                  className="crow-bird"
+                  src={birdGif}
+                  alt="bird"
                   style={{
+                    position: 'absolute',
                     top: b.top,
-                    animation: `crow-flap 0.52s steps(1) infinite, flock-fly-rtl ${b.speed}s linear ${b.delay}s infinite`,
+                    width: `${32 + b.scale * 30}px`,
+                    height: 'auto',
                     transformOrigin: 'top left',
+                    animation: `flock-fly-rtl ${b.speed}s linear ${b.delay}s infinite`,
+                    mixBlendMode: 'multiply',
+                    pointerEvents: 'none',
                   }}
                 />
               ))}
