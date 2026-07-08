@@ -299,6 +299,67 @@ const Scene = memo(function Scene({
         {/* Mountains + trees */}
         <g className="portrait-scale-landscape">
           <Mountains pal={pal} />
+          
+          {/* Day-time: sitting and flying birds */}
+          {starFade < 0.95 && (
+            <g style={{ color: pal.fgDark }}>
+              {/* Bird on Left Tree Tip */}
+              <g style={{
+                transformOrigin: '112px 309px',
+                animation: 'bird-flyaway-left 32s ease-in-out infinite',
+              }}>
+                <path
+                  d="M 112,309 C 112,306 114,304 117,304 C 119,304 120,306 120,309 C 118,308.5 115,308.5 112,309 Z M 116,304 C 116,302.5 117,301.5 118,301.5 C 118.5,301.5 119,302 119,302.5 C 118.5,303 117.5,303.8 116,304 Z"
+                  fill="currentColor"
+                />
+              </g>
+              {/* Bird on Right Tree Tip */}
+              <g style={{
+                transformOrigin: '1212px 341px',
+                animation: 'bird-flyaway-right 28s ease-in-out 8s infinite',
+              }}>
+                <path
+                  d="M 1212,341 C 1212,338 1214,336 1217,336 C 1219,336 1220,338 1220,341 C 1218,340.5 1215,340.5 1212,341 Z M 1216,336 C 1216,334.5 1217,333.5 1218,333.5 C 1218.5,333.5 1219,334 1219,334.5 C 1218.5,335 1217.5,335.8 1216,336 Z"
+                  fill="currentColor"
+                />
+              </g>
+            </g>
+          )}
+
+          {/* Night-time: Fireflies next to the foreground trees */}
+          {starFade > 0.05 && (
+            <g style={{ opacity: starFade }}>
+              {[
+                // Left tree fireflies
+                { x: 44, y: 460, dur: 4.8, delay: 0 },
+                { x: 80, y: 410, dur: 5.2, delay: 1.2 },
+                { x: 112, y: 360, dur: 4.2, delay: 0.5 },
+                { x: 150, y: 490, dur: 5.8, delay: 2.1 },
+                { x: 178, y: 440, dur: 4.6, delay: 1.5 },
+                { x: 228, y: 500, dur: 5.0, delay: 0.8 },
+                // Right tree fireflies
+                { x: 1150, y: 490, dur: 4.9, delay: 0.2 },
+                { x: 1212, y: 420, dur: 5.5, delay: 1.7 },
+                { x: 1272, y: 460, dur: 4.4, delay: 0.9 },
+                { x: 1334, y: 410, dur: 6.0, delay: 2.5 },
+                { x: 1392, y: 480, dur: 4.7, delay: 1.1 },
+                { x: 1436, y: 430, dur: 5.3, delay: 0.4 },
+              ].map((ff, i) => (
+                <circle
+                  key={`ff-${i}`}
+                  cx={ff.x}
+                  cy={ff.y}
+                  r="2"
+                  fill="#bfff00"
+                  filter="drop-shadow(0 0 3px #bfff00) drop-shadow(0 0 6px #bfff00)"
+                  style={{
+                    animation: `firefly-glow ${ff.dur}s ease-in-out ${ff.delay}s infinite, ${i % 2 === 0 ? 'firefly-drift-1' : 'firefly-drift-2'} ${ff.dur + 2}s ease-in-out ${ff.delay}s infinite`,
+                    transformOrigin: `${ff.x}px ${ff.y}px`,
+                  }}
+                />
+              ))}
+            </g>
+          )}
         </g>
 
         {/* Water */}
@@ -415,11 +476,7 @@ function seededStars(seed:number, count:number) {
   }));
 }
 const STARS = seededStars(20250708, 120);
-const SHOOTING = [
-  { top:'8%',  left:'12%', dur:9,  delay:2,  len:150 },
-  { top:'16%', left:'55%', dur:13, delay:7,  len:190 },
-  { top:'5%',  left:'72%', dur:11, delay:11, len:130 },
-];
+
 
 /* ═══════════════════════════════════════════════════════════
    SUN / MOON
@@ -653,6 +710,49 @@ function SkyBackground() {
 
   const starFade  = elevation >= 3 ? 0 : elevation <= -15 ? 1 : (-elevation + 3) / 18;
 
+  interface ShootingStar {
+    top: string;
+    left: string;
+    len: number;
+    dur: number;
+  }
+  const [shootingStar, setShootingStar] = useState<ShootingStar | null>(null);
+
+  useEffect(() => {
+    if (starFade <= 0.05) {
+      setShootingStar(null);
+      return;
+    }
+
+    let activeTimeout: any = null;
+    let transitionTimeout: any = null;
+
+    const triggerNext = () => {
+      const nextDelay = 18000 + Math.random() * 14000;
+      activeTimeout = setTimeout(() => {
+        const star: ShootingStar = {
+          top: `${5 + Math.random() * 20}%`,
+          left: `${10 + Math.random() * 60}%`,
+          len: 100 + Math.random() * 60,
+          dur: 0.6 + Math.random() * 0.5,
+        };
+        setShootingStar(star);
+
+        transitionTimeout = setTimeout(() => {
+          setShootingStar(null);
+          triggerNext();
+        }, star.dur * 1000);
+
+      }, nextDelay);
+    };
+
+    triggerNext();
+    return () => {
+      clearTimeout(activeTimeout);
+      clearTimeout(transitionTimeout);
+    };
+  }, [starFade]);
+
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden sky-bg">
@@ -688,15 +788,15 @@ function SkyBackground() {
                   </div>
                 );
               })}
-              {SHOOTING.map((sh,i) => (
-                <div key={`sh${i}`} style={{
-                  position:'absolute', top:sh.top, left:sh.left, width:sh.len, height:2,
+              {shootingStar && (
+                <div style={{
+                  position:'absolute', top:shootingStar.top, left:shootingStar.left, width:shootingStar.len, height:2,
                   background:'linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0))',
                   borderRadius:2, opacity:starFade,
-                  animation:`shoot ${sh.dur}s ease-in ${sh.delay}s infinite`,
+                  animation:`shoot-once ${shootingStar.dur}s ease-in forwards`,
                   filter:'drop-shadow(0 0 4px rgba(255,255,255,0.8))',
                 }} />
-              ))}
+              )}
             </div>
           )}
 
