@@ -116,3 +116,32 @@ export function determineSkyPhase(elevation: number, azimuth = 90): SkyPhase {
 
   return { id, ...phases[id] };
 }
+
+export function calculateSunPositionFromPrayers(
+  date: Date,
+  times: { sunrise: Date; maghrib: Date }
+): SolarPosition {
+  const t = date.getTime();
+  const sunriseMs = times.sunrise.getTime();
+  const maghribMs = times.maghrib.getTime();
+
+  if (t >= sunriseMs && t <= maghribMs) {
+    const p = (t - sunriseMs) / (maghribMs - sunriseMs);
+    const elevation = 90 * Math.sin(p * Math.PI);
+    const azimuth = 90 + p * 180;
+    return { elevation, azimuth };
+  } else {
+    // Night
+    let p = 0;
+    if (t < sunriseMs) {
+      const prevMaghribMs = maghribMs - 24 * 3600 * 1000;
+      p = (t - prevMaghribMs) / (sunriseMs - prevMaghribMs);
+    } else {
+      const nextSunriseMs = sunriseMs + 24 * 3600 * 1000;
+      p = (t - maghribMs) / (nextSunriseMs - maghribMs);
+    }
+    const elevation = -90 * Math.sin(p * Math.PI);
+    const azimuth = (270 + p * 180) % 360;
+    return { elevation, azimuth };
+  }
+}

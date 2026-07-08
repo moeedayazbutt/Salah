@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { calculatePrayerTimes, getPrayerInfo, formatCountdown, calculateQibla, calculateHijriDate } from '../utils/prayerTimes';
-import { calculateSunPosition, determineSkyPhase, getMoonPhase } from '../utils/skyEngine';
+import { calculateSunPositionFromPrayers, determineSkyPhase, getMoonPhase } from '../utils/skyEngine';
 import { useStore } from '../store';
 import { playAzaan, stopAzaan } from '../utils/azaanEngine';
 
@@ -30,21 +30,6 @@ export function usePrayerTimeEngine() {
     const hasLocation = latitude !== 0 || longitude !== 0;
 
     if (hasLocation) {
-      const solarPos = calculateSunPosition(now, latitude, longitude);
-      setSolarPosition(solarPos);
-
-      const phase = determineSkyPhase(solarPos.elevation, solarPos.azimuth);
-      setSkyPhase(phase);
-
-      const moonInfo = getMoonPhase(now);
-      setMoonPosition({
-        phase: moonInfo.phase,
-        phaseName: moonInfo.name,
-        illumination: moonInfo.illumination,
-        elevation: 0,
-        azimuth: 0,
-      });
-
       const times = calculatePrayerTimes(now, {
         coordinates: settings.coordinates,
         method: settings.calculationMethod,
@@ -55,6 +40,21 @@ export function usePrayerTimeEngine() {
 
       if (times) {
         setPrayerTimes(times);
+
+        const solarPos = calculateSunPositionFromPrayers(now, times);
+        setSolarPosition(solarPos);
+
+        const phase = determineSkyPhase(solarPos.elevation, solarPos.azimuth);
+        setSkyPhase(phase);
+
+        const moonInfo = getMoonPhase(now);
+        setMoonPosition({
+          phase: moonInfo.phase,
+          phaseName: moonInfo.name,
+          illumination: moonInfo.illumination,
+          elevation: 0,
+          azimuth: 0,
+        });
 
         const info = getPrayerInfo(times, now);
         setPrayerInfo(info);

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useId, memo } from 'react';
 import { useSkyPhase, useMoonPosition } from '../../hooks/usePrayerTimes';
 import { useStore } from '../../store';
-import { calculateSunPosition, determineSkyPhase } from '../../utils/skyEngine';
+import { calculateSunPosition, calculateSunPositionFromPrayers, determineSkyPhase } from '../../utils/skyEngine';
 
 const DEFAULT_GRADIENT = 'linear-gradient(180deg, #080A1A 0%, #0E1230 25%, #151A3A 60%, #1A1F3E 100%)';
 
@@ -523,6 +523,7 @@ function SkyBackground() {
   const skySliderDragging = useStore((s) => s.skySliderDragging);
   const aodMode           = useStore((s) => s.aodMode);
   const settings          = useStore((s) => s.settings);
+  const prayerTimes       = useStore((s) => s.prayerTimes);
   useMoonPosition();
 
   const speed = skySliderDragging ? 16 : 1;
@@ -537,6 +538,19 @@ function SkyBackground() {
     const lat = settings.coordinates.latitude || 25;
     const lon = settings.coordinates.longitude || 45;
     if (aodMode) return { targetGradient:'#000000', phaseId:'night', elevation:-40, azimuth:0 };
+
+    if (prayerTimes) {
+      if (!skySliderAuto && skyDisplayHours !== null) {
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        d.setHours(Math.floor(skyDisplayHours), Math.round((skyDisplayHours%1)*60), 0, 0);
+        const pos = calculateSunPositionFromPrayers(d, prayerTimes);
+        const sp = determineSkyPhase(pos.elevation, pos.azimuth);
+        return { targetGradient: sp.gradient, phaseId: sp.id, elevation: pos.elevation, azimuth: pos.azimuth };
+      }
+      const pos = calculateSunPositionFromPrayers(now, prayerTimes);
+      return { targetGradient: phase?.gradient ?? DEFAULT_GRADIENT, phaseId: phase?.id ?? 'night', elevation: pos.elevation, azimuth: pos.azimuth };
+    }
+
     if (!skySliderAuto && skyDisplayHours !== null) {
       const d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       d.setHours(Math.floor(skyDisplayHours), Math.round((skyDisplayHours%1)*60), 0, 0);
@@ -546,7 +560,7 @@ function SkyBackground() {
     }
     const pos = calculateSunPosition(now, lat, lon);
     return { targetGradient: phase?.gradient ?? DEFAULT_GRADIENT, phaseId: phase?.id ?? 'night', elevation: pos.elevation, azimuth: pos.azimuth };
-  }, [phase, skyDisplayHours, skySliderAuto, aodMode, settings.coordinates, now]);
+  }, [phase, skyDisplayHours, skySliderAuto, aodMode, settings.coordinates, now, prayerTimes]);
 
   const pal = useMemo(() => getPalette(phaseId), [phaseId]);
 
