@@ -169,7 +169,7 @@ export default function NextPrayerTimer() {
   }, [skySliderAuto, skyDisplayHours, solarPos, settings.coordinates, phase, now, prayerTimes]);
 
   const prayerNameStyle = useMemo((): React.CSSProperties => {
-    const name = displayPhase?.name as string | undefined;
+    const name = displayPhase?.id as string | undefined;
     switch (name) {
       case 'morning':
       case 'midday':
