@@ -4,7 +4,7 @@ import {
   useSkyPhase, useSolarPosition, usePrayerInfoList, useHijriDate,
 } from '../../hooks/usePrayerTimes';
 import { useStore } from '../../store';
-import { calculateSunPosition, determineSkyPhase } from '../../utils/skyEngine';
+import { calculateSunPosition, calculateSunPositionFromPrayers, determineSkyPhase } from '../../utils/skyEngine';
 import { useWeather } from '../../hooks/useWeather';
 import { formatTime } from '../../utils/prayerTimes';
 
@@ -155,15 +155,18 @@ export default function NextPrayerTimer() {
   }, []);
 
   /* Phase drives the next-prayer name gradient (slider-aware) */
+  const prayerTimes = useStore((s) => s.prayerTimes);
   const displayPhase = useMemo(() => {
     if (!skySliderAuto && skyDisplayHours !== null) {
       const d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       d.setHours(Math.floor(skyDisplayHours), Math.round((skyDisplayHours % 1) * 60), 0, 0);
-      const pos = calculateSunPosition(d, settings.coordinates.latitude || 25, settings.coordinates.longitude || 45);
+      const pos = prayerTimes
+        ? calculateSunPositionFromPrayers(d, prayerTimes)
+        : calculateSunPosition(d, settings.coordinates.latitude || 25, settings.coordinates.longitude || 45);
       return determineSkyPhase(pos.elevation, pos.azimuth);
     }
     return phase;
-  }, [skySliderAuto, skyDisplayHours, solarPos, settings.coordinates, phase, now]);
+  }, [skySliderAuto, skyDisplayHours, solarPos, settings.coordinates, phase, now, prayerTimes]);
 
   const prayerNameStyle = useMemo((): React.CSSProperties => {
     const name = displayPhase?.name as string | undefined;
