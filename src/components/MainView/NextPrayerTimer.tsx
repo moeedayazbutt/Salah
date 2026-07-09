@@ -178,7 +178,6 @@ export default function NextPrayerTimer() {
         return {
           background: 'linear-gradient(135deg, #FFEB3B 0%, #00B0FF 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.7))',
         };
       case 'sunrise':
       case 'sunset':
@@ -187,14 +186,12 @@ export default function NextPrayerTimer() {
         return {
           background: 'linear-gradient(135deg, #FF5722 0%, #FFD700 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.6))',
         };
       default: // night, fajr, isha
         // Purple to deep blue
         return {
           background: 'linear-gradient(135deg, #E040FB 0%, #2979FF 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: 'drop-shadow(0 2px 25px rgba(0,0,0,0.8))',
         };
     }
   }, [displayPhase]);
