@@ -171,29 +171,27 @@ export default function NextPrayerTimer() {
       case 'morning':
       case 'midday':
       case 'afternoon':
+        // Bright yellow to sky/lake blue
         return {
-          background: 'linear-gradient(135deg, #ffffff 0%, #FFF9C4 50%, #FFE082 100%)',
+          background: 'linear-gradient(135deg, #FFEB3B 0%, #00B0FF 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
           filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.7))',
         };
       case 'sunrise':
-        return {
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FFE0B2 45%, #FF8F00 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.5))',
-        };
       case 'sunset':
       case 'maghrib':
+        // Orange to golden
         return {
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FCE4EC 45%, #E91E63 100%)',
+          background: 'linear-gradient(135deg, #FF5722 0%, #FFD700 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.5))',
+          filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.6))',
         };
       default: // night, fajr, isha
+        // Purple to deep blue
         return {
-          background: 'linear-gradient(135deg, #FFD600 0%, #F59E0B 30%, #14B8A6 70%, #0D9488 100%)',
+          background: 'linear-gradient(135deg, #E040FB 0%, #2979FF 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: 'drop-shadow(0 0 40px rgba(245,158,11,0.3))',
+          filter: 'drop-shadow(0 2px 25px rgba(0,0,0,0.8))',
         };
     }
   }, [displayPhase]);
