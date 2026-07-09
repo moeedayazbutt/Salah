@@ -93,41 +93,40 @@ function PrayerIcon({ prayerKey, size = 22, color = 'rgba(255,255,255,0.6)' }: {
 
 /* ── Mini weather icon ──────────────────────────────── */
 function MiniWeatherIcon({ condition }: { condition: string }) {
-  const c = condition === 'sunny' ? '#FFD600'
-    : condition === 'partly-cloudy' ? '#E8C84A'
-    : condition === 'cloudy' ? '#9CA3AF'
-    : '#60A5FA';
   return (
-    <svg width="1em" height="1em" viewBox="0 0 40 40" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '0.25em' }}>
-      <circle cx="20" cy="18" r="7" fill={c} opacity="0.9" />
+    <svg width="1.15em" height="1.15em" viewBox="0 0 40 40" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '0.2em', marginTop: '-0.05em' }}>
       {condition === 'sunny' && (
-        <g stroke={c} strokeWidth="1.5" opacity="0.55">
-          <line x1="20" y1="4" x2="20" y2="8" /><line x1="20" y1="28" x2="20" y2="32" />
-          <line x1="8" y1="18" x2="12" y2="18" /><line x1="28" y1="18" x2="32" y2="18" />
-          <line x1="11.5" y1="9.5" x2="14.5" y2="12.5" /><line x1="25.5" y1="12.5" x2="28.5" y2="9.5" />
-          <line x1="11.5" y1="26.5" x2="14.5" y2="23.5" /><line x1="25.5" y1="23.5" x2="28.5" y2="26.5" />
+        <g fill="#FFFFFF">
+          <circle cx="20" cy="18" r="7" />
+          <g stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round">
+            <line x1="20" y1="3" x2="20" y2="8" /><line x1="20" y1="28" x2="20" y2="33" />
+            <line x1="7" y1="18" x2="12" y2="18" /><line x1="28" y1="18" x2="33" y2="18" />
+            <line x1="10.5" y1="8.5" x2="14" y2="12" /><line x1="26" y1="12" x2="29.5" y2="8.5" />
+            <line x1="10.5" y1="27.5" x2="14" y2="24" /><line x1="26" y1="24" x2="29.5" y2="27.5" />
+          </g>
         </g>
       )}
       {condition === 'partly-cloudy' && (
-        <>
-          <g stroke={c} strokeWidth="1.2" opacity="0.4">
-            <line x1="20" y1="6" x2="20" y2="9" />
-            <line x1="10" y1="18" x2="13" y2="18" />
-            <line x1="27" y1="18" x2="30" y2="18" />
-          </g>
-          <ellipse cx="28" cy="22" rx="10" ry="5" fill="rgba(255,255,255,0.22)" />
-        </>
+        <g fill="#FFFFFF">
+          <circle cx="16" cy="16" r="6" />
+          <ellipse cx="26" cy="23" rx="11" ry="6.5" />
+        </g>
       )}
       {condition === 'cloudy' && (
-        <ellipse cx="26" cy="22" rx="13" ry="6" fill="rgba(255,255,255,0.28)" />
+        <g fill="#FFFFFF">
+          <ellipse cx="18" cy="22" rx="10" ry="6" />
+          <ellipse cx="28" cy="24" rx="11" ry="6.5" />
+        </g>
       )}
       {condition === 'rainy' && (
-        <>
-          <ellipse cx="26" cy="20" rx="12" ry="5.5" fill="rgba(255,255,255,0.22)" />
-          <g stroke="#60A5FA" strokeWidth="1.5" opacity="0.7" strokeLinecap="round">
-            <line x1="22" y1="28" x2="20" y2="34" /><line x1="27" y1="28" x2="25" y2="34" /><line x1="32" y1="28" x2="30" y2="34" />
+        <g>
+          <ellipse cx="24" cy="20" rx="12" ry="6" fill="#FFFFFF" />
+          <g stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" fill="none">
+            <line x1="17" y1="29" x2="15" y2="36" />
+            <line x1="24" y1="30" x2="22" y2="37" />
+            <line x1="31" y1="29" x2="29" y2="36" />
           </g>
-        </>
+        </g>
       )}
     </svg>
   );
