@@ -169,17 +169,17 @@ export default function NextPrayerTimer() {
 
   const prayerNameStyle = useMemo((): React.CSSProperties => {
     const pal = displayPhase ? getPalette(displayPhase.id) : null;
-    const hardShadow = '0 4px 6px rgba(0,0,0,0.85)';
     if (pal) {
-      const glowColor = pal.sunGlow;
       return {
-        color: '#FFFFFF',
-        textShadow: `${hardShadow}, 0 2px 30px ${glowColor}`,
+        background: `linear-gradient(135deg, ${pal.sunCore} 0%, ${pal.sunEdge} 100%)`,
+        WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+        filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.7)) drop-shadow(0 4px 6px rgba(0,0,0,0.85))',
       };
     }
     return {
-      color: '#FFFFFF',
-      textShadow: `${hardShadow}, 0 0 40px rgba(245,158,11,0.3)`,
+      background: 'linear-gradient(135deg, #FFD600 0%, #F59E0B 30%, #14B8A6 70%, #0D9488 100%)',
+      WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+      filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.7)) drop-shadow(0 4px 6px rgba(0,0,0,0.85))',
     };
   }, [displayPhase]);
 
