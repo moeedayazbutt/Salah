@@ -6,6 +6,7 @@ import {
 import { useStore } from '../../store';
 import { calculateSunPosition, determineSkyPhase } from '../../utils/skyEngine';
 import { getPalette } from '../Background/SkyBackground';
+import { getForecast } from '../../utils/weatherForecast';
 import { formatTime } from '../../utils/prayerTimes';
 
 /* ── Prayer icons (horizon-based sun position) ──────── */
@@ -90,6 +91,48 @@ function PrayerIcon({ prayerKey, size = 22, color = 'rgba(255,255,255,0.6)' }: {
   );
 }
 
+/* ── Mini weather icon ──────────────────────────────── */
+function MiniWeatherIcon({ condition }: { condition: string }) {
+  const c = condition === 'sunny' ? '#FFD600'
+    : condition === 'partly-cloudy' ? '#E8C84A'
+    : condition === 'cloudy' ? '#9CA3AF'
+    : '#60A5FA';
+  return (
+    <svg width="1em" height="1em" viewBox="0 0 40 40" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '0.25em' }}>
+      <circle cx="20" cy="18" r="7" fill={c} opacity="0.9" />
+      {condition === 'sunny' && (
+        <g stroke={c} strokeWidth="1.5" opacity="0.55">
+          <line x1="20" y1="4" x2="20" y2="8" /><line x1="20" y1="28" x2="20" y2="32" />
+          <line x1="8" y1="18" x2="12" y2="18" /><line x1="28" y1="18" x2="32" y2="18" />
+          <line x1="11.5" y1="9.5" x2="14.5" y2="12.5" /><line x1="25.5" y1="12.5" x2="28.5" y2="9.5" />
+          <line x1="11.5" y1="26.5" x2="14.5" y2="23.5" /><line x1="25.5" y1="23.5" x2="28.5" y2="26.5" />
+        </g>
+      )}
+      {condition === 'partly-cloudy' && (
+        <>
+          <g stroke={c} strokeWidth="1.2" opacity="0.4">
+            <line x1="20" y1="6" x2="20" y2="9" />
+            <line x1="10" y1="18" x2="13" y2="18" />
+            <line x1="27" y1="18" x2="30" y2="18" />
+          </g>
+          <ellipse cx="28" cy="22" rx="10" ry="5" fill="rgba(255,255,255,0.22)" />
+        </>
+      )}
+      {condition === 'cloudy' && (
+        <ellipse cx="26" cy="22" rx="13" ry="6" fill="rgba(255,255,255,0.28)" />
+      )}
+      {condition === 'rainy' && (
+        <>
+          <ellipse cx="26" cy="20" rx="12" ry="5.5" fill="rgba(255,255,255,0.22)" />
+          <g stroke="#60A5FA" strokeWidth="1.5" opacity="0.7" strokeLinecap="round">
+            <line x1="22" y1="28" x2="20" y2="34" /><line x1="27" y1="28" x2="25" y2="34" /><line x1="32" y1="28" x2="30" y2="34" />
+          </g>
+        </>
+      )}
+    </svg>
+  );
+}
+
 /* ── Main component ─────────────────────────────────── */
 export default function NextPrayerTimer() {
   const currentPrayer   = useCurrentPrayer();
@@ -104,6 +147,8 @@ export default function NextPrayerTimer() {
   const skySliderAuto   = useStore((s) => s.skySliderAuto);
   const aodMode         = useStore((s) => s.aodMode);
   const isAzaanPlaying  = useStore((s) => s.isAzaanPlaying);
+  const forecast        = useMemo(() => getForecast(settings.coordinates.latitude, settings.coordinates.longitude), [settings.coordinates]);
+  const today           = forecast[0];
 
   /* Live clock */
   const [now, setNow] = useState(() => new Date());
@@ -229,6 +274,12 @@ export default function NextPrayerTimer() {
             {hijriStr && (
               <span className="font-ui" style={{ fontSize: 'clamp(0.9rem, 1.8vw, 1.9rem)', color: 'rgba(255,255,255,0.92)', lineHeight: 1.2, textShadow: shadow }}>
                 {hijriStr}
+              </span>
+            )}
+            {today && (
+              <span className="font-ui" style={{ fontSize: 'clamp(0.9rem, 1.8vw, 1.9rem)', color: 'rgba(255,255,255,0.92)', lineHeight: 1.2, textShadow: shadow }}>
+                <MiniWeatherIcon condition={today.condition.icon} />
+                {today.high}°C
               </span>
             )}
           </div>
