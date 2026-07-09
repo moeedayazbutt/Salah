@@ -169,21 +169,17 @@ export default function NextPrayerTimer() {
 
   const prayerNameStyle = useMemo((): React.CSSProperties => {
     const pal = displayPhase ? getPalette(displayPhase.id) : null;
-    const hardShadow = 'drop-shadow(0 4px 6px rgba(0,0,0,0.85))';
+    const hardShadow = '0 4px 6px rgba(0,0,0,0.85)';
     if (pal) {
-      const isDark = displayPhase?.id === 'night' || displayPhase?.id === 'isha' || displayPhase?.id === 'fajr' || displayPhase?.id === 'maghrib';
-      const midColor = isDark ? pal.cloud : pal.warmLight;
-      const gradient = `linear-gradient(135deg, ${pal.sunCore} 0%, ${pal.sunEdge} 35%, ${midColor} 100%)`;
+      const glowColor = pal.sunGlow;
       return {
-        background: gradient,
-        WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-        filter: `${hardShadow} drop-shadow(0 2px 20px rgba(0,0,0,0.7))`,
+        color: '#FFFFFF',
+        textShadow: `${hardShadow}, 0 2px 30px ${glowColor}`,
       };
     }
     return {
-      background: 'linear-gradient(135deg, #FFD600 0%, #F59E0B 30%, #14B8A6 70%, #0D9488 100%)',
-      WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-      filter: `${hardShadow} drop-shadow(0 0 40px rgba(245,158,11,0.3))`,
+      color: '#FFFFFF',
+      textShadow: `${hardShadow}, 0 0 40px rgba(245,158,11,0.3)`,
     };
   }, [displayPhase]);
 
