@@ -1,6 +1,5 @@
-import { useMemo } from 'react';
 import { useStore } from '../../store';
-import { getForecast, getHourlyForecast } from '../../utils/weatherForecast';
+import { useWeather } from '../../hooks/useWeather';
 
 function WeatherIcon({ condition, size = 24 }: { condition: string; size?: number }) {
   const c = condition === 'sunny' ? '#FFD600'
@@ -66,22 +65,23 @@ export default function WeatherWidget() {
   const lat = settings.coordinates.latitude;
   const lon = settings.coordinates.longitude;
 
-  const forecast = useMemo(() => getForecast(lat, lon), [lat, lon]);
-  const hourly = useMemo(() => getHourlyForecast(lat, lon), [lat, lon]);
+  const { current, daily, hourly: hourlyData, loading: _loading } = useWeather(lat, lon);
 
+  const forecast = daily ?? [];
   const today = forecast[0];
   const next3 = forecast.slice(0, 3);
-  const tempBase = today?.high ?? 22;
-  const feelsTemp = Math.round(tempBase + (tempBase > 30 ? -3 : 2) + Math.sin(tempBase * 0.4) * 3);
-  const humidity = Math.round(25 + Math.sin(tempBase * 0.7 + 2) * 20 + Math.cos(tempBase * 0.3) * 10);
-  const windSpeed = Math.round(4 + Math.sin(tempBase * 0.5 + 4) * 8 + Math.cos(tempBase * 0.8) * 5);
+  const hourly = hourlyData ?? [];
+  const tempBase = current?.temp ?? (today?.high ?? 22);
+  const feelsTemp = current?.feelsLike ?? Math.round(tempBase + (tempBase > 30 ? -3 : 2) + Math.sin(tempBase * 0.4) * 3);
+  const humidity = current?.humidity ?? Math.round(25 + Math.sin(tempBase * 0.7 + 2) * 20 + Math.cos(tempBase * 0.3) * 10);
+  const windSpeed = current?.windSpeed ?? Math.round(4 + Math.sin(tempBase * 0.5 + 4) * 8 + Math.cos(tempBase * 0.8) * 5);
 
   const rangeMin = Math.min(...next3.map((d) => d.low));
   const rangeMax = Math.max(...next3.map((d) => d.high));
 
-  const locationLabel = lat !== 0 || lon !== 0
+  const locationLabel = settings.selectedCityName || (lat !== 0 || lon !== 0
     ? `${Math.abs(lat).toFixed(1)}°${lat >= 0 ? 'N' : 'S'}, ${Math.abs(lon).toFixed(1)}°${lon >= 0 ? 'E' : 'W'}`
-    : 'No location';
+    : 'No location');
 
   return (
     <div

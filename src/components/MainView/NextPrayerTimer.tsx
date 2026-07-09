@@ -6,7 +6,7 @@ import {
 import { useStore } from '../../store';
 import { calculateSunPosition, determineSkyPhase } from '../../utils/skyEngine';
 import { getPalette } from '../Background/SkyBackground';
-import { getForecast } from '../../utils/weatherForecast';
+import { useWeather } from '../../hooks/useWeather';
 import { formatTime } from '../../utils/prayerTimes';
 
 /* ── Prayer icons (horizon-based sun position) ──────── */
@@ -146,8 +146,7 @@ export default function NextPrayerTimer() {
   const skySliderAuto   = useStore((s) => s.skySliderAuto);
   const aodMode         = useStore((s) => s.aodMode);
   const isAzaanPlaying  = useStore((s) => s.isAzaanPlaying);
-  const forecast        = useMemo(() => getForecast(settings.coordinates.latitude, settings.coordinates.longitude), [settings.coordinates]);
-  const today           = forecast[0];
+  const { current: weatherCurrent } = useWeather(settings.coordinates.latitude, settings.coordinates.longitude);
 
   /* Live clock */
   const [now, setNow] = useState(() => new Date());
@@ -169,16 +168,8 @@ export default function NextPrayerTimer() {
 
   const prayerNameStyle = useMemo((): React.CSSProperties => {
     const pal = displayPhase ? getPalette(displayPhase.id) : null;
-    if (pal) {
-      return {
-        background: `linear-gradient(135deg, ${pal.sunCore} 0%, ${pal.sunEdge} 100%)`,
-        WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-        textShadow: '0 4px 6px rgba(0,0,0,0.85)',
-      };
-    }
     return {
-      background: 'linear-gradient(135deg, #FFD600 0%, #F59E0B 30%, #14B8A6 70%, #0D9488 100%)',
-      WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+      color: pal?.sunEdge ?? '#FFFFFF',
       textShadow: '0 4px 6px rgba(0,0,0,0.85)',
     };
   }, [displayPhase]);
@@ -271,10 +262,10 @@ export default function NextPrayerTimer() {
                 {hijriStr}
               </span>
             )}
-            {today && (
+            {weatherCurrent && (
               <span className="font-ui" style={{ fontSize: 'clamp(0.9rem, 1.8vw, 1.9rem)', color: 'rgba(255,255,255,0.92)', lineHeight: 1.2, textShadow: shadow }}>
-                <MiniWeatherIcon condition={today.condition.icon} />
-                {today.high}°C
+                <MiniWeatherIcon condition={weatherCurrent.condition.icon} />
+                {weatherCurrent.temp}°C
               </span>
             )}
           </div>
