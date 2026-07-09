@@ -173,13 +173,13 @@ export default function NextPrayerTimer() {
       return {
         background: `linear-gradient(135deg, ${pal.sunCore} 0%, ${pal.sunEdge} 100%)`,
         WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-        filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.7)) drop-shadow(0 4px 6px rgba(0,0,0,0.85))',
+        textShadow: '0 4px 6px rgba(0,0,0,0.85)',
       };
     }
     return {
       background: 'linear-gradient(135deg, #FFD600 0%, #F59E0B 30%, #14B8A6 70%, #0D9488 100%)',
       WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-      filter: 'drop-shadow(0 2px 20px rgba(0,0,0,0.7)) drop-shadow(0 4px 6px rgba(0,0,0,0.85))',
+      textShadow: '0 4px 6px rgba(0,0,0,0.85)',
     };
   }, [displayPhase]);
 
