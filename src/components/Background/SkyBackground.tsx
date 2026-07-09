@@ -12,7 +12,7 @@ const DEFAULT_GRADIENT = 'linear-gradient(180deg, #080A1A 0%, #0E1230 25%, #151A
    Composition & tones inspired by the serene-lake reference:
    two-tone (sunlit/shadow) peaks, layered ridges, mirror lake.
    ═══════════════════════════════════════════════════════════ */
-interface Palette {
+export interface Palette {
   cloud: string; cloudUnder: string; cloudOpacity: number;
   farRidge: string;
   warmLight: string; warmDark: string;
@@ -26,7 +26,7 @@ interface Palette {
   birdColor: string;
 }
 
-function getPalette(id: string): Palette {
+export function getPalette(id: string): Palette {
   switch (id) {
     case 'morning':
       return { cloud:'#f6f2e6', cloudUnder:'#f0d2b0', cloudOpacity:0.92,

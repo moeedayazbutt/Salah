@@ -5,6 +5,7 @@ import {
 } from '../../hooks/usePrayerTimes';
 import { useStore } from '../../store';
 import { calculateSunPosition, determineSkyPhase } from '../../utils/skyEngine';
+import { getPalette } from '../Background/SkyBackground';
 import { formatTime } from '../../utils/prayerTimes';
 
 /* ── Prayer icons (horizon-based sun position) ──────── */
@@ -123,37 +124,23 @@ export default function NextPrayerTimer() {
   }, [skySliderAuto, skyDisplayHours, solarPos, settings.coordinates, phase, now]);
 
   const prayerNameStyle = useMemo((): React.CSSProperties => {
-    const name = displayPhase?.name as string | undefined;
+    const pal = displayPhase ? getPalette(displayPhase.id) : null;
     const hardShadow = 'drop-shadow(0 4px 6px rgba(0,0,0,0.85))';
-    switch (name) {
-      case 'morning':
-      case 'midday':
-      case 'afternoon':
-        return {
-          background: 'linear-gradient(135deg, #ffffff 0%, #FFF9C4 50%, #FFE082 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: `${hardShadow} drop-shadow(0 2px 20px rgba(0,0,0,0.7))`,
-        };
-      case 'sunrise':
-        return {
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FFE0B2 45%, #FF8F00 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: `${hardShadow} drop-shadow(0 2px 20px rgba(0,0,0,0.5))`,
-        };
-      case 'sunset':
-      case 'maghrib':
-        return {
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FCE4EC 45%, #E91E63 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: `${hardShadow} drop-shadow(0 2px 20px rgba(0,0,0,0.5))`,
-        };
-      default: // night, fajr, isha
-        return {
-          background: 'linear-gradient(135deg, #FFD600 0%, #F59E0B 30%, #14B8A6 70%, #0D9488 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: `${hardShadow} drop-shadow(0 0 40px rgba(245,158,11,0.3))`,
-        };
+    if (pal) {
+      const isDark = displayPhase?.id === 'night' || displayPhase?.id === 'isha' || displayPhase?.id === 'fajr' || displayPhase?.id === 'maghrib';
+      const midColor = isDark ? pal.cloud : pal.warmLight;
+      const gradient = `linear-gradient(135deg, ${pal.sunCore} 0%, ${pal.sunEdge} 35%, ${midColor} 100%)`;
+      return {
+        background: gradient,
+        WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+        filter: `${hardShadow} drop-shadow(0 2px 20px rgba(0,0,0,0.7))`,
+      };
     }
+    return {
+      background: 'linear-gradient(135deg, #FFD600 0%, #F59E0B 30%, #14B8A6 70%, #0D9488 100%)',
+      WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+      filter: `${hardShadow} drop-shadow(0 0 40px rgba(245,158,11,0.3))`,
+    };
   }, [displayPhase]);
 
   const showUpcoming = currentPrayer?.key === 'sunrise';
