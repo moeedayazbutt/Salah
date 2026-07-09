@@ -261,11 +261,11 @@ const Scene = memo(function Scene({
   const reflId = `refl${uid}`;
   const warmId = `warm${uid}`;
   const shimmer = [
-    { y:'70%', w:'50%', left:'10%', dur:9,  delay:0 },
-    { y:'78%', w:'36%', left:'38%', dur:11, delay:2 },
-    { y:'86%', w:'42%', left:'20%', dur:8,  delay:4 },
-    { y:'74%', w:'30%', left:'60%', dur:12, delay:1 },
-    { y:'92%', w:'46%', left:'30%', dur:10, delay:3 },
+    { y:'74%', w:'50%', left:'10%', dur:14,  delay:0 },
+    { y:'82%', w:'36%', left:'38%', dur:17, delay:3 },
+    { y:'90%', w:'42%', left:'20%', dur:12,  delay:5 },
+    { y:'78%', w:'30%', left:'60%', dur:18, delay:1 },
+    { y:'95%', w:'46%', left:'30%', dur:15, delay:4 },
   ];
   return (
     <div style={{ position:'absolute', inset:0, pointerEvents:'none' }}>
@@ -276,7 +276,7 @@ const Scene = memo(function Scene({
           width:'11%', height:'34%', opacity:sunGlowOpacity*0.6,
           background:`linear-gradient(180deg, ${pal.sunGlow} 0%, ${pal.sunGlow} 18%, transparent 100%)`,
           filter:'blur(7px)', transition:'left 1.5s ease',
-          animation:'reflect-waver 6s ease-in-out infinite',
+          animation:'reflect-waver 12s ease-in-out infinite',
         }} />
       )}
 
@@ -333,7 +333,7 @@ const Scene = memo(function Scene({
           </radialGradient>
           <filter id="water-waves" x="0" y="0" width="100%" height="100%">
             <feTurbulence type="fractalNoise" baseFrequency="0.015 0.08" numOctaves="3" result="noise">
-              <animate attributeName="baseFrequency" dur="25s" values="0.012 0.06;0.018 0.10;0.012 0.06" repeatCount="indefinite" />
+              <animate attributeName="baseFrequency" dur="40s" values="0.012 0.06;0.018 0.10;0.012 0.06" repeatCount="indefinite" />
             </feTurbulence>
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
           </filter>

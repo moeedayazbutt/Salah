@@ -52,7 +52,7 @@
 /* Reflection gentle wavering */
 @keyframes reflect-waver {
   0%, 100% { transform: scaleY(1)     translateY(0); }
-  50%      { transform: scaleY(1.012) translateY(2px); }
+  50%      { transform: scaleY(1.008) translateY(1.5px); }
 }
 /* Sun / moon soft breathing glow */
 @keyframes celestial-glow {
