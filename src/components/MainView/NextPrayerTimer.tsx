@@ -170,6 +170,7 @@ export default function NextPrayerTimer() {
 
   const prayerNameStyle = useMemo((): React.CSSProperties => {
     const name = displayPhase?.id as string | undefined;
+    const shadowFilter = 'drop-shadow(0 4px 12px rgba(0,0,0,0.9)) drop-shadow(0 2px 4px rgba(0,0,0,0.8))';
     switch (name) {
       case 'morning':
       case 'midday':
@@ -178,6 +179,7 @@ export default function NextPrayerTimer() {
         return {
           backgroundImage: 'linear-gradient(135deg, #FFEB3B 0%, #00B0FF 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          filter: shadowFilter,
         };
       case 'sunrise':
       case 'sunset':
@@ -186,12 +188,14 @@ export default function NextPrayerTimer() {
         return {
           backgroundImage: 'linear-gradient(135deg, #FF5722 0%, #FFD700 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          filter: shadowFilter,
         };
       default: // night, fajr, isha
         // Purple to deep blue
         return {
           backgroundImage: 'linear-gradient(135deg, #E040FB 0%, #2979FF 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          filter: shadowFilter,
         };
     }
   }, [displayPhase]);
