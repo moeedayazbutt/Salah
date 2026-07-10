@@ -176,7 +176,7 @@ export default function NextPrayerTimer() {
       case 'afternoon':
         // Bright yellow to sky/lake blue
         return {
-          background: 'linear-gradient(135deg, #FFEB3B 0%, #00B0FF 100%)',
+          backgroundImage: 'linear-gradient(135deg, #FFEB3B 0%, #00B0FF 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
         };
       case 'sunrise':
@@ -184,13 +184,13 @@ export default function NextPrayerTimer() {
       case 'maghrib':
         // Orange to golden
         return {
-          background: 'linear-gradient(135deg, #FF5722 0%, #FFD700 100%)',
+          backgroundImage: 'linear-gradient(135deg, #FF5722 0%, #FFD700 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
         };
       default: // night, fajr, isha
         // Purple to deep blue
         return {
-          background: 'linear-gradient(135deg, #E040FB 0%, #2979FF 100%)',
+          backgroundImage: 'linear-gradient(135deg, #E040FB 0%, #2979FF 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
         };
     }
