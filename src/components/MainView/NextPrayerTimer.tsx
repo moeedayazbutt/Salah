@@ -170,7 +170,7 @@ export default function NextPrayerTimer() {
 
   const prayerNameStyle = useMemo((): React.CSSProperties => {
     const phaseId = displayPhase?.id as string | undefined;
-    const shadowFilter = 'drop-shadow(0 4px 12px rgba(0,0,0,0.9)) drop-shadow(0 2px 4px rgba(0,0,0,0.8))';
+    const shadowFilter = 'drop-shadow(0 4px 12px rgba(0,0,0,0.45)) drop-shadow(0 2px 4px rgba(0,0,0,0.4))';
     
     let gradient = '';
     switch (phaseId) {
