@@ -169,35 +169,57 @@ export default function NextPrayerTimer() {
   }, [skySliderAuto, skyDisplayHours, solarPos, settings.coordinates, phase, now, prayerTimes]);
 
   const prayerNameStyle = useMemo((): React.CSSProperties => {
-    const name = displayPhase?.id as string | undefined;
+    const phaseId = displayPhase?.id as string | undefined;
     const shadowFilter = 'drop-shadow(0 4px 12px rgba(0,0,0,0.9)) drop-shadow(0 2px 4px rgba(0,0,0,0.8))';
-    switch (name) {
-      case 'morning':
-      case 'midday':
-      case 'afternoon':
-        // Bright yellow to sky/lake blue
-        return {
-          backgroundImage: 'linear-gradient(135deg, #FFEB3B 0%, #00B0FF 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: shadowFilter,
-        };
+    
+    let gradient = '';
+    switch (phaseId) {
+      case 'fajr':
+        // Dawn: soft violet-purple to peach-pink
+        gradient = 'linear-gradient(135deg, #BA68C8 0%, #FF8A65 100%)';
+        break;
       case 'sunrise':
+        // Sunrise: vibrant orange-red to golden yellow
+        gradient = 'linear-gradient(135deg, #FF3D00 0%, #FFC400 100%)';
+        break;
+      case 'morning':
+        // Morning: bright cream yellow to light sky blue
+        gradient = 'linear-gradient(135deg, #FFF59D 0%, #29B6F6 100%)';
+        break;
+      case 'midday':
+        // Midday: bright pure yellow to intense sky blue
+        gradient = 'linear-gradient(135deg, #FFEB3B 0%, #00B0FF 100%)';
+        break;
+      case 'afternoon':
+        // Afternoon: amber gold to bright cyan-blue
+        gradient = 'linear-gradient(135deg, #FFC107 0%, #00E5FF 100%)';
+        break;
       case 'sunset':
+        // Sunset: fiery orange-red to deep magenta/purple
+        gradient = 'linear-gradient(135deg, #FF5722 0%, #8E24AA 100%)';
+        break;
       case 'maghrib':
-        // Orange to golden
-        return {
-          backgroundImage: 'linear-gradient(135deg, #FF5722 0%, #FFD700 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: shadowFilter,
-        };
-      default: // night, fajr, isha
-        // Purple to deep blue
-        return {
-          backgroundImage: 'linear-gradient(135deg, #E040FB 0%, #2979FF 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          filter: shadowFilter,
-        };
+        // Maghrib: deep twilight pink/magenta to deep blue
+        gradient = 'linear-gradient(135deg, #E91E63 0%, #3F51B5 100%)';
+        break;
+      case 'isha':
+        // Isha: royal purple to bright blue
+        gradient = 'linear-gradient(135deg, #7B1FA2 0%, #2979FF 100%)';
+        break;
+      case 'night':
+      default:
+        // Night: deep violet purple to electric blue
+        gradient = 'linear-gradient(135deg, #9C27B0 0%, #00E5FF 100%)';
+        break;
     }
+
+    return {
+      backgroundImage: gradient,
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+      backgroundClip: 'text',
+      filter: shadowFilter,
+    };
   }, [displayPhase]);
 
   const showUpcoming = currentPrayer?.key === 'sunrise';
