@@ -355,13 +355,30 @@ export default function NextPrayerTimer() {
               fontSize: 'clamp(6.5rem, 23.4vw, 20.8rem)',
               fontWeight: 600,
               letterSpacing: 'clamp(2px, 0.5vw, 8px)',
-              fontVariantNumeric: 'tabular-nums',
               zIndex: 1,
               marginTop: '-0.10em',
-              ...prayerNameStyle,
+              filter: prayerNameStyle.filter,
             }}
           >
-            {countdown}
+            {countdown.split('').map((char, index) => {
+              const isColon = char === ':';
+              return (
+                <span
+                  key={index}
+                  style={{
+                    display: 'inline-block',
+                    width: isColon ? '0.3em' : '0.62em',
+                    textAlign: 'center',
+                    backgroundImage: prayerNameStyle.backgroundImage,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  {char}
+                </span>
+              );
+            })}
           </span>
         </div>
 
