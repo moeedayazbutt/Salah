@@ -205,16 +205,6 @@ export default function NextPrayerTimer() {
 
   const shadow = '0 2px 12px rgba(0,0,0,0.55)';
 
-  const formattedCountdown = useMemo(() => {
-    return countdown.split('').map((char, index) => {
-      const isColon = char === ':';
-      return (
-        <span key={index} style={{ display: 'inline-block', width: isColon ? '0.3em' : '0.62em', textAlign: 'center' }}>
-          {char}
-        </span>
-      );
-    });
-  }, [countdown]);
 
   const formattedTime = useMemo(() => {
     return timeStr.split('').map((char, index) => {
@@ -320,7 +310,6 @@ export default function NextPrayerTimer() {
                   paddingBottom: '0.14em',
                   whiteSpace: 'nowrap',
                   overflow: 'visible',
-                  transition: 'filter 2s ease, background 2s ease',
                   ...prayerNameStyle,
                 }}
               >
@@ -346,7 +335,7 @@ export default function NextPrayerTimer() {
               ...prayerNameStyle,
             }}
           >
-            {formattedCountdown}
+            {countdown}
           </span>
         </div>
 
