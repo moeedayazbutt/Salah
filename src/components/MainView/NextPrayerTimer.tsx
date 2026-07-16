@@ -93,7 +93,7 @@ function PrayerIcon({ prayerKey, size = 22, color = 'rgba(255,255,255,0.6)' }: {
 /* ── Mini weather icon ──────────────────────────────── */
 function MiniWeatherIcon({ condition }: { condition: string }) {
   return (
-    <svg width="1.15em" height="1.15em" viewBox="0 0 40 40" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '0.2em', marginTop: '-0.05em' }}>
+    <svg width="1.15em" height="1.15em" viewBox="0 0 40 40" style={{ display: 'block', marginRight: '0.25em', alignSelf: 'center', flexShrink: 0 }}>
       {condition === 'sunny' && (
         <g fill="#FFFFFF">
           <circle cx="20" cy="18" r="7" />
