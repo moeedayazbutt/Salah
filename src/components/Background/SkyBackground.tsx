@@ -212,10 +212,10 @@ function Mountains({ pal }: { pal:Palette }) {
       {/* Moose/deer herd using the stock animation — WebP faces LEFT by default */}
       {/* Herd group 1: walks left-to-right, 4 animals — scaleX(-1) flips both direction and sprite */}
       {[
-        { xOff: 0,  yBase: 532, size: 26, speed: 180, delay: 0 },
-        { xOff: 28, yBase: 534, size: 22, speed: 180, delay: 0 },
-        { xOff: 52, yBase: 531, size: 28, speed: 180, delay: 0 },
-        { xOff: 72, yBase: 535, size: 20, speed: 180, delay: 0 },
+        { xOff: 0,  yBase: 532, size: 32.5, speed: 180, delay: 0 },
+        { xOff: 35, yBase: 534, size: 27.5, speed: 180, delay: 0 },
+        { xOff: 65, yBase: 531, size: 35,   speed: 180, delay: 0 },
+        { xOff: 90, yBase: 535, size: 25,   speed: 180, delay: 0 },
       ].map((m, i) => (
         <g key={`moose-ltr-${i}`} style={{
           animation: `moose-walk-rtl ${m.speed}s linear ${m.delay}s infinite`,
@@ -227,9 +227,9 @@ function Mountains({ pal }: { pal:Palette }) {
 
       {/* Herd group 2: walks right-to-left, 3 animals — no flip needed (faces left by default) */}
       {[
-        { xOff: 0,  yBase: 534, size: 24, speed: 210, delay: 40 },
-        { xOff: 26, yBase: 532, size: 26, speed: 210, delay: 40 },
-        { xOff: 50, yBase: 536, size: 20, speed: 210, delay: 40 },
+        { xOff: 0,  yBase: 534, size: 30,   speed: 210, delay: 40 },
+        { xOff: 32.5, yBase: 532, size: 32.5, speed: 210, delay: 40 },
+        { xOff: 62.5, yBase: 536, size: 25,   speed: 210, delay: 40 },
       ].map((m, i) => (
         <g key={`moose-rtl-${i}`} style={{
           animation: `moose-walk-rtl ${m.speed}s linear ${m.delay}s infinite`,

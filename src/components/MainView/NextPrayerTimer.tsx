@@ -175,41 +175,41 @@ export default function NextPrayerTimer() {
     let gradient = '';
     switch (phaseId) {
       case 'fajr':
-        // Dawn: soft violet-purple to peach-pink
-        gradient = 'linear-gradient(135deg, #703E78 0%, #99533D 100%)';
+        // Dawn: soft violet-purple to peach-pink (25% brighter/saturated)
+        gradient = 'linear-gradient(135deg, #E49BEB 0%, #FFAF94 100%)';
         break;
       case 'sunrise':
-        // Sunrise: vibrant orange-red to golden yellow
-        gradient = 'linear-gradient(135deg, #992500 0%, #997600 100%)';
+        // Sunrise: vibrant orange-red to golden yellow (25% brighter/saturated)
+        gradient = 'linear-gradient(135deg, #FF7547 0%, #FFD633 100%)';
         break;
       case 'morning':
-        // Morning: bright cream yellow to light sky blue
-        gradient = 'linear-gradient(135deg, #99935E 0%, #196D94 100%)';
+        // Morning: bright cream yellow to light sky blue (25% brighter/saturated)
+        gradient = 'linear-gradient(135deg, #FFFFD6 0%, #66CCFF 100%)';
         break;
       case 'midday':
-        // Midday: bright pure yellow to intense sky blue
-        gradient = 'linear-gradient(135deg, #998D23 0%, #006A99 100%)';
+        // Midday: bright pure yellow to intense sky blue (25% brighter/saturated)
+        gradient = 'linear-gradient(135deg, #FFF266 0%, #42C8FF 100%)';
         break;
       case 'afternoon':
-        // Afternoon: amber gold to bright cyan-blue
-        gradient = 'linear-gradient(135deg, #997404 0%, #008999 100%)';
+        // Afternoon: amber gold to bright cyan-blue (25% brighter/saturated)
+        gradient = 'linear-gradient(135deg, #FFD247 0%, #42EDFF 100%)';
         break;
       case 'sunset':
-        // Sunset: fiery orange-red to deep magenta/purple
-        gradient = 'linear-gradient(135deg, #993414 0%, #551666 100%)';
+        // Sunset: fiery orange-red to deep magenta/purple (25% brighter/saturated)
+        gradient = 'linear-gradient(135deg, #FF8D6B 0%, #C436E7 100%)';
         break;
       case 'maghrib':
-        // Maghrib: deep twilight pink/magenta to deep blue
-        gradient = 'linear-gradient(135deg, #8C123B 0%, #26316D 100%)';
+        // Maghrib: deep twilight pink/magenta to deep blue (25% brighter/saturated)
+        gradient = 'linear-gradient(135deg, #FF4FA0 0%, #5C6FD6 100%)';
         break;
       case 'isha':
-        // Isha: royal purple to bright blue
-        gradient = 'linear-gradient(135deg, #4A1361 0%, #194999 100%)';
+        // Isha: royal purple to bright blue (25% brighter/saturated)
+        gradient = 'linear-gradient(135deg, #B02EE3 0%, #75A3FF 100%)';
         break;
       case 'night':
       default:
-        // Night: deep violet purple to electric blue
-        gradient = 'linear-gradient(135deg, #5E176A 0%, #008999 100%)';
+        // Night: deep violet purple to electric blue (25% brighter/saturated)
+        gradient = 'linear-gradient(135deg, #CA3CE0 0%, #42EDFF 100%)';
         break;
     }
 
@@ -300,16 +300,18 @@ export default function NextPrayerTimer() {
                 {hijriStr}
               </span>
             )}
+          </div>
+          <div className="flex flex-col items-end flex-shrink-0" style={{ gap: 6 }}>
+            <span style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 400, fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)', color: '#FFFFFF', letterSpacing: '0.04em', lineHeight: 1, marginTop: 2, fontVariantNumeric: 'tabular-nums', textShadow: shadow }}>
+              {formattedTime}
+            </span>
             {weatherCurrent && (
-              <span className="font-ui" style={{ fontSize: 'clamp(1.1rem, 2.2vw, 2.3rem)', color: 'rgba(255,255,255,0.92)', lineHeight: 1.2, textShadow: shadow }}>
+              <span style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 400, fontSize: 'clamp(1.0rem, 2.0vw, 2.4rem)', color: '#FFFFFF', letterSpacing: '0.04em', lineHeight: 1, textShadow: shadow, display: 'flex', alignItems: 'center' }}>
                 <MiniWeatherIcon condition={weatherCurrent.condition.icon} />
                 {weatherCurrent.temp}°C
               </span>
             )}
           </div>
-          <span style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 400, fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)', color: '#FFFFFF', letterSpacing: '0.04em', lineHeight: 1, marginTop: 2, fontVariantNumeric: 'tabular-nums', textShadow: shadow }}>
-            {formattedTime}
-          </span>
         </div>
 
         {/* MIDDLE GROUP — vertically centred between top bar and strip */}
