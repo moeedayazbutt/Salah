@@ -176,40 +176,40 @@ export default function NextPrayerTimer() {
     switch (phaseId) {
       case 'fajr':
         // Dawn: soft violet-purple to peach-pink
-        gradient = 'linear-gradient(135deg, #BA68C8 0%, #FF8A65 100%)';
+        gradient = 'linear-gradient(135deg, #703E78 0%, #99533D 100%)';
         break;
       case 'sunrise':
         // Sunrise: vibrant orange-red to golden yellow
-        gradient = 'linear-gradient(135deg, #FF3D00 0%, #FFC400 100%)';
+        gradient = 'linear-gradient(135deg, #992500 0%, #997600 100%)';
         break;
       case 'morning':
         // Morning: bright cream yellow to light sky blue
-        gradient = 'linear-gradient(135deg, #FFF59D 0%, #29B6F6 100%)';
+        gradient = 'linear-gradient(135deg, #99935E 0%, #196D94 100%)';
         break;
       case 'midday':
         // Midday: bright pure yellow to intense sky blue
-        gradient = 'linear-gradient(135deg, #FFEB3B 0%, #00B0FF 100%)';
+        gradient = 'linear-gradient(135deg, #998D23 0%, #006A99 100%)';
         break;
       case 'afternoon':
         // Afternoon: amber gold to bright cyan-blue
-        gradient = 'linear-gradient(135deg, #FFC107 0%, #00E5FF 100%)';
+        gradient = 'linear-gradient(135deg, #997404 0%, #008999 100%)';
         break;
       case 'sunset':
         // Sunset: fiery orange-red to deep magenta/purple
-        gradient = 'linear-gradient(135deg, #FF5722 0%, #8E24AA 100%)';
+        gradient = 'linear-gradient(135deg, #993414 0%, #551666 100%)';
         break;
       case 'maghrib':
         // Maghrib: deep twilight pink/magenta to deep blue
-        gradient = 'linear-gradient(135deg, #E91E63 0%, #3F51B5 100%)';
+        gradient = 'linear-gradient(135deg, #8C123B 0%, #26316D 100%)';
         break;
       case 'isha':
         // Isha: royal purple to bright blue
-        gradient = 'linear-gradient(135deg, #7B1FA2 0%, #2979FF 100%)';
+        gradient = 'linear-gradient(135deg, #4A1361 0%, #194999 100%)';
         break;
       case 'night':
       default:
         // Night: deep violet purple to electric blue
-        gradient = 'linear-gradient(135deg, #9C27B0 0%, #00E5FF 100%)';
+        gradient = 'linear-gradient(135deg, #5E176A 0%, #008999 100%)';
         break;
     }
 
@@ -292,16 +292,16 @@ export default function NextPrayerTimer() {
         {/* TOP: Date + Clock */}
         <div className="flex items-start justify-between flex-shrink-0" style={{ marginBottom: 0 }}>
           <div className="flex flex-col" style={{ gap: 1 }}>
-            <span className="font-ui" style={{ fontSize: 'clamp(0.9rem, 1.8vw, 1.9rem)', color: 'rgba(255,255,255,0.92)', fontWeight: 400, lineHeight: 1.2, textShadow: shadow }}>
+            <span className="font-ui" style={{ fontSize: 'clamp(1.1rem, 2.2vw, 2.3rem)', color: 'rgba(255,255,255,0.92)', fontWeight: 400, lineHeight: 1.2, textShadow: shadow }}>
               {dateStr}
             </span>
             {hijriStr && (
-              <span className="font-ui" style={{ fontSize: 'clamp(0.9rem, 1.8vw, 1.9rem)', color: 'rgba(255,255,255,0.92)', lineHeight: 1.2, textShadow: shadow }}>
+              <span className="font-ui" style={{ fontSize: 'clamp(1.1rem, 2.2vw, 2.3rem)', color: 'rgba(255,255,255,0.92)', lineHeight: 1.2, textShadow: shadow }}>
                 {hijriStr}
               </span>
             )}
             {weatherCurrent && (
-              <span className="font-ui" style={{ fontSize: 'clamp(0.9rem, 1.8vw, 1.9rem)', color: 'rgba(255,255,255,0.92)', lineHeight: 1.2, textShadow: shadow }}>
+              <span className="font-ui" style={{ fontSize: 'clamp(1.1rem, 2.2vw, 2.3rem)', color: 'rgba(255,255,255,0.92)', lineHeight: 1.2, textShadow: shadow }}>
                 <MiniWeatherIcon condition={weatherCurrent.condition.icon} />
                 {weatherCurrent.temp}°C
               </span>

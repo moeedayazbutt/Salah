@@ -99,29 +99,29 @@ export default function WeatherWidget() {
       {/* Header row */}
       <div className="flex items-start justify-between flex-shrink-0" style={{ gap: 8 }}>
         <div className="flex items-center" style={{ gap: 8 }}>
-          <WeatherIcon condition={today?.condition.icon ?? 'sunny'} size={38} />
+          <WeatherIcon condition={today?.condition.icon ?? 'sunny'} size={46} />
           <div className="flex flex-col">
             <div className="flex items-end" style={{ gap: 2 }}>
-              <span className="font-mono" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 3rem)', fontWeight: 300, color: '#FAFAFA', lineHeight: 1 }}>
+              <span className="font-mono" style={{ fontSize: 'clamp(2.0rem, 4.3vw, 3.7rem)', fontWeight: 300, color: '#FAFAFA', lineHeight: 1 }}>
                 {tempBase}
               </span>
-              <span className="font-ui" style={{ fontSize: 'clamp(0.75rem, 1.2vw, 1.2rem)', color: 'rgba(255,255,255,0.4)', marginBottom: '0.25em' }}>°C</span>
+              <span className="font-ui" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.5rem)', color: 'rgba(255,255,255,0.4)', marginBottom: '0.25em' }}>°C</span>
             </div>
-            <span className="font-ui" style={{ fontSize: 'clamp(0.65rem, 1vw, 1rem)', color: 'rgba(255,255,255,0.5)' }}>
+            <span className="font-ui" style={{ fontSize: 'clamp(0.8rem, 1.2vw, 1.25rem)', color: 'rgba(255,255,255,0.5)' }}>
               {today?.condition.en ?? 'Clear'}
             </span>
           </div>
         </div>
         <div className="flex flex-col items-end" style={{ gap: 2 }}>
           <div className="flex items-center" style={{ gap: 4 }}>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2" aria-hidden="true">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
             </svg>
-            <span className="font-ui" style={{ fontSize: 'clamp(0.55rem, 0.8vw, 0.85rem)', color: 'rgba(255,255,255,0.35)' }}>
+            <span className="font-ui" style={{ fontSize: 'clamp(0.7rem, 1.0vw, 1.05rem)', color: 'rgba(255,255,255,0.35)' }}>
               {locationLabel}
             </span>
           </div>
-          <span className="font-ui" style={{ fontSize: 'clamp(0.55rem, 0.75vw, 0.8rem)', color: 'rgba(255,255,255,0.28)' }}>
+          <span className="font-ui" style={{ fontSize: 'clamp(0.7rem, 0.95vw, 1.0rem)', color: 'rgba(255,255,255,0.28)' }}>
             Feels {feelsTemp}° · {humidity}% hum · {windSpeed} km/h
           </span>
         </div>
@@ -137,17 +137,17 @@ export default function WeatherWidget() {
                 className="flex flex-col items-center rounded-lg"
                 style={{
                   padding: '5px 6px',
-                  minWidth: 44,
+                  minWidth: 52,
                   background: h.isNow ? 'rgba(245,158,11,0.12)' : 'rgba(255,255,255,0.03)',
                   border: `1px solid ${h.isNow ? 'rgba(245,158,11,0.25)' : 'rgba(255,255,255,0.04)'}`,
                   gap: 2,
                 }}
               >
-                <span className="font-ui" style={{ fontSize: 'clamp(0.55rem, 0.75vw, 0.75rem)', color: h.isNow ? '#F59E0B' : 'rgba(255,255,255,0.4)', letterSpacing: '0.03em' }}>
+                <span className="font-ui" style={{ fontSize: 'clamp(0.7rem, 0.95vw, 0.95rem)', color: h.isNow ? '#F59E0B' : 'rgba(255,255,255,0.4)', letterSpacing: '0.03em' }}>
                   {h.timeLabel}
                 </span>
-                <WeatherIcon condition={h.condition.icon} size={18} />
-                <span className="font-mono" style={{ fontSize: 'clamp(0.6rem, 0.85vw, 0.9rem)', color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
+                <WeatherIcon condition={h.condition.icon} size={22} />
+                <span className="font-mono" style={{ fontSize: 'clamp(0.75rem, 1.05vw, 1.1rem)', color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
                   {h.temp}°
                 </span>
               </div>
@@ -160,15 +160,15 @@ export default function WeatherWidget() {
       <div className="flex flex-col flex-shrink-0" style={{ gap: 4 }}>
         {next3.map((day, i) => (
           <div key={day.date.toISOString()} className="flex items-center" style={{ gap: 8 }}>
-            <span className="font-ui" style={{ fontSize: 'clamp(0.65rem, 0.9vw, 0.95rem)', color: i === 0 ? 'rgba(255,215,0,0.75)' : 'rgba(255,255,255,0.55)', minWidth: 32 }}>
+            <span className="font-ui" style={{ fontSize: 'clamp(0.8rem, 1.1vw, 1.2rem)', color: i === 0 ? 'rgba(255,215,0,0.75)' : 'rgba(255,255,255,0.55)', minWidth: 42 }}>
               {i === 0 ? 'Today' : day.dayNameEn.slice(0, 3)}
             </span>
-            <WeatherIcon condition={day.condition.icon} size={16} />
-            <span className="font-mono" style={{ fontSize: 'clamp(0.6rem, 0.85vw, 0.9rem)', color: 'rgba(255,255,255,0.45)', minWidth: 22, textAlign: 'right' }}>
+            <WeatherIcon condition={day.condition.icon} size={20} />
+            <span className="font-mono" style={{ fontSize: 'clamp(0.75rem, 1.05vw, 1.1rem)', color: 'rgba(255,255,255,0.45)', minWidth: 28, textAlign: 'right' }}>
               {day.low}°
             </span>
             <TempBar high={day.high} low={day.low} rangeMin={rangeMin} rangeMax={rangeMax} />
-            <span className="font-mono" style={{ fontSize: 'clamp(0.6rem, 0.85vw, 0.9rem)', color: 'rgba(255,255,255,0.75)', minWidth: 22 }}>
+            <span className="font-mono" style={{ fontSize: 'clamp(0.75rem, 1.05vw, 1.1rem)', color: 'rgba(255,255,255,0.75)', minWidth: 28 }}>
               {day.high}°
             </span>
           </div>

@@ -33,7 +33,7 @@ export default function RightPanel() {
         <div className="flex items-center justify-between" style={{ gap: 8 }}>
           <div className="flex flex-col min-w-0">
             <span className="font-mono" style={{
-              fontSize: 'clamp(1.1rem, 2.5vw, 2.4rem)',
+              fontSize: 'clamp(1.3rem, 2.9vw, 2.85rem)',
               fontWeight: 300,
               background: 'linear-gradient(135deg, #FFD600 0%, #F59E0B 50%, #14B8A6 100%)',
               WebkitBackgroundClip: 'text',
@@ -43,7 +43,7 @@ export default function RightPanel() {
             }}>
               {hijri ? `${hijri.day} ${hijri.monthNameEn} ${hijri.year} AH` : '—'}
             </span>
-            <span className="font-ui" style={{ fontSize: 'clamp(0.6rem, 0.9vw, 0.95rem)', color: 'rgba(255,255,255,0.35)', marginTop: 1 }}>
+            <span className="font-ui" style={{ fontSize: 'clamp(0.75rem, 1.1vw, 1.15rem)', color: 'rgba(255,255,255,0.35)', marginTop: 1 }}>
               {hijri?.dayNameEn ?? '—'} · Hijri Calendar
             </span>
           </div>
@@ -61,10 +61,10 @@ export default function RightPanel() {
               }} />
             </div>
             <div className="flex flex-col" style={{ gap: 0 }}>
-              <span className="font-ui" style={{ fontSize: 'clamp(0.6rem, 0.9vw, 1rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.2 }}>
+              <span className="font-ui" style={{ fontSize: 'clamp(0.75rem, 1.1vw, 1.2rem)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.2 }}>
                 {moon?.phaseName || '—'}
               </span>
-              <span className="font-mono" style={{ fontSize: 'clamp(0.55rem, 0.8vw, 0.9rem)', color: 'rgba(255,255,255,0.28)', lineHeight: 1.2 }}>
+              <span className="font-mono" style={{ fontSize: 'clamp(0.65rem, 1.0vw, 1.05rem)', color: 'rgba(255,255,255,0.28)', lineHeight: 1.2 }}>
                 {moon ? `${Math.round(moon.illumination * 100)}%` : ''}
               </span>
             </div>
@@ -72,7 +72,7 @@ export default function RightPanel() {
         </div>
 
         <div className="flex items-center flex-wrap" style={{ gap: 4, marginTop: 3 }}>
-          <span className="font-ui" style={{ fontSize: 'clamp(0.55rem, 0.8vw, 0.85rem)', color: 'rgba(255,255,255,0.3)' }}>
+          <span className="font-ui" style={{ fontSize: 'clamp(0.65rem, 1.0vw, 1.0rem)', color: 'rgba(255,255,255,0.3)' }}>
             {settings.timezone.split('/').pop()?.replace('_', ' ') || settings.timezone}
           </span>
         </div>

@@ -59,6 +59,14 @@ const cache = new Map<string, { data: WeatherData; expiry: number }>();
 export function useWeather(lat: number, lon: number) {
   const [data, setData] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [tick, setTick] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTick((t) => t + 1);
+    }, 60 * 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (!lat && !lon) { setLoading(false); return; }
@@ -71,7 +79,7 @@ export function useWeather(lat: number, lon: number) {
     }
 
     let cancelled = false;
-    setLoading(true);
+    if (!data) setLoading(true);
 
     const params = new URLSearchParams({
       latitude: lat.toFixed(2),
@@ -127,13 +135,13 @@ export function useWeather(lat: number, lon: number) {
         });
 
         const result: WeatherData = { current, daily, hourly };
-        cache.set(key, { data: result, expiry: Date.now() + 15 * 60 * 1000 });
+        cache.set(key, { data: result, expiry: Date.now() + 50 * 1000 });
         if (!cancelled) { setData(result); setLoading(false); }
       })
       .catch(() => { if (!cancelled) setLoading(false); });
 
     return () => { cancelled = true; };
-  }, [lat, lon]);
+  }, [lat, lon, tick]);
 
   return { ...data, loading };
 }
