@@ -133,6 +133,7 @@ function MiniWeatherIcon({ condition }: { condition: string }) {
 
 /* ── Main component ─────────────────────────────────── */
 export default function NextPrayerTimer() {
+  const strongShadowFilter = 'drop-shadow(0 4px 12px rgba(0,0,0,0.60)) drop-shadow(0 2px 4px rgba(0,0,0,0.52))';
   const currentPrayer   = useCurrentPrayer();
   const nextPrayer      = useNextPrayer();
   const countdown       = useTimeUntilNext();
@@ -170,7 +171,7 @@ export default function NextPrayerTimer() {
 
   const prayerNameStyle = useMemo((): React.CSSProperties => {
     const phaseId = displayPhase?.id as string | undefined;
-    const shadowFilter = 'drop-shadow(0 4px 12px rgba(0,0,0,0.45)) drop-shadow(0 2px 4px rgba(0,0,0,0.4))';
+    const shadowFilter = strongShadowFilter;
     
     let gradient = '';
     switch (phaseId) {
@@ -292,21 +293,21 @@ export default function NextPrayerTimer() {
         {/* TOP: Date + Clock */}
         <div className="flex items-start justify-between flex-shrink-0" style={{ marginBottom: 0 }}>
           <div className="flex flex-col" style={{ gap: 1 }}>
-            <span className="font-ui" style={{ fontSize: 'clamp(1.1rem, 2.2vw, 2.3rem)', color: 'rgba(255,255,255,0.92)', fontWeight: 400, lineHeight: 1.2, textShadow: shadow }}>
+            <span className="font-ui" style={{ fontSize: 'clamp(1.1rem, 2.2vw, 2.3rem)', color: 'rgba(255,255,255,0.92)', fontWeight: 400, lineHeight: 1.2, filter: strongShadowFilter }}>
               {dateStr}
             </span>
             {hijriStr && (
-              <span className="font-ui" style={{ fontSize: 'clamp(1.1rem, 2.2vw, 2.3rem)', color: 'rgba(255,255,255,0.92)', lineHeight: 1.2, textShadow: shadow }}>
+              <span className="font-ui" style={{ fontSize: 'clamp(1.1rem, 2.2vw, 2.3rem)', color: 'rgba(255,255,255,0.92)', lineHeight: 1.2, filter: strongShadowFilter }}>
                 {hijriStr}
               </span>
             )}
           </div>
           <div className="flex flex-col items-end flex-shrink-0" style={{ gap: 6 }}>
-            <span style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 400, fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)', color: '#FFFFFF', letterSpacing: '0.04em', lineHeight: 1, marginTop: 2, fontVariantNumeric: 'tabular-nums', textShadow: shadow }}>
+            <span style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 400, fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)', color: '#FFFFFF', letterSpacing: '0.04em', lineHeight: 1, marginTop: 2, fontVariantNumeric: 'tabular-nums', filter: strongShadowFilter }}>
               {formattedTime}
             </span>
             {weatherCurrent && (
-              <span style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 400, fontSize: 'clamp(1.0rem, 2.0vw, 2.4rem)', color: '#FFFFFF', letterSpacing: '0.04em', lineHeight: 1, textShadow: shadow, display: 'flex', alignItems: 'center' }}>
+              <span style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 400, fontSize: 'clamp(1.2rem, 2.4vw, 2.8rem)', color: '#FFFFFF', letterSpacing: '0.04em', lineHeight: 1, display: 'flex', alignItems: 'center', filter: strongShadowFilter }}>
                 <MiniWeatherIcon condition={weatherCurrent.condition.icon} />
                 {weatherCurrent.temp}°C
               </span>
